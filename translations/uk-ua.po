@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Captcha uk Ukrainian Translation\n"
 "POT-Creation-Date: 2009-05-16 17:44+0300\n"
-"PO-Revision-Date: 2009-05-16 18:49+0300\n"
+"PO-Revision-Date: 2009-05-16 22:23+0300\n"
 "Last-Translator: Andriy Podanenko <podarok@ua.fm>\n"
 "Language-Team: uk <podarok@ua.fm>\n"
 "MIME-Version: 1.0\n"
@@ -508,7 +508,7 @@ msgstr ""
 
 #: image_captcha/image_captcha.admin.inc:208
 msgid "The list of characters to use should not contain spaces."
-msgstr ""
+msgstr "Список символів не повинен містити пропусків"
 
 #: image_captcha/image_captcha.admin.inc:213
 msgid "You need to select a font"
@@ -520,11 +520,11 @@ msgstr "Шрифт недоступний або нечитаємий"
 
 #: image_captcha/image_captcha.admin.inc:221
 msgid "Background color is not a valid hexadecimal color value."
-msgstr ""
+msgstr "Колір фону має неправильне шіснадцяткове значення"
 
 #: image_captcha/image_captcha.admin.inc:224
 msgid "Text color is not a valid hexadecimal color value."
-msgstr ""
+msgstr "Колір тексту має неправильне шіснадцяткове значення"
 
 #: image_captcha/image_captcha.user.inc:28
 msgid "Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font."
@@ -536,7 +536,7 @@ msgstr ""
 
 #: image_captcha/image_captcha.module:20
 msgid "<p>Example image, generated with the current settings:</p>!img"
-msgstr ""
+msgstr "<p>Приклад картинки, згенерованої теперішнімі параметрами: </p> !img"
 
 #: image_captcha/image_captcha.module:140;140;33
 #: image_captcha/image_captcha.info:0
@@ -553,7 +553,7 @@ msgstr "Впишіть символи із зображення ('а' та 'А' 
 
 #: image_captcha/image_captcha.module:92
 msgid "Encountered an illegal byte while splitting an utf8 string in characters."
-msgstr ""
+msgstr "Трапився неправильний байт при розділенні utf8 строки в символи"
 
 #: image_captcha/image_captcha.module:0
 msgid "image_captcha"
@@ -561,15 +561,15 @@ msgstr "image_captcha"
 
 #: image_captcha/image_captcha.info:0
 msgid "Provides an image based CAPTCHA."
-msgstr ""
+msgstr "Надає фото капчу"
 
 #: text_captcha/text_captcha.admin.inc:13
 msgid "Kind of words to use in the phrase"
-msgstr ""
+msgstr "Тип слів для фрази"
 
 #: text_captcha/text_captcha.admin.inc:15
 msgid "Generate nonsense random words."
-msgstr ""
+msgstr "Генерація беззмістовних випадкових слів"
 
 #: text_captcha/text_captcha.admin.inc:16
 msgid "Use user defined words."
@@ -581,19 +581,19 @@ msgstr "Користувацькі слова"
 
 #: text_captcha/text_captcha.admin.inc:25
 msgid "Enter a bunch of space separated words (at least @min)."
-msgstr ""
+msgstr "Введіть набір слів ( як мінімум @min )"
 
 #: text_captcha/text_captcha.admin.inc:30
 msgid "Number of words in the phrase"
-msgstr ""
+msgstr "Кількість слів в фразі"
 
 #: text_captcha/text_captcha.admin.inc:48
 msgid "You need to enter at least @min words if you want to use user defined words."
-msgstr ""
+msgstr "Вам потрібно ввести мінімум @min слів, якщо Ви хочете використовувати \"зазначені\" слова"
 
 #: text_captcha/text_captcha.admin.inc:57
 msgid "Number of words in the phrase should be between 4 and 10."
-msgstr ""
+msgstr "КІлькість слів у фразі повинна бути між 4 та 10"
 
 #: text_captcha/text_captcha.user.inc:51
 msgid "first"
