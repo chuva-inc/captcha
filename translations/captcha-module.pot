@@ -5,19 +5,20 @@
 # Generated from files:
 #  captcha.admin.inc,v 1.32 2009/10/27 16:11:17 soxofaan
 #  image_captcha.admin.inc,v 1.30 2009/12/15 23:53:37 soxofaan
-#  captcha.module,v 1.102 2009/12/08 22:25:19 soxofaan
+#  captcha.module,v 1.103 2010/01/25 00:54:22 soxofaan
 #  captcha.inc,v 1.11 2009/08/27 22:21:56 soxofaan
 #  captcha.info,v 1.7 2008/02/17 12:49:24 soxofaan
-#  image_captcha.user.inc,v 1.23 2009/12/15 23:53:37 soxofaan
+#  image_captcha.user.inc,v 1.25 2010/01/30 21:53:13 soxofaan
 #  image_captcha.module,v 1.33 2009/12/15 23:53:37 soxofaan
 #  captcha.install,v 1.11 2009/12/19 00:24:36 soxofaan
 #  image_captcha.info,v 1.5 2008/02/17 12:49:24 soxofaan
+#  image_captcha.install,v 1.10 2009/12/16 00:11:41 soxofaan
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-01-03 15:35+0100\n"
+"POT-Creation-Date: 2010-01-31 00:38+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -278,87 +279,87 @@ msgstr ""
 msgid "skip CAPTCHA"
 msgstr ""
 
-#: (duplicate) captcha.module:269;322;119 ;222;446;475;60;71 captcha.info:0 image_captcha/image_captcha.user.inc:29 image_captcha/image_captcha.module:129
+#: (duplicate) captcha.module:274;327;119 ;227;495;524;60;71 captcha.info:0 image_captcha/image_captcha.user.inc:29 image_captcha/image_captcha.module:126
 msgid "CAPTCHA"
 msgstr ""
 
-#: captcha.module:327
+#: captcha.module:332
 msgid "CAPTCHA: challenge \"@type\" enabled"
 msgstr ""
 
-#: captcha.module:328
+#: captcha.module:333
 msgid "Untrusted users will see a CAPTCHA here (!settings)."
 msgstr ""
 
-#: captcha.module:329
+#: captcha.module:334
 msgid "general CAPTCHA settings"
 msgstr ""
 
-#: captcha.module:333
+#: captcha.module:338
 msgid "Enabled challenge"
 msgstr ""
 
-#: captcha.module:334
+#: captcha.module:339
 msgid "\"@type\" by module \"@module\" (!change, !disable)"
 msgstr ""
 
-#: captcha.module:337
+#: captcha.module:342
 msgid "change"
 msgstr ""
 
-#: captcha.module:338
+#: captcha.module:343
 msgid "disable"
 msgstr ""
 
-#: captcha.module:352 image_captcha/image_captcha.admin.inc:36
+#: captcha.module:357 image_captcha/image_captcha.admin.inc:36
 msgid "Example"
 msgstr ""
 
-#: captcha.module:353
+#: captcha.module:358
 msgid "This is a pre-solved, non-blocking example of this challenge."
 msgstr ""
 
-#: captcha.module:362
+#: captcha.module:367
 msgid "CAPTCHA: no challenge enabled"
 msgstr ""
 
-#: captcha.module:364
+#: captcha.module:369
 msgid "Place a CAPTCHA here for untrusted users."
 msgstr ""
 
-#: captcha.module:445
+#: captcha.module:494
 msgid "CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists."
 msgstr ""
 
-#: captcha.module:470
+#: captcha.module:519
 msgid "The answer you entered for the CAPTCHA was not correct."
 msgstr ""
 
-#: captcha.module:557
+#: captcha.module:606
 msgid "Math question"
 msgstr ""
 
-#: captcha.module:558
+#: captcha.module:607
 msgid "Solve this simple math problem and enter the result. E.g. for 1+3, enter 4."
 msgstr ""
 
-#: captcha.module:559
+#: captcha.module:608
 msgid "@x + @y = "
 msgstr ""
 
-#: captcha.module:578
+#: captcha.module:627
 msgid "Test one two three"
 msgstr ""
 
-#: captcha.module:222
+#: captcha.module:227
 msgid "CAPTCHA problem: hook_captcha() of module %module returned nothing when trying to retrieve challenge type %type for form %form_id."
 msgstr ""
 
-#: captcha.module:446
+#: captcha.module:495
 msgid "CAPTCHA validation error: unknown CAPTCHA session ID (%csid)."
 msgstr ""
 
-#: captcha.module:475
+#: captcha.module:524
 msgid "%form_id post blocked by CAPTCHA module: challenge \"%challenge\" (by module \"%module\"), user answered \"%response\", but the solution was \"%solution\"."
 msgstr ""
 
@@ -672,28 +673,36 @@ msgstr ""
 msgid "Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font."
 msgstr ""
 
-#: image_captcha/image_captcha.module:30
+#: image_captcha/image_captcha.module:27
 msgid "The image CAPTCHA is a popular challenge where a random textual code is obfuscated in an image. The image is generated on the fly for each request, which is rather CPU intensive for the server. Be careful with the size and computation related settings."
 msgstr ""
 
-#: image_captcha/image_captcha.module:212;212;42 image_captcha/image_captcha.info:0
+#: image_captcha/image_captcha.module:223;223;39 image_captcha/image_captcha.info:0
 msgid "Image CAPTCHA"
 msgstr ""
 
-#: image_captcha/image_captcha.module:217
+#: image_captcha/image_captcha.module:228
 msgid "What code is in the image?"
 msgstr ""
 
-#: image_captcha/image_captcha.module:218
+#: image_captcha/image_captcha.module:229
 msgid "Enter the characters shown in the image."
 msgstr ""
 
-#: image_captcha/image_captcha.module:129
+#: image_captcha/image_captcha.module:126
 msgid "Encountered an illegal byte while splitting an utf8 string in characters."
 msgstr ""
 
-#: image_captcha/image_captcha.module:51
+#: image_captcha/image_captcha.module:48
 msgid "Font example"
+msgstr ""
+
+#: (duplicate) image_captcha/image_captcha.install:21 
+msgid "Image CAPTCHA requires GD library"
+msgstr ""
+
+#: (duplicate) image_captcha/image_captcha.install:23 
+msgid "The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href=\"!gddoc\">GD library</a>, which is required to generate images."
 msgstr ""
 
 #: image_captcha/image_captcha.info:0
