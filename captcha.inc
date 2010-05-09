@@ -217,7 +217,7 @@ function _captcha_get_captcha_placement($form_id, $form) {
     $buttons = _captcha_search_buttons($form);
     if (count($buttons)) {
       // Pick first button.
-      // TODO: make this more sofisticated? Use cases needed.
+      // TODO: make this more sophisticated? Use cases needed.
       $placement = $buttons[0];
     }
     else {

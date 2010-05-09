@@ -496,13 +496,14 @@ function captcha_validate($element, &$form_state) {
     watchdog('CAPTCHA',
       'CAPTCHA validation error: unknown CAPTCHA session ID (%csid).',
       array('%csid' => var_export($csid, TRUE)),
-      WATCHDOG_ERROR);
+      WATCHDOG_ERROR
+    );
   }
   else {
     // Get CAPTCHA validate function or fall back on strict equality.
     $captcha_validate = $element['#captcha_validate'];
     if (!function_exists($captcha_validate)) {
-       $captcha_validate = 'captcha_validate_strict_equality';
+      $captcha_validate = 'captcha_validate_strict_equality';
     }
     // Check the response with the CAPTCHA validation function.
     // Apart from the traditional expected $solution and received $response,
@@ -528,7 +529,8 @@ function captcha_validate($element, &$form_state) {
             '%response' => $captcha_response, '%solution' => $solution,
             '%challenge' => $captcha_info['type'], '%module' => $captcha_info['module'],
           ),
-          WATCHDOG_NOTICE);
+          WATCHDOG_NOTICE
+        );
       }
       // If CAPTCHA was on a login form: stop validating, quit the current request
       // and forward to the current page (like a reload) to prevent loging in.
