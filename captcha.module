@@ -443,7 +443,6 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *     if the values could not be found, e.g. for a fresh form).
  */
 function _captcha_get_posted_captcha_info($element, $form_state) {
-  drupal_set_message(t('yoooooo.'), 'error');
   // Get the post data from where we can find it.
   if (isset($element['#post']) && count($element['#post'])) {
     $post_data = $element['#post'];
