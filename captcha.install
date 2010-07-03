@@ -303,7 +303,7 @@ function captcha_update_6201() {
  */
 function captcha_update_6202() {
   $ret = array();
-  db_add_column(&$ret, 'captcha_sessions', 'token', 'varchar(64)');
+  db_add_column($ret, 'captcha_sessions', 'token', 'varchar(64)');
   return $ret;
 }
 
