@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ * Functionality and helper functions for CAPTCHA administration.
+ */
+
+/**
  * Return an array with the available CAPTCHA types, for use as options array
  * for a select form elements.
  *

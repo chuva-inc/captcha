@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ * Install, update and uninstall functions for the CAPTCHA module.
+ */
+
+/**
  * Implementation of hook_schema().
  */
 function captcha_schema() {
@@ -132,8 +137,12 @@ function captcha_install() {
   drupal_install_schema('captcha');
 
   // insert some defaults
-  $form_ids = array('comment_form', 'contact_mail_user', 'contact_mail_page',
-    'user_register', 'user_pass', 'user_login', 'user_login_block', 'forum_node_form');
+  $form_ids = array(
+    'comment_form',
+    'contact_mail_user', 'contact_mail_page',
+    'user_register', 'user_pass', 'user_login', 'user_login_block',
+    'forum_node_form'
+  );
   foreach ($form_ids as $form_id) {
     db_query("INSERT INTO {captcha_points} (form_id, module, type) VALUES ('%s', NULL, NULL)", $form_id);
   }

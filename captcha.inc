@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ * General CAPTCHA functionality and helper functions.
+ */
+
+/**
  * Helper function for adding/updating a CAPTCHA point.
  *
  * @param $form_id the form ID to configure.
