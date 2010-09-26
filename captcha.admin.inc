@@ -37,7 +37,7 @@ function _captcha_available_challenge_types($add_special_options=TRUE) {
 /**
  * Form builder function for the general CAPTCHA configuration
  */
-function captcha_admin_settings() {
+function captcha_admin_settings(&$form_state) {
   module_load_include('inc', 'captcha');
 
   // Use javascript for some added usability on admin form.
@@ -123,6 +123,26 @@ function captcha_admin_settings() {
     '#default_value' => variable_get('captcha_allow_on_admin_pages', FALSE),
     '#description' => t('This option makes it possible to add CAPTCHAs to forms on administrative pages. CAPTCHAs are disabled by default on administrative pages (which shouldn\'t be accessible to untrusted users normally) to avoid the related overhead. In some situations, e.g. in the case of demo sites, it can be usefull to allow CAPTCHAs on administrative pages.'),
   );
+
+  // Button for flushing the CAPTCHA placement cache.
+  $form['captcha_form_protection']['captcha_placement_caching'] = array(
+    '#type' => 'item',
+    '#title' => t('CAPTCHA placement caching'),
+    '#description' => t('For efficiency, the positions of the CAPTCHA elements in each of the configured forms are cached. Most of the time, the structure of a form does not change and it would be a waste to recalculate the positions every time. Occasionally however, the form structure can change (e.g. during site building) and flushing the CAPTCHA placement cache can be required to fix the CAPTCHA placement.'),
+  );
+  $form['captcha_form_protection']['captcha_placement_caching']['captcha_placement_cache_flush'] = array(
+    '#type' => 'button',
+    '#value' => t('Flush the CAPTCHA placement cache'),
+    '#submit' => array('captcha_placement_cache_flush'),
+  );
+  // Handle the button for flushing the CAPTCHA placement cache.
+  // This is done here instead of in a submit handler because the button is
+  // not a submitting button.
+  if (isset($form_state['post']['op']) && $form_state['post']['op'] ==  t('Flush the CAPTCHA placement cache')) {
+    variable_del('captcha_placement_map_cache');
+    drupal_set_message(t('Flushed the CAPTCHA placement cache.'));
+  }
+
 
   // Configuration option for adding a CAPTCHA description.
   $form['captcha_add_captcha_description'] = array(
