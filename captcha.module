@@ -480,9 +480,17 @@ function _captcha_get_posted_captcha_info($element, $form_state) {
       $post_data = array();
     }
     // Get the posted form_id and CAPTCHA session ID.
-    $posted_form_id = isset($post_data['form_id']) ? $post_data['form_id'] : NULL;
-    $posted_captcha_sid = isset($post_data['captcha_sid']) ? (int) $post_data['captcha_sid'] : NULL;
-    $posted_captcha_token = isset($post_data['captcha_token']) ? (string) $post_data['captcha_token'] : NULL;
+    // Because we possibly use raw post data here,
+    // we should be extra cautious and filter this data.
+    $posted_form_id = isset($post_data['form_id']) ?
+      preg_replace("/[^a-z0-9_]/", "", (string) $post_data['form_id'])
+      : NULL;
+    $posted_captcha_sid = isset($post_data['captcha_sid']) ?
+      (int) $post_data['captcha_sid']
+      : NULL;
+    $posted_captcha_token = isset($post_data['captcha_token']) ?
+      preg_replace("/[^a-zA-Z0-9]/", "", (string) $post_data['captcha_token'])
+      : NULL;
 
     // Check if the posted CAPTCHA token is valid for the posted CAPTCHA
     // session ID. Note that we could just check the validity of the CAPTCHA
