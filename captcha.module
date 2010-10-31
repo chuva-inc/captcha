@@ -390,6 +390,12 @@ function captcha_form_alter(&$form, $form_state, $form_id) {
 
     }
   }
+  // Add a warning about caching on the Perfomance settings page.
+  if ($form_id == 'system_performance_settings') {
+    $form['page_cache']['cache']['#description'] .= '<p><strong class="error">'
+      . t('Warning: the CAPTCHA module will disable the caching of pages that contain a CAPTCHA.')
+      . '</strong></p>';
+  }
 }
 
 /**
