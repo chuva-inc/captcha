@@ -1,7 +1,8 @@
 // $Id$
 
-$(document).ready(function(){
-
+// JavaScript behaviors for the Image CAPTCHA admin page
+Drupal.behaviors.imageCaptchaAdmin = function (context) {
+	
 	// Helper function to show/hide noise level widget.
 	var noise_level_shower = function(speed) {
 		speed = (typeof speed == 'undefined') ? 'slow' : speed;
@@ -33,4 +34,4 @@ $(document).ready(function(){
 	// Show or hide appropriately on page load.
 	smooth_distortion_shower(0)
 
-});
+};

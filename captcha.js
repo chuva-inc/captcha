@@ -1,8 +1,8 @@
 // $Id$
 
-// TODO: change this to Drupal.behaviors.captchaadmin = function (context) {}
-$(document).ready(function(){
-
+// JavaScript behaviors for the CAPTCHA admin page
+Drupal.behaviors.captchaAdmin = function (context) {
+	
 	// Add onclick handler to checkbox for adding a CAPTCHA description
 	// so that the textfields for the CAPTCHA description are hidden
 	// when no description should be added.
@@ -21,4 +21,4 @@ $(document).ready(function(){
 		$("#edit-captcha-description-wrapper").hide();
 	}
 
-});
+};
