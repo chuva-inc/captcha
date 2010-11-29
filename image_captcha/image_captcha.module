@@ -6,6 +6,8 @@
  * Implementation of image CAPTCHA for use with the CAPTCHA module
  */
 
+// TODO: add test for fallback to simple math challenge in maintenance mode.
+
 define('IMAGE_CAPTCHA_ALLOWED_CHARACTERS', 'aAbBCdEeFfGHhijKLMmNPQRrSTtWXYZ23456789');
 
 // Setup status flags.

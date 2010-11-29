@@ -2,7 +2,7 @@
 
 // JavaScript behaviors for the CAPTCHA admin page
 Drupal.behaviors.captchaAdmin = function (context) {
-	
+
 	// Add onclick handler to checkbox for adding a CAPTCHA description
 	// so that the textfields for the CAPTCHA description are hidden
 	// when no description should be added.
