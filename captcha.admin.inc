@@ -88,7 +88,15 @@ function captcha_admin_settings(&$form_state) {
     );
     // Additional operations.
     $ops = array();
-    $ops[] = l(t('delete'), "admin/user/captcha/captcha/captcha_point/{$captcha_point->form_id}/delete");
+    if (module_exists('ctools') && $captcha_point->export_type & EXPORT_IN_CODE) {
+      if ($captcha_point->export_type & EXPORT_IN_DATABASE) {
+        $ops[] = l(t('revert'), "admin/user/captcha/captcha/captcha_point/{$captcha_point->form_id}/delete");
+      }
+      // TODO Disable exported points.
+    }
+    else {
+      $ops[] = l(t('delete'), "admin/user/captcha/captcha/captcha_point/{$captcha_point->form_id}/delete");
+    }
     $elem['operations'] = array('#value' => implode(", ", $ops));
 
     $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id] = $elem;
@@ -273,7 +281,30 @@ function captcha_admin_settings_submit($form, &$form_state) {
 
   // Process CAPTCHA points
   if (isset($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'])) {
+    // Load existing data.
+    $captcha_points = captcha_get_captcha_points();
+
     foreach ($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'] as $captcha_point_form_id => $data) {
+
+      // If this is an in-code captcha point and its settings are unchanged,
+      // don't save to the database.
+      if (module_exists('ctools') && isset($captcha_points[$captcha_point_form_id])) {
+        // Parse module and captcha_type from submitted values.
+        if (is_string($data['captcha_type']) && substr_count($data['captcha_type'], '/') == 1) {
+          list($module, $captcha_type) = explode('/', $data['captcha_type']);
+        }
+        else {
+          $module = '';
+          $captcha_type = $data['captcha_type'];
+        }
+
+        $point = $captcha_points[$captcha_point_form_id];
+        if ($point->export_type & EXPORT_IN_CODE && !($point->export_type & EXPORT_IN_DATABASE) &&
+        $point->module == $module && $point->captcha_type == $captcha_type) {
+          continue;
+        }
+      }
+
       captcha_set_form_id_setting($captcha_point_form_id, $data['captcha_type']);
     }
   }
