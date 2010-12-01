@@ -74,9 +74,9 @@ function captcha_admin_settings(&$form_state) {
     );
     // Select widget for CAPTCHA type.
     if (isset($captcha_point->module) && $captcha_point->module) {
-      $captcha_type = $captcha_point->module .'/'. $captcha_point->type;
+      $captcha_type = $captcha_point->module .'/'. $captcha_point->captcha_type;
     }
-    elseif ($captcha_point->type == 'default') {
+    elseif ($captcha_point->captcha_type == 'default') {
       $captcha_type = 'default';
     }
     else {
@@ -358,7 +358,7 @@ function captcha_point_admin_form($form_state, $captcha_point_form_id=NULL) {
     );
     $captcha_point = captcha_get_form_id_setting($captcha_point_form_id);
     if ($captcha_point) {
-      $default_captcha_type = "{$captcha_point->module}/{$captcha_point->type}";
+      $default_captcha_type = "{$captcha_point->module}/{$captcha_point->captcha_type}";
     }
   }
   else {
