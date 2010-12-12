@@ -13,7 +13,6 @@
 // TODO: test custom CAPTCHA validation stuff
 // TODO: test if entry on status report (Already X blocked form submissions) works
 // TODO: test space ignoring validation of image CAPTCHA
-// TODO: test that forged CAPTCHA session id raises a "CAPTCHA validation error".
 
 // Some constants for better reuse.
 define('CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE',
