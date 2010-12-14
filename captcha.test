@@ -453,6 +453,8 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Click the add new comment link
     $this->clickLink(t('Add new comment'));
     $add_comment_url = $this->getUrl();
+    // Remove fragment part from comment URL to avoid problems with later asserts
+    $add_comment_url = strtok($add_comment_url, "#");
 
     ////////////////////////////////////////////////////////////
     // Click the CAPTCHA admin link to enable a challenge.
