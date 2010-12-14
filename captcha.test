@@ -29,7 +29,7 @@ define('CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE',
  *
  * Provides common setup stuff and various helper functions
  */
-class CaptchaBaseWebTestCase extends DrupalWebTestCase {
+abstract class CaptchaBaseWebTestCase extends DrupalWebTestCase {
 
   /**
    * User with various administrative permissions.
@@ -78,23 +78,17 @@ class CaptchaBaseWebTestCase extends DrupalWebTestCase {
    */
   protected function assertCaptchaResponseAccepted() {
     // There should be no error message about unknown CAPTCHA session ID.
-    $this->assertNoText(
-      t(CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE),
+    $this->assertNoText(t(CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE),
       'CAPTCHA response should be accepted (known CSID).',
-      'CAPTCHA'
-    );
+      'CAPTCHA');
     // There should be no error message about CSID reuse attack.
-    $this->assertNoText(
-      t(CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE),
+    $this->assertNoText(t(CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE),
       'CAPTCHA response should be accepted (no CAPTCHA session reuse attack detection).',
-      'CAPTCHA'
-    );
+      'CAPTCHA');
     // There should be no error message about wrong response.
-    $this->assertNoText(
-      t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE),
+    $this->assertNoText(t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE),
       'CAPTCHA response should be accepted (correct response).',
-      'CAPTCHA'
-    );
+      'CAPTCHA');
   }
 
   /**
@@ -231,17 +225,14 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
       $this->assertCaptchaResponseAccepted();
       // Get node page and check that comment shows up.
       $this->drupalGet('node/' . $node->nid);
-      $this->assertText($edit['comment'],
-        $message .' Comment should show up on node page.', 'CAPTCHA');
+      $this->assertText($edit['comment'], $message .' Comment should show up on node page.', 'CAPTCHA');
     }
     else {
       // Check for error message.
-      $this->assertText(t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE),
-        $message .' Comment submission should be blocked.', 'CAPTCHA');
+      $this->assertText(t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE), $message .' Comment submission should be blocked.', 'CAPTCHA');
       // Get node page and check that comment is not present.
       $this->drupalGet('node/' . $node->nid);
-      $this->assertNoText($edit['comment'],
-        $message .' Comment should not show up on node page.', 'CAPTCHA');
+      $this->assertNoText($edit['comment'], $message .' Comment should not show up on node page.', 'CAPTCHA');
     }
   }
 
@@ -575,7 +566,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
 
 
-    /**
+  /**
    * Method for testing the CAPTCHA point administration
    */
   function testCaptchaPointAdministration() {
@@ -907,18 +898,13 @@ class CaptchaSessionReuseAttackCase extends CaptchaBaseWebTestCase {
    * Assert that the CAPTCHA session ID reuse attack was detected.
    */
   protected function assertCaptchaSessionIdReuseAttackDetection() {
-    $this->assertText(
-      t(CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE),
+    $this->assertText(t(CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE),
       'CAPTCHA session ID reuse attack should be detected.',
-      'CAPTCHA'
-    );
+      'CAPTCHA');
     // There should be an error message about wrong response.
-    $this->assertText(
-      t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE),
+    $this->assertText(t(CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE),
       'CAPTCHA response should flagged as wrong.',
-      'CAPTCHA'
-    );
-
+      'CAPTCHA');
   }
 
   function testCaptchaSessionReuseAttackDetectionOnCommentPreview() {
