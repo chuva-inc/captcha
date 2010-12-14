@@ -189,7 +189,7 @@ function captcha_process($element, $edit, &$form_state, $complete_form) {
   // Get the CAPTCHA session ID.
   // If there is a submitted form: try to retrieve and reuse the
   // CAPTCHA session ID from the posted data.
-  list($posted_form_id, $posted_captcha_sid) = _captcha_get_posted_captcha_info($element, $form_state);
+  list($posted_form_id, $posted_captcha_sid) = _captcha_get_posted_captcha_info($element, $form_state, $this_form_id);
   if ($this_form_id == $posted_form_id && isset($posted_captcha_sid)) {
     $captcha_sid = $posted_captcha_sid;
   }
@@ -458,11 +458,13 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *
  * @param $element the CAPTCHA element.
  * @param $form_state the form state structure to extract the info from.
+ * @param $this_form_id the form ID of the form we are currently processing
+ *     (which is not necessarily the form that was posted).
  *
  * @return an array with $posted_form_id and $post_captcha_sid (with NULL values
  *     if the values could not be found, e.g. for a fresh form).
  */
-function _captcha_get_posted_captcha_info($element, $form_state) {
+function _captcha_get_posted_captcha_info($element, $form_state, $this_form_id) {
   if (isset($form_state['captcha_info'])) {
     // We already determined the posted form ID and CAPTCHA session ID
     // for this form, so we reuse this info
@@ -498,22 +500,29 @@ function _captcha_get_posted_captcha_info($element, $form_state) {
       preg_replace("/[^a-zA-Z0-9]/", "", (string) $post_data['captcha_token'])
       : NULL;
 
-    // Check if the posted CAPTCHA token is valid for the posted CAPTCHA
-    // session ID. Note that we could just check the validity of the CAPTCHA
-    // token and extract the CAPTCHA session ID from that (without looking at
-    // the actual posted CAPTCHA session ID). However, here we check both
-    // the posted CAPTCHA token and session ID: it is a bit more stringent
-    // and the database query should also be more efficient (because there is
-    // an index on the CAPTCHA session ID).
-    if ($posted_captcha_sid != NULL) {
-      $expected_captcha_token = db_result(db_query("SELECT token FROM {captcha_sessions} WHERE csid = %d", $posted_captcha_sid));
-      if ($expected_captcha_token !== $posted_captcha_token) {
-        drupal_set_message(t('CAPTCHA session reuse attack detected.'), 'error');
-        // Invalidate the CAPTCHA session.
-        $posted_captcha_sid = NULL;
+    if ($posted_form_id == $this_form_id) {
+      // Check if the posted CAPTCHA token is valid for the posted CAPTCHA
+      // session ID. Note that we could just check the validity of the CAPTCHA
+      // token and extract the CAPTCHA session ID from that (without looking at
+      // the actual posted CAPTCHA session ID). However, here we check both
+      // the posted CAPTCHA token and session ID: it is a bit more stringent
+      // and the database query should also be more efficient (because there is
+      // an index on the CAPTCHA session ID).
+      if ($posted_captcha_sid != NULL) {
+        $expected_captcha_token = db_result(db_query("SELECT token FROM {captcha_sessions} WHERE csid = %d", $posted_captcha_sid));
+        if ($expected_captcha_token !== $posted_captcha_token) {
+          drupal_set_message(t('CAPTCHA session reuse attack detected.'), 'error');
+          // Invalidate the CAPTCHA session.
+          $posted_captcha_sid = NULL;
+        }
+        // Invalidate CAPTCHA token to avoid reuse.
+        db_query("UPDATE {captcha_sessions} SET token=NULL WHERE csid=%d", $posted_captcha_sid);
       }
-      // Invalidate CAPTCHA token to avoid reuse.
-      db_query("UPDATE {captcha_sessions} SET token=NULL WHERE csid=%d", $posted_captcha_sid);
+    }
+    else {
+      // The CAPTCHA session ID is specific to the posted form.
+      // Return NULL, so a new session will be generated for this other form.
+      $posted_captcha_sid = NULL;
     }
   }
   return array($posted_form_id, $posted_captcha_sid);
