@@ -94,7 +94,9 @@ function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
  */
 function _captcha_generate_captcha_session($form_id=NULL, $status=CAPTCHA_STATUS_UNSOLVED) {
   global $user;
-  db_query("INSERT into {captcha_sessions} (uid, sid, ip_address, timestamp, form_id, solution, status, attempts) VALUES (%d, '%s', '%s', %d, '%s', '%s', %d, %d)", $user->uid, session_id(), ip_address(), time(), $form_id, 'undefined', $status, 0);
+  // Initialize solution with random data.
+  $solution = md5(mt_rand());
+  db_query("INSERT into {captcha_sessions} (uid, sid, ip_address, timestamp, form_id, solution, status, attempts) VALUES (%d, '%s', '%s', %d, '%s', '%s', %d, %d)", $user->uid, session_id(), ip_address(), time(), $form_id, $solution, $status, 0);
   $captcha_sid = db_last_insert_id('captcha_sessions', 'csid');
   return $captcha_sid;
 }
