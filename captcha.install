@@ -136,7 +136,7 @@ function captcha_install() {
   $t = get_t();
   drupal_install_schema('captcha');
 
-  // insert some defaults
+  // Insert some default CAPTCHA points.
   $form_ids = array(
     'comment_form',
     'contact_mail_user', 'contact_mail_page',
@@ -147,13 +147,13 @@ function captcha_install() {
     db_query("INSERT INTO {captcha_points} (form_id, module, captcha_type) VALUES ('%s', NULL, NULL)", $form_id);
   }
 
-  // what to do after install?
+  // Be friendly to your users: what to do after install?
   drupal_set_message($t('You can now <a href="!captcha_admin">configure the CAPTCHA module</a> for your site.',
     array('!captcha_admin' => url('admin/user/captcha'))), 'status');
 
   // Explain to users that page caching may be disabled.
   if (variable_get('cache', CACHE_DISABLED) != CACHE_DISABLED) {
-    drupal_set_message($t('Note that the CAPTCHA module disables <a href="!performance_admin">page caching</a> of pages that include a CAPTCHA challenge. ',
+    drupal_set_message($t('Note that the CAPTCHA module disables <a href="!performance_admin">page caching</a> of pages that include a CAPTCHA challenge.',
       array('!performance_admin' => url('admin/settings/performance'))), 'warning');
   }
 
@@ -322,6 +322,7 @@ function captcha_update_6202() {
   db_add_column($ret, 'captcha_sessions', 'token', 'varchar(64)');
   return $ret;
 }
+
 
 /**
  * Implementation of hook_update_N()
