@@ -134,14 +134,24 @@ abstract class CaptchaBaseWebTestCase extends DrupalWebTestCase {
    * Helper function to generate a form values array for comment forms
    */
   protected function getCommentFormValues() {
-    $comment_subject = 'comment_subject ' . $this->randomName(32);
-    $comment_body = 'comment_body ' . $this->randomName(256);
     $edit = array(
-      'subject' => $comment_subject,
-      'comment' =>  $comment_body,
+      'subject' => 'comment_subject ' . $this->randomName(32),
+      'comment' => 'comment_body ' . $this->randomName(256),
     );
     return $edit;
   }
+
+  /**
+   * Helper function to generate a form values array for node forms
+   */
+  protected function getNodeFormValues() {
+    $edit = array(
+      'title' => 'node_title ' . $this->randomName(32),
+      'body' => 'node_body ' . $this->randomName(256),
+    );
+    return $edit;
+  }
+
 
   /**
    * Get the CAPTCHA session id from the current form in the browser.
@@ -355,11 +365,8 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->drupalLogin($this->normal_user);
 
     // Page settings to post, with correct CAPTCHA answer.
-    $edit = array(
-      'title'     => $this->randomName(8),
-      'body'      => $this->randomName(32),
-      'captcha_response' => 'Test 123',
-    );
+    $edit = $this->getNodeFormValues();
+    $edit['captcha_response'] = 'Test 123';
     // Preview the node
     $this->drupalPost('node/add/page', $edit, t('Preview'));
 
@@ -936,8 +943,6 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
 }
 
 
-
-
 class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
   public static function getInfo() {
@@ -981,24 +986,18 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $solution = $this->getMathCaptchaSolutionFromForm();
 
     // Post the form with the solution.
-    $edit = array(
-      'subject' => $this->randomName(32, 'subject_'),
-      'comment' =>  $this->randomName(256, 'comment_body'),
-      'captcha_response' => $solution,
-    );
+    $edit = $this->getCommentFormValues();
+    $edit['captcha_response'] = $solution;
     $this->drupalPost(NULL, $edit, t('Preview'));
     // Answer should be accepted and further CAPTCHA ommitted.
     $this->assertCaptchaResponseAccepted();
     $this->assertCaptchaPresence(FALSE);
 
     // Post a new comment, reusing the previous CAPTCHA session.
-    $edit = array(
-      'subject' => $this->randomName(32, 'subject_'),
-      'comment' =>  $this->randomName(256, 'comment_body'),
-      'captcha_sid' => $captcha_sid,
-      'captcha_token' => $captcha_token,
-      'captcha_response' => $solution,
-    );
+    $edit = $this->getCommentFormValues();
+    $edit['captcha_sid'] = $captcha_sid;
+    $edit['captcha_token'] = $captcha_token;
+    $edit['captcha_response'] = $solution;
     $this->drupalPost('comment/reply/' . $node->nid, $edit, t('Preview'));
     // CAPTCHA session reuse attack should be detected.
     $this->assertCaptchaSessionIdReuseAttackDetection();
@@ -1025,11 +1024,8 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $solution = $this->getMathCaptchaSolutionFromForm();
 
     // Page settings to post, with correct CAPTCHA answer.
-    $edit = array(
-      'title'     => $this->randomName(8, 'node_title_'),
-      'body'      => $this->randomName(32, 'node_body_'),
-      'captcha_response' => $solution,
-    );
+    $edit = $this->getNodeFormValues();
+    $edit['captcha_response'] = $solution;
     // Preview the node
     $this->drupalPost(NULL, $edit, t('Preview'));
     // Answer should be accepted.
@@ -1038,13 +1034,10 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(FALSE);
 
     // Post a new comment, reusing the previous CAPTCHA session.
-    $edit = array(
-      'title'     => $this->randomName(8, 'node_title_'),
-      'body'      => $this->randomName(32, 'node_body_'),
-      'captcha_sid' => $captcha_sid,
-      'captcha_token' => $captcha_token,
-      'captcha_response' => $solution,
-    );
+    $edit = $this->getNodeFormValues();
+    $edit['captcha_sid'] = $captcha_sid;
+    $edit['captcha_token'] = $captcha_token;
+    $edit['captcha_response'] = $solution;
     $this->drupalPost('node/add/page', $edit, t('Preview'));
     // CAPTCHA session reuse attack should be detected.
     $this->assertCaptchaSessionIdReuseAttackDetection();
@@ -1107,12 +1100,9 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $node = $this->createNodeWithCommentsEnabled();
 
     // Preview comment with correct CAPTCHA answer.
-    $comment_subject = 'comment_subject_' . $this->randomName(32);
-    $edit = array(
-      'subject' => $comment_subject,
-      'comment' =>  $this->randomName(256),
-      'captcha_response' => 'Test 123',
-    );
+    $edit = $this->getCommentFormValues();
+    $comment_subject = $edit['subject'];
+    $edit['captcha_response'] = 'Test 123';
     $this->drupalPost('comment/reply/' . $node->nid, $edit, t('Preview'));
     // Post should be accepted: no warnings,
     // no CAPTCHA reuse detection (which could be used by user log in block).
@@ -1121,8 +1111,8 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
   }
 
-
 }
+
 
 // Some tricks to debug:
 // drupal_debug($data) // from devel module
