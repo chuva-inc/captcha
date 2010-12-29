@@ -607,8 +607,18 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->assertNull($placement_map, 'CAPTCHA placement cache should be unset after flush.');
   }
 
-
-
+  /**
+   * Helper function to get the CAPTCHA point setting straight from the database.
+   * @param string $form_id
+   * @return stdClass object
+   */
+  private function getCaptchaPointSettingFromDatabase($form_id) {
+    $result = db_fetch_object(db_query(
+      "SELECT * FROM {captcha_points} WHERE form_id='%s'",
+      array($form_id)
+    ));
+    return $result;
+  }
 
   /**
    * Method for testing the CAPTCHA point administration
@@ -634,7 +644,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'Saving of CAPTCHA point settings');
 
     // Check in database
-    $result = db_fetch_object(db_query("SELECT * FROM {captcha_points} WHERE form_id='%s'", array($captcha_point_form_id)));
+    $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertEqual($result->module, $captcha_point_module,
       'Enabled CAPTCHA point should have module set');
     $this->assertEqual($result->captcha_type, $captcha_point_type,
@@ -645,7 +655,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->assertRaw(t('Disabled CAPTCHA for form %form_id.', array('%form_id' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
 
     // Check in database
-    $result = db_fetch_object(db_query("SELECT * FROM {captcha_points} WHERE form_id='%s'", array($captcha_point_form_id)));
+    $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertNull($result->module,
       'Disabled CAPTCHA point should have NULL as module');
     $this->assertNull($result->captcha_type,
@@ -660,7 +670,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'Saving of CAPTCHA point settings');
 
     // Check in database
-    $result = db_fetch_object(db_query("SELECT * FROM {captcha_points} WHERE form_id='%s'", array($captcha_point_form_id)));
+    $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertEqual($result->module, $captcha_point_module,
       'Enabled CAPTCHA point should have module set');
     $this->assertEqual($result->captcha_type, $captcha_point_type,
@@ -672,7 +682,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'Deleting of CAPTCHA point');
 
     // Check in database
-    $result = db_fetch_object(db_query("SELECT * FROM {captcha_points} WHERE form_id='%s'", array($captcha_point_form_id)));
+    $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertFalse($result, 'Deleted CAPTCHA point should be in database');
   }
 
@@ -723,7 +733,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->drupalLogin($this->admin_user);
 
     // Check if original CAPTCHA point still exists in database
-    $result = db_fetch_object(db_query("SELECT * FROM {captcha_points} WHERE form_id='%s'", array($captcha_point_form_id)));
+    $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertEqual($result->module, $captcha_point_module,
       'Enabled CAPTCHA point should still have module set');
     $this->assertEqual($result->captcha_type, $captcha_point_type,
