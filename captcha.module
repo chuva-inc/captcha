@@ -272,7 +272,6 @@ function captcha_process($element, $edit, &$form_state, $complete_form) {
 
   }
 
-
   return $element;
 }
 
