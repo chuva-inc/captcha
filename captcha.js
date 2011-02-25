@@ -1,4 +1,3 @@
-// $Id$
 
 // Javascript behaviors for general CAPTCHA functionality.
 Drupal.behaviors.captcha = function (context) {

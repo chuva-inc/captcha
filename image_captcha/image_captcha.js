@@ -1,4 +1,3 @@
-// $Id$
 
 // JavaScript behaviors for the Image CAPTCHA admin page
 Drupal.behaviors.imageCaptchaAdmin = function (context) {

@@ -1,4 +1,3 @@
-# $Id$
 #
 # Indonesian translation of Drupal (general)
 # Copyright (c) 2010 by the Indonesian translation team <admin@drupal-id.org>
