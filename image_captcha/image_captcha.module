@@ -214,6 +214,9 @@ function image_captcha_captcha($op, $captcha_type='', $captcha_sid=NULL) {
         // build the result to return
         $result = array();
 
+        // Use javascript for some added usability (e.g. image reload).
+        drupal_add_js(drupal_get_path('module', 'image_captcha') .'/image_captcha.js');
+
         $result['solution'] = $code;
         // Generate image source URL (add timestamp to avoid problems with
         // client side caching: subsequent images of the same CAPTCHA session
@@ -221,7 +224,7 @@ function image_captcha_captcha($op, $captcha_type='', $captcha_sid=NULL) {
         $img_src = check_url(url("image_captcha/$captcha_sid/". time()));
         $result['form']['captcha_image'] = array(
           '#type' => 'markup',
-          '#value' => '<img src="'. $img_src .'" alt="'. t('Image CAPTCHA') .'" title="'. t('Image CAPTCHA') .'" />',
+          '#value' => '<img src="'. $img_src .'" class="captcha_image" id="captcha_image_'. $captcha_sid .'" alt="'. t('Image CAPTCHA') .'" title="'. t('Image CAPTCHA') .'" />',
           '#weight' => -2,
         );
         $result['form']['captcha_response'] = array(
