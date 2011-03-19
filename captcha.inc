@@ -350,4 +350,3 @@ function _captcha_insert_captcha_element(&$form, $placement, $captcha_element) {
     }
   }
 }
-
