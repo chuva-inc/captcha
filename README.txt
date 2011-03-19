@@ -1,4 +1,3 @@
-
 Readme file for the CAPTCHA module for Drupal
 ---------------------------------------------
 
@@ -16,7 +15,7 @@ Dependencies:
   The basic CAPTCHA module has no dependencies, nothing special is required.
 
 Conflicts/known issues:
-  CAPTCHA and page caching do not work together currently.
+  CAPTCHA and authcache/boost caching do not work together currently.
   However, the CAPTCHA module does support the Drupal core page
   caching mechanism: it just disables the caching of the pages
   where it has to put its challenges.
