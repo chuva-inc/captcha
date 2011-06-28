@@ -175,7 +175,6 @@ function captcha_admin_settings(&$form_state) {
       '#description' => t('Configurable description of the CAPTCHA. An empty entry will reset the description.'),
       '#default_value' => _captcha_get_description(),
       '#maxlength' => 256,
-      '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
     );
   }
 
