@@ -64,11 +64,11 @@ function captcha_admin_settings(&$form_state) {
   );
   $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'] = array();
   $captcha_type_options = _captcha_available_challenge_types();
-  // TODO: make a wrapper for this query to make it a bit cleaner?
-  $result = db_query("SELECT * FROM {captcha_points} ORDER BY form_id");
-  while ($captcha_point = db_fetch_object($result)) {
-    $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id] = array();
-    $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id]['form_id'] = array(
+
+  $captcha_points = captcha_get_captcha_points();
+  foreach ($captcha_points as $captcha_point) {
+    $elem = array();
+    $elem['form_id'] = array(
       '#value' => $captcha_point->form_id,
     );
     // Select widget for CAPTCHA type.
@@ -81,17 +81,17 @@ function captcha_admin_settings(&$form_state) {
     else {
       $captcha_type = 'none';
     }
-    $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id]['captcha_type'] = array(
+    $elem['captcha_type'] = array(
       '#type' => 'select',
       '#default_value' => $captcha_type,
       '#options' => $captcha_type_options,
     );
     // Additional operations.
-    $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id]['operations'] = array(
-      '#value' => implode(", ", array(
-        l(t('delete'), "admin/user/captcha/captcha/captcha_point/{$captcha_point->form_id}/delete"),
-      ))
-    );
+    $ops = array();
+    $ops[] = l(t('delete'), "admin/user/captcha/captcha/captcha_point/{$captcha_point->form_id}/delete");
+    $elem['operations'] = array('#value' => implode(", ", $ops));
+
+    $form['captcha_form_protection']['captcha_form_id_overview']['captcha_captcha_points'][$captcha_point->form_id] = $elem;
   }
 
   // Form items for new form_id.

@@ -83,6 +83,19 @@ function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
   return $captcha_point;
 }
 
+/**
+ * Helper function to load all captcha points.
+ *
+ * @return array of all captcha_points
+ */
+function captcha_get_captcha_points() {
+  $captcha_points = array();
+  $result = db_query("SELECT * FROM {captcha_points} ORDER BY form_id");
+  while ($captcha_point = db_fetch_object($result)) {
+    $captcha_points[] = $captcha_point;
+  }
+  return $captcha_points;
+}
 
 /**
  * Helper function for generating a new CAPTCHA session.
