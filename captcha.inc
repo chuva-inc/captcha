@@ -99,6 +99,7 @@ function captcha_get_captcha_points() {
   if (module_exists('ctools')) {
     ctools_include('export');
     $captcha_points = ctools_export_load_object('captcha_points', 'all');
+    ksort($captcha_points);
   }
   else {
     $captcha_points = array();
