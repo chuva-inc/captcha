@@ -309,8 +309,8 @@ function captcha_captcha_default_points_alter(&$items)  {
           $captcha->disabled = FALSE;
           $captcha->api_version = 1;
           $captcha->form_id = $form_id;
-          $captcha->module = '';
-          $captcha->captcha_type = 'default';
+          $captcha->module = NULL;
+          $captcha->captcha_type = NULL;
           $items[$form_id] = $captcha;
         }
       }

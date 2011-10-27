@@ -290,17 +290,18 @@ function captcha_admin_settings_submit($form, &$form_state) {
       // don't save to the database.
       if (module_exists('ctools') && isset($captcha_points[$captcha_point_form_id])) {
         // Parse module and captcha_type from submitted values.
-        if (is_string($data['captcha_type']) && substr_count($data['captcha_type'], '/') == 1) {
-          list($module, $captcha_type) = explode('/', $data['captcha_type']);
+        $captcha_type = $data['captcha_type'];
+        if (is_string($captcha_type) && substr_count($captcha_type, '/') == 1) {
+          list($module, $subtype) = explode('/', $data['captcha_type']);
         }
         else {
-          $module = '';
-          $captcha_type = $data['captcha_type'];
+          $module = NULL;
+          $subtype = ($captcha_type === 'none') ? NULL : $captcha_type;
         }
 
         $point = $captcha_points[$captcha_point_form_id];
         if ($point->export_type & EXPORT_IN_CODE && !($point->export_type & EXPORT_IN_DATABASE) &&
-        $point->module == $module && $point->captcha_type == $captcha_type) {
+        $point->module == $module && $point->captcha_type == $subtype) {
           continue;
         }
       }
