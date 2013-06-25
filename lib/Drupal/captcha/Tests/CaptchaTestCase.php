@@ -15,7 +15,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\Core\Language\Language;
 
 class CaptchaTestCase extends CaptchaBaseWebTestCase {
-  
+
   public static function getInfo() {
     return array(
       'name' => t('General CAPTCHA functionality'),

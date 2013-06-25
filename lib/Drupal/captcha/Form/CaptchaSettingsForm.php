@@ -29,7 +29,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
   public function buildForm(array $form, array &$form_state) {
     module_load_include('inc','captcha');
     module_load_include('inc','captcha','captcha.admin');
-  
+
     // Use javascript for some added usability on admin form.
     drupal_add_library('captcha','captcha.js');
 
@@ -95,7 +95,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
   );
   // Empty Cell
   $form['captcha_form_protection']['captcha_form_id_overview']['captcha_new_captcha_point']['operations'] = array();
-  
+
   // Field for the CAPTCHA administration mode.
   $form['captcha_form_protection']['captcha_administration_mode'] = array(
     '#type' => 'checkbox',
@@ -291,7 +291,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
 
     parent::SubmitForm($form, $form_state);
   }
-  
+
     /**
   * Submit callback; clear CAPTCHA placement cache.
   */

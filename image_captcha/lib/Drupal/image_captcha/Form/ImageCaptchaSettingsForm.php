@@ -198,7 +198,7 @@ class ImageCaptchaSettingsForm extends SystemConfigFormBase {
    * Implements \Drupal\Core\Form\FormInterface:validateForm()
    */
   public function validateForm(array &$form, array &$form_state) {
-  
+
     // Check image_captcha_image_allowed_chars for spaces.
     if (preg_match('/\s/', $form_state['values']['image_captcha_image_allowed_chars'])) {
       form_set_error('image_captcha_image_allowed_chars', t('The list of characters to use should not contain spaces.'));
@@ -230,7 +230,7 @@ class ImageCaptchaSettingsForm extends SystemConfigFormBase {
     if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $form_state['values']['image_captcha_foreground_color'])) {
       form_set_error('image_captcha_foreground_color', t('Text color is not a valid hexadecimal color value.'));
     }
-    
+
     parent::validateForm($form, $form_state);
   }
 
@@ -248,7 +248,7 @@ class ImageCaptchaSettingsForm extends SystemConfigFormBase {
 
     parent::SubmitForm($form, $form_state);
   }
-  
+
   /**
  * Form elements for the font specific setting.
  *

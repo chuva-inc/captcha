@@ -39,10 +39,10 @@ const CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE =
 
 const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE =
   'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
-  
+
   public static $modules = array('captcha', 'comment');
   protected $profile = 'standard';
-  
+
   /**
    * User with various administrative permissions.
    * @var Drupal user
@@ -172,7 +172,7 @@ const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE =
     $captcha_sid = (int) $elements[0]['value'];
     return $captcha_sid;
   }
-  
+
   /**
    * Get the CAPTCHA token from the current form in the browser.
    */

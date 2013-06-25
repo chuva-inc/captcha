@@ -15,7 +15,7 @@ use Drupal\simpletest\WebTestBase;
 use stdClass;
 
 class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
-  
+
   public static function getInfo() {
     return array(
       'name' => t('CAPTCHA administration functionality'),
