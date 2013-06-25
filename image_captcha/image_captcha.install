@@ -35,5 +35,5 @@ function image_captcha_uninstall() {
   db_delete('variable')
     ->condition('name', db_like('image_captcha_') . '%', 'LIKE')
     ->execute();
-  cache_clear_all('variables', 'cache');
+  cache()->deleteTags(array('variables' => TRUE));
 }

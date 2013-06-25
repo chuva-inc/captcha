@@ -37,7 +37,7 @@ define('CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE', 1);
  */
 function captcha_library_info() {
   $libraries['captcha.js'] = array(
-    'title' => 'Captcha javascript',
+    'title' => 'Captcha Javascript',
     'version' => '1.0',
     'js' => array(
       drupal_get_path('module', 'captcha') . '/captcha.js' => array(),
@@ -85,10 +85,7 @@ function captcha_menu() {
   $items['admin/config/people/captcha'] = array(
     'title' => 'CAPTCHA',
     'description' => 'Administer how and where CAPTCHAs are used.',
-    'file' => 'captcha.admin.inc',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('captcha_admin_settings'),
-    'access arguments' => array('administer CAPTCHA settings'),
+    'route_name' => 'captcha_settings',
     'type' => MENU_NORMAL_ITEM,
   );
   // the default local task (needed when other modules want to offer
@@ -146,9 +143,6 @@ function captcha_permission() {
  */
 function captcha_theme() {
   return array(
-    'captcha_admin_settings_captcha_points' => array(
-      'render element' => 'form',
-    ),
     'captcha' => array(
       'render element' => 'element',
     ),

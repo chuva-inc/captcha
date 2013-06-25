@@ -1,0 +1,6 @@
+captcha_settings:
+  pattern: '/admin/config/people/captcha'
+  defaults:
+    _form: '\Drupal\captcha\Form\CaptchaSettingsForm'
+  requirements:
+    _permission: 'administer CAPTCHA settings'

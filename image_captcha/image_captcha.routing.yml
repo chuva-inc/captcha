@@ -1,0 +1,6 @@
+image_captcha_settings:
+  pattern: '/admin/config/people/captcha/image_captcha'
+  defaults:
+    _form: '\Drupal\image_captcha\Form\ImageCaptchaSettingsForm'
+  requirements:
+    _permission: 'administer CAPTCHA settings'

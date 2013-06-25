@@ -115,7 +115,8 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $edit = array(
       'captcha_administration_mode' => TRUE,
     );
-    $this->drupalPost(self::CAPTCHA_ADMIN_PATH, $edit, 'Save configuration');
+
+    $this->drupalPost(self::CAPTCHA_ADMIN_PATH, $edit, t('Save configuration'));
 
     // Create a node with comments enabled.
     $node = $this->createNodeWithCommentsEnabled();
