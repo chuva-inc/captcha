@@ -113,11 +113,10 @@ function captcha_schema() {
  */
 function captcha_requirements($phase) {
   $requirements = array();
-  $t = get_t();
   if ($phase == 'runtime' && variable_get('captcha_enable_stats', FALSE)) {
     // Show the wrong response counter in the status report.
     $requirements['captcha_wrong_response_counter'] = array(
-      'title' => $t('CAPTCHA'),
+      'title' => t('CAPTCHA'),
       'value' => format_plural(
         variable_get('captcha_wrong_response_counter', 0),
         'Already 1 blocked form submission',
@@ -133,16 +132,15 @@ function captcha_requirements($phase) {
  * Implementation of hook_install().
  */
 function captcha_install() {
-  $t = get_t();
   // Insert some default CAPTCHA points.
   $form_ids = array(
     'contact_site_form', 'contact_personal_form',
-    'user_register_form', 'user_pass', 'user_login', 'user_login_block',
+    'user_register_form', 'user_pass', 'user_login_form', 'user_login_block',
     'forum_node_form'
   );
   // Add form_ids of all currently known node types too.
   foreach (node_type_get_names() as $type => $name) {
-    $form_ids[] = 'comment_node_' . $type . '_form';
+    $form_ids[] = $type .'_node_form';
   }
   foreach ($form_ids as $form_id) {
     db_insert('captcha_points')
@@ -155,7 +153,7 @@ function captcha_install() {
   }
 
   // Be friendly to your users: what to do after install?
-  drupal_set_message($t('You can now <a href="!captcha_admin">configure the CAPTCHA module</a> for your site.',
+  drupal_set_message(t('You can now <a href="!captcha_admin">configure the CAPTCHA module</a> for your site.',
     array('!captcha_admin' => url('admin/config/people/captcha'))), 'status');
 
   // Explain to users that page caching may be disabled.
@@ -172,7 +170,7 @@ function captcha_install() {
 function captcha_uninstall() {
   drupal_uninstall_schema('captcha');
   db_query("DELETE FROM {variable} WHERE name LIKE 'captcha_%'");
-  cache_clear_all('variables', 'cache');
+  cache()->deleteTags(array('variables' => TRUE));
 }
 
 /**

@@ -1,0 +1,7 @@
+name: CAPTCHA
+type: module
+description: Base CAPTCHA module for adding challenges to arbitrary forms.
+package: Spam control
+version: 8.x
+core: 8.x
+configure: admin/config/people/captcha

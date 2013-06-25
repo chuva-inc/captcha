@@ -111,7 +111,7 @@ function _captcha_generate_captcha_session($form_id=NULL, $status=CAPTCHA_STATUS
   ->fields(array(
     'uid' => $user->uid,
     'sid' => session_id(),
-    'ip_address' => ip_address(),
+    'ip_address' => Drupal::request()->getClientIp(),
     'timestamp' => REQUEST_TIME,
     'form_id' => $form_id,
     'solution' => $solution,
@@ -191,8 +191,8 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
  */
 function _captcha_get_description($lang_code=NULL) {
   // If no language code is given: use the language of the current page.
-  global $language;
-  $lang_code = isset($lang_code) ? $lang_code : $language->language;
+  $language = Drupal::languageManager()->getLanguage();
+  $lang_code = isset($lang_code) ? $lang_code : $language->langcode;
   // The hardcoded but localizable default.
   $default = t('This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.', array(), array('langcode' => $lang_code));
   // Look up the configured CAPTCHA description or fall back on the (localized) default.

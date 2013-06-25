@@ -10,7 +10,6 @@
  */
 function image_captcha_requirements($phase) {
   $requirements = array();
-  $t = get_t();
   if ($phase == 'install') {
     // _image_captcha_check_setup() is defined in image_captcha.module.
     module_load_include('module', 'image_captcha');
@@ -19,7 +18,7 @@ function image_captcha_requirements($phase) {
       $requirements['image_captcha_requires_gd'] = array(
         'title' => $t('Image CAPTCHA requires GD library'),
         'description' =>
-          $t('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
+          t('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
             array('!gddoc' => 'http://www.php.net/manual/en/book.image.php',)
           ),
         'severity' => REQUIREMENT_ERROR,

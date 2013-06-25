@@ -33,6 +33,26 @@ define('CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE', 0);
 define('CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE', 1);
 
 /**
+ * Implements hook_library_info().
+ */
+function captcha_library_info() {
+  $libraries['captcha.js'] = array(
+    'title' => 'Captcha javascript',
+    'version' => '1.0',
+    'js' => array(
+      drupal_get_path('module', 'captcha') . '/captcha.js' => array(),
+     ),
+    'dependencies' => array(
+      array('system', 'jquery'),
+      array('system', 'drupal'),
+      array('system', 'drupalSettings'),
+      array('system', 'jquery.once'),
+    ),
+  );
+  return $libraries;
+}
+
+/**
  * Implementation of hook_help().
  */
 function captcha_help($path, $arg) {
@@ -177,11 +197,11 @@ function captcha_element_info() {
  * Process callback for CAPTCHA form element.
  */
 function captcha_element_process($element, &$form_state, $complete_form) {
-
+  // Add captcha.inc file
   module_load_include('inc', 'captcha');
 
   // Add Javascript for general CAPTCHA functionality.
-  drupal_add_js(drupal_get_path('module', 'captcha') . '/captcha.js');
+  drupal_add_library('captcha','captcha.js');
 
   // Prevent caching of the page with CAPTCHA elements.
   // This needs to be done even if the CAPTCHA will be ommitted later:
@@ -297,20 +317,22 @@ function captcha_element_process($element, &$form_state, $complete_form) {
 /**
  * Theme function for a CAPTCHA element.
  *
- * Render it in a fieldset if a description of the CAPTCHA
+ * Render it in a section element if a description of the CAPTCHA
  * is available. Render it as is otherwise.
  */
 function theme_captcha($variables) {
   $element = $variables['element'];
   if (!empty($element['#description']) && isset($element['captcha_widgets'])) {
     $fieldset = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('CAPTCHA'),
       '#description' => $element['#description'],
       '#children' => drupal_render_children($element),
-      '#attributes' => array('class' => array('captcha')),
+      '#attributes' => array(
+         'class' => array('captcha'),'open' => array('')), //This is a hack because #open was not working
+      '#open' => TRUE,
     );
-    return theme('fieldset', array('element' => $fieldset));
+    return theme('details', array('element' => $fieldset));
   }
   else {
     return '<div class="captcha">' . drupal_render_children($element) . '</div>';
@@ -360,11 +382,10 @@ function captcha_form_alter(&$form, &$form_state, $form_id) {
     $captcha_point = captcha_get_form_id_setting($form_id);
     // For administrators: show CAPTCHA info and offer link to configure it
     $captcha_element = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('CAPTCHA'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
       '#attributes' => array('class' => array('captcha-admin-links')),
+      '#open' => TRUE,
     );
     if ($captcha_point !== NULL && $captcha_point->captcha_type) {
       $captcha_element['#title'] = t('CAPTCHA: challenge "@type" enabled', array('@type' => $captcha_point->captcha_type));
@@ -391,9 +412,10 @@ function captcha_form_alter(&$form, &$form_state, $form_id) {
       // should be removed.
       if ($captcha_point->module != 'recaptcha' && $captcha_point->module != 'egglue_captcha') {
         $captcha_element['example'] = array(
-          '#type' => 'fieldset',
+          '#type' => 'details',
           '#title' => t('Example'),
           '#description' => t('This is a pre-solved, non-blocking example of this challenge.'),
+          '#open' => TRUE,
         );
         $captcha_element['example']['example_captcha'] = array(
           '#type' => 'captcha',
@@ -417,7 +439,7 @@ function captcha_form_alter(&$form, &$form_state, $form_id) {
 
   // Add a warning about caching on the Perfomance settings page.
   if ($form_id == 'system_performance_settings') {
-    $icon = theme('image', array('path' => 'misc/watchdog-warning.png', 'width' => 18, 'height' => 18, 'alt' => t('warning'), 'title' => t('warning')));
+    $icon = theme('image', array('uri' => 'core/misc/watchdog-warning.png', 'width' => 18, 'height' => 18, 'alt' => t('warning'), 'title' => t('warning')));
     $form['caching']['captcha'] = array(
       '#type' => 'item',
       '#title' => t('CAPTCHA'),
@@ -703,6 +725,7 @@ function captcha_captcha($op, $captcha_type = '') {
           '#size' => 4,
           '#maxlength' => 2,
           '#required' => TRUE,
+		  '#attributes' => array('autocomplete' => 'off'),
         );
         return $result;
       }

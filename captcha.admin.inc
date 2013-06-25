@@ -41,11 +41,11 @@ function captcha_admin_settings() {
   module_load_include('inc', 'captcha');
 
   // Use javascript for some added usability on admin form.
-  drupal_add_js(drupal_get_path('module', 'captcha') . '/captcha.js');
+  drupal_add_library('captcha','captcha.js');
 
   // Configuration of which forms to protect, with what challenge.
   $form['captcha_form_protection'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Form protection'),
     '#description' => t("Select the challenge type you want for each of the listed forms (identified by their so called <em>form_id</em>'s). You can easily add arbitrary forms with the textfield at the bottom of the table or with the help of the option <em>Add CAPTCHA administration links to forms</em> below."),
   );
@@ -145,7 +145,7 @@ function captcha_admin_settings() {
   if (module_exists('locale')) {
     $langs = locale_language_list();
     $form['captcha_descriptions'] = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => t('CAPTCHA description'),
       '#description' => t('Configurable description of the CAPTCHA. An empty entry will reset the description to default.'),
       '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
@@ -501,7 +501,7 @@ function captcha_examples($form, $form_state, $module, $challenge) {
       if ($challenges) {
         foreach ($challenges as $ckey => $challenge) {
           $form["captcha_{$mkey}_{$ckey}"] = array(
-            '#type' => 'fieldset',
+            '#type' => 'details',
             '#title' => t('Challenge %challenge by module %module', array('%challenge' => $challenge, '%module' => $module)),
             'challenge' => _captcha_generate_example_challenge($module, $challenge),
             'more_examples' => array(
