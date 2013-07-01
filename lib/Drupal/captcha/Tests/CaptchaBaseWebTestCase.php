@@ -8,7 +8,7 @@
  * drupal_debug($data) // from devel module
  * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
  */
- 
+
 // TODO: write test for CAPTCHAs on admin pages
 // TODO: test for default challenge type
 // TODO: test about placement (comment form, node forms, log in form, etc)
@@ -31,7 +31,7 @@ use Drupal\Core\Language\Language;
 abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
 // Some constants for better reuse.
-const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE = 
+const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE =
   'The answer you entered for the CAPTCHA was not correct.';
 
 const CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE =
@@ -69,7 +69,7 @@ const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE =
 
   function setUp() {
     // Load two modules: the captcha module itself and the comment module for testing anonymous comments.
-	parent::setUp();
+    parent::setUp();
     module_load_include('inc', 'captcha');
 
     // Create a normal user.

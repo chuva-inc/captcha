@@ -8,7 +8,7 @@
  * drupal_debug($data) // from devel module
  * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
  */
- 
+
 namespace Drupal\captcha\Tests;
 
 use Drupal\simpletest\WebTestBase;
@@ -73,7 +73,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    */
   protected function assertCommentPosting($captcha_response, $should_pass, $message) {
     // Make sure comments on pages can be saved directely without preview.
-    variable_set('comment_preview_page', DRUPAL_OPTIONAL);
+    $this->container->get('state')->set('comment_preview_page', DRUPAL_OPTIONAL);
 
     // Create a node with comments enabled.
     $node = $this->createNodeWithCommentsEnabled();
@@ -107,6 +107,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    * Testing the case sensistive/insensitive validation.
    */
   function testCaseInsensitiveValidation() {
+    $config = config('captcha.settings');
     // Set Test CAPTCHA on comment form
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
 
@@ -114,17 +115,20 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->drupalLogin($this->normal_user);
 
     // Test case sensitive posting.
-    variable_set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE);
+    $config->set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE);
+    $config->save();
+
     $this->assertCommentPosting('Test 123', TRUE, 'Case sensitive validation of right casing.');
     $this->assertCommentPosting('test 123', FALSE, 'Case sensitive validation of wrong casing.');
     $this->assertCommentPosting('TEST 123', FALSE, 'Case sensitive validation of wrong casing.');
 
     // Test case insensitive posting (the default)
-    variable_set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE);
+    $config->set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE);
+    $config->save();
+
     $this->assertCommentPosting('Test 123', TRUE, 'Case insensitive validation of right casing.');
     $this->assertCommentPosting('test 123', TRUE, 'Case insensitive validation of wrong casing.');
     $this->assertCommentPosting('TEST 123', TRUE, 'Case insensitive validation of wrong casing.');
-
   }
 
   /**

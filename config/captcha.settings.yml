@@ -1,0 +1,9 @@
+captcha_default_challenge: 'captcha/Math'
+captcha_description: 'This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.'
+captcha_administration_mode: 0
+captcha_allow_on_admin_pages: 0
+captcha_add_captcha_description: 1
+captcha_default_validation: 1
+captcha_persistence: 1
+captcha_enable_stats: 0
+captcha_log_wrong_responses: 0

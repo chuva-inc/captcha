@@ -8,7 +8,7 @@
  * drupal_debug($data) // from devel module
  * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
  */
- 
+
 namespace Drupal\captcha\Tests;
 
 use Drupal\simpletest\WebTestBase;
@@ -41,7 +41,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $node = $this->createNodeWithCommentsEnabled();
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
-    variable_set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE);
+    config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normal_user);
@@ -79,7 +79,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   function testCaptchaSessionReuseAttackDetectionOnNodeForm() {
     // Set CAPTCHA on page form.
     captcha_set_form_id_setting('page_node_form', 'captcha/Math');
-    variable_set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE);
+    config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normal_user);
@@ -119,7 +119,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   function testCaptchaSessionReuseAttackDetectionOnLoginForm() {
     // Set CAPTCHA on login form.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
-    variable_set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE);
+    config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Go to log in form.
     $this->drupalGet('user');

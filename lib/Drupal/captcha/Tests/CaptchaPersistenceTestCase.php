@@ -8,7 +8,7 @@
  * drupal_debug($data) // from devel module
  * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
  */
- 
+
 namespace Drupal\captcha\Tests;
 
 use Drupal\simpletest\WebTestBase;

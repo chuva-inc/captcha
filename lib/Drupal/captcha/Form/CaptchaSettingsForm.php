@@ -8,6 +8,9 @@
 namespace Drupal\captcha\Form;
 
 use Drupal\Core\ControllerInterface;
+use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\Context\ContextInterface;
 use Drupal\system\SystemConfigFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,6 +18,30 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Displays the captcha settings form.
  */
 class CaptchaSettingsForm extends SystemConfigFormBase {
+
+  /**
+   * The Drupal state storage service.
+   *
+   * @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface
+   */
+  protected $state;
+
+  /**
+   * Constructs a \Drupal\user\SystemConfigFormBase object.
+   *
+   */
+  public function __construct(ConfigFactory $config_factory, ContextInterface $context, KeyValueStoreInterface $state) {
+    $this->configFactory = $config_factory;
+    $this->configFactory->enterContext($context);
+    $this->state = $state;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static($container->get('config.factory'), $container->get('config.context.free'), $container->get('state'));
+  }
 
   /**
    * Implements \Drupal\Core\Form\FormInterface::getFormID().
@@ -27,6 +54,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
    * Implements \Drupal\Core\Form\FormInterface::buildForm().
    */
   public function buildForm(array $form, array &$form_state) {
+    $config = $this->configFactory->get('captcha.settings');
     module_load_include('inc','captcha');
     module_load_include('inc','captcha','captcha.admin');
 
@@ -44,7 +72,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
     '#title' => t('Default challenge type'),
     '#description' => t('Select the default challenge type for CAPTCHAs. This can be overriden for each form if desired.'),
     '#options' => _captcha_available_challenge_types(FALSE),
-    '#default_value' => variable_get('captcha_default_challenge', 'captcha/Math'),
+    '#default_value' => $config->get('captcha_default_challenge'),
   );
   // List known form_ids.
   $form['captcha_form_protection']['captcha_form_id_overview'] = array(
@@ -100,14 +128,14 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
   $form['captcha_form_protection']['captcha_administration_mode'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add CAPTCHA administration links to forms'),
-    '#default_value' => variable_get('captcha_administration_mode', FALSE),
+    '#default_value' => $config->get('captcha_administration_mode'),
     '#description' => t('This option makes it easy to manage CAPTCHA settings on forms. When enabled, users with the <em>administer CAPTCHA settings</em> permission will see a fieldset with CAPTCHA administration links on all forms, except on administrative pages.'),
   );
   // Field for the CAPTCHAs on admin pages.
   $form['captcha_form_protection']['captcha_allow_on_admin_pages'] = array(
     '#type' => 'checkbox',
     '#title' => t('Allow CAPTCHAs and CAPTCHA administration links on administrative pages'),
-    '#default_value' => variable_get('captcha_allow_on_admin_pages', FALSE),
+    '#default_value' => $config->get('captcha_allow_on_admin_pages'),
     '#description' => t("This option makes it possible to add CAPTCHAs to forms on administrative pages. CAPTCHAs are disabled by default on administrative pages (which shouldn't be accessible to untrusted users normally) to avoid the related overhead. In some situations, e.g. in the case of demo sites, it can be usefull to allow CAPTCHAs on administrative pages."),
   );
 
@@ -129,7 +157,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
     '#type' => 'checkbox',
     '#title' => t('Add a description to the CAPTCHA'),
     '#description' => t('Add a configurable description to explain the purpose of the CAPTCHA to the visitor.'),
-    '#default_value' => variable_get('captcha_add_captcha_description', TRUE),
+    '#default_value' => $config->get('captcha_add_captcha_description'),
   );
   // Textfield(s) for the CAPTCHA description.
   if (module_exists('locale')) {
@@ -169,7 +197,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
       CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE => t('Case sensitive validation: the response has to exactly match the solution.'),
       CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE => t('Case insensitive validation: lowercase/uppercase errors are ignored.'),
     ),
-    '#default_value' => variable_get('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE),
+    '#default_value' => $config->get('captcha_default_validation'),
   );
 
   // Field for CAPTCHA persistence.
@@ -177,7 +205,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
   $form['captcha_persistence'] = array(
     '#type' => 'radios',
     '#title' => t('Persistence'),
-    '#default_value' => variable_get('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE),
+    '#default_value' => $config->get('captcha_persistence'),
     '#options' => array(
       CAPTCHA_PERSISTENCE_SHOW_ALWAYS =>
         t('Always add a challenge.'),
@@ -196,7 +224,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
     '#type' => 'checkbox',
     '#title' => t('Enable statistics'),
     '#description' => t('Keep CAPTCHA related counters in the <a href="!statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', array('!statusreport' => url('admin/reports/status'))),
-    '#default_value' => variable_get('captcha_enable_stats', FALSE),
+    '#default_value' => $config->get('captcha_enable_stats'),
   );
 
   // Option for logging wrong responses.
@@ -204,7 +232,7 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
     '#type' => 'checkbox',
     '#title' => t('Log wrong responses'),
     '#description' => t('Report information about wrong responses to the <a href="!dblog">log</a>.', array('!dblog' => url('admin/reports/dblog'))),
-    '#default_value' => variable_get('captcha_log_wrong_responses', FALSE),
+    '#default_value' => $config->get('captcha_log_wrong_responses'),
   );
 
   // Submit button.
@@ -235,68 +263,68 @@ class CaptchaSettingsForm extends SystemConfigFormBase {
    * @see book_remove_button_submit()
    */
   public function submitForm(array &$form, array &$form_state) {
-    variable_set('captcha_administration_mode', $form_state['values']['captcha_administration_mode']);
-  variable_set('captcha_allow_on_admin_pages', $form_state['values']['captcha_allow_on_admin_pages']);
+    $config = $this->configFactory->get('captcha.settings');
+    $config->set('captcha_administration_mode', $form_state['values']['captcha_administration_mode']);
+    $config->set('captcha_allow_on_admin_pages', $form_state['values']['captcha_allow_on_admin_pages']);
+    $config->set('captcha_default_challenge', $form_state['values']['captcha_default_challenge']);
 
-  variable_set('captcha_default_challenge', $form_state['values']['captcha_default_challenge']);
-
-  // Process CAPTCHA points
-  if (isset($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'])) {
-    foreach ($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'] as $captcha_point_form_id => $data) {
-      captcha_set_form_id_setting($captcha_point_form_id, $data['captcha_type']);
-    }
-  }
-
-  // Add new CAPTCHA point?
-  $captcha_point_form_id = $form_state['values']['captcha_form_id_overview']['captcha_new_captcha_point']['form_id'];
-  if (!empty($captcha_point_form_id)) {
-    $captcha_type = $form_state['values']['captcha_form_id_overview']['captcha_new_captcha_point']['captcha_type'];
-    captcha_set_form_id_setting($captcha_point_form_id, $captcha_type);
-    drupal_set_message(t('Added CAPTCHA point.'), 'status');
-  }
-
-  // CAPTCHA description stuff.
-  variable_set('captcha_add_captcha_description', $form_state['values']['captcha_add_captcha_description']);
-  // Save (or reset) the CAPTCHA descriptions.
-  if (module_exists('locale')) {
-    $langs = locale_language_list();
-    foreach ($langs as $lang_code => $lang_name) {
-      $description = $form_state['values']["captcha_description_$lang_code"];
-      if ($description) {
-        variable_set("captcha_description_$lang_code", $description);
-      }
-      else {
-        variable_del("captcha_description_$lang_code");
-        drupal_set_message(t('Reset of CAPTCHA description for language %language.', array('%language' => $lang_name)), 'status');
+    // Process CAPTCHA points
+    if (isset($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'])) {
+      foreach ($form_state['values']['captcha_form_id_overview']['captcha_captcha_points'] as $captcha_point_form_id => $data) {
+        captcha_set_form_id_setting($captcha_point_form_id, $data['captcha_type']);
       }
     }
-  }
-  else {
-    $description = $form_state['values']['captcha_description'];
-    if ($description) {
-      variable_set('captcha_description', $description);
+
+    // Add new CAPTCHA point?
+    $captcha_point_form_id = $form_state['values']['captcha_form_id_overview']['captcha_new_captcha_point']['form_id'];
+    if (!empty($captcha_point_form_id)) {
+      $captcha_type = $form_state['values']['captcha_form_id_overview']['captcha_new_captcha_point']['captcha_type'];
+      captcha_set_form_id_setting($captcha_point_form_id, $captcha_type);
+      drupal_set_message(t('Added CAPTCHA point.'), 'status');
+    }
+
+    // CAPTCHA description stuff.
+    $config->set('captcha_add_captcha_description', $form_state['values']['captcha_add_captcha_description']);
+    // Save (or reset) the CAPTCHA descriptions.
+    if (module_exists('locale')) {
+      $langs = locale_language_list();
+      foreach ($langs as $lang_code => $lang_name) {
+        $description = $form_state['values']["captcha_description_$lang_code"];
+        if ($description) {
+          $config->set("captcha_description_$lang_code", $description);
+        }
+        else {
+          variable_del("captcha_description_$lang_code");
+          drupal_set_message(t('Reset of CAPTCHA description for language %language.', array('%language' => $lang_name)), 'status');
+        }
+      }
     }
     else {
-      variable_del('captcha_description');
-      drupal_set_message(t('Reset of CAPTCHA description.'), 'status');
+      $description = $form_state['values']['captcha_description'];
+      if ($description) {
+        $config->set('captcha_description', $description);
+      }
+      else {
+        $config->set('captcha_description','');
+        drupal_set_message(t('Reset of CAPTCHA description.'), 'status');
+      }
     }
-  }
 
-  variable_set('captcha_default_validation', $form_state['values']['captcha_default_validation']);
-  variable_set('captcha_persistence', $form_state['values']['captcha_persistence']);
-  variable_set('captcha_enable_stats', $form_state['values']['captcha_enable_stats']);
-  variable_set('captcha_log_wrong_responses', $form_state['values']['captcha_log_wrong_responses']);
-
-  drupal_set_message(t('The CAPTCHA settings have been saved.'), 'status');
+    $config->set('captcha_default_validation', $form_state['values']['captcha_default_validation']);
+    $config->set('captcha_persistence', $form_state['values']['captcha_persistence']);
+    $config->set('captcha_enable_stats', $form_state['values']['captcha_enable_stats']);
+    $config->set('captcha_log_wrong_responses', $form_state['values']['captcha_log_wrong_responses']);
+    $config->save();
+    drupal_set_message(t('The CAPTCHA settings have been saved.'), 'status');
 
     parent::SubmitForm($form, $form_state);
   }
 
-    /**
+ /**
   * Submit callback; clear CAPTCHA placement cache.
   */
   public function captcha_clear_captcha_placement_cache_submit($form, $form_state) {
-    variable_del('captcha_placement_map_cache');
+    $this->state->delete('captcha_placement_map_cache');
     drupal_set_message(t('Cleared the CAPTCHA placement cache.'));
   }
 }

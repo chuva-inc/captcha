@@ -8,7 +8,7 @@
  * drupal_debug($data) // from devel module
  * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
  */
- 
+
 namespace Drupal\captcha\Tests;
 
 use Drupal\simpletest\WebTestBase;
@@ -53,7 +53,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->assertEqual($result, 'none', 'Setting and symbolic getting CAPTCHA point: "none"', 'CAPTCHA');
     // Set to 'default'
     captcha_set_form_id_setting($comment_form_id, 'default');
-    variable_set('captcha_default_challenge', 'foo/bar');
+    config('captcha.settings')->set('captcha_default_challenge', 'foo/bar')->save();
     $result = captcha_get_form_id_setting($comment_form_id);
     $this->assertNotNull($result, 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
     $this->assertEqual($result->module, 'foo', 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
@@ -242,13 +242,13 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Visit user register form to fill the CAPTCHA placement cache.
     $this->drupalGet('user/register');
     // Check if there is CAPTCHA placement cache.
-    $placement_map = variable_get('captcha_placement_map_cache', NULL);
+    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
     $this->assertNotNull($placement_map, 'CAPTCHA placement cache should be set.');
     // Clear the cache
     $this->drupalLogin($this->admin_user);
     $this->drupalPost(self::CAPTCHA_ADMIN_PATH, array(), t('Clear the CAPTCHA placement cache'));
     // Check that the placement cache is unset
-    $placement_map = variable_get('captcha_placement_map_cache', NULL);
+    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
     $this->assertNull($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
   }
 
