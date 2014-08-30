@@ -2,26 +2,24 @@
 
 /**
  * Menu handler for font preview request.
- *
  */
 function image_captcha_font_preview($font_token) {
-
   // Get the font from the given font token.
   if ($font_token == 'BUILTIN') {
     $font = 'BUILTIN';
   }
   else {
     // Get the mapping of font tokens to font file objects.
-    $fonts = variable_get('image_captcha_fonts_preview_map_cache', array());
+    $fonts = \Drupal::config('image_captcha.settings')->get('image_captcha_fonts_preview_map_cache');
     if (!isset($fonts[$font_token])) {
-      echo('bad token');
+      print 'Bad token';
       exit();
     }
     // Get the font path.
     $font = $fonts[$font_token]->uri;
     // Some sanity checks if the given font is valid.
     if (!is_file($font) || !is_readable($font)) {
-      echo('bad font');
+      print 'Bad font';
       exit();
     }
   }
@@ -42,12 +40,12 @@ function image_captcha_font_preview($font_token) {
   $color = imagecolorallocate($image, 0, 0, 0);
   imagefilledrectangle($image, 0, 0, $width, $height, $background_color);
 
-  // Draw preview text
+  // Draw preview text.
   if ($font == 'BUILTIN') {
-    imagestring($image, 5, 1, .5*$height-10, $text, $color);
+    imagestring($image, 5, 1, .5 * $height-10, $text, $color);
   }
   else {
-    imagettftext($image, $font_size, 0, 1, 1.5*$font_size, $color, realpath($font), $text);
+    imagettftext($image, $font_size, 0, 1, 1.5 * $font_size, $color, realpath($font), $text);
   }
 
   // Set content type.

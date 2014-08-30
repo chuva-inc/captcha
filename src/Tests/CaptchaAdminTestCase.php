@@ -48,7 +48,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA point setting getter/setter.
    */
-  public function _testCaptchaPointSettingGetterAndSetter() {
+  public function noTestCaptchaPointSettingGetterAndSetter() {
     $comment_form_id = self::COMMENT_FORM_ID;
     captcha_set_form_id_setting($comment_form_id, 'none');
     /* @var CaptchaPoint $result */
@@ -208,7 +208,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test untrusted user posting.
    */
-  public function _testUntrustedUserPosting() {
+  public function noTestUntrustedUserPosting() {
     // Set CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
 
@@ -236,7 +236,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test XSS vulnerability on CAPTCHA description.
    */
-  public function _testXssOnCaptchaDescription() {
+  public function noTestXssOnCaptchaDescription() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register', 'captcha/Math');
 
@@ -255,7 +255,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA placement clearing.
    */
-  public function _testCaptchaPlacementCacheClearing() {
+  public function noTestCaptchaPlacementCacheClearing() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register_form', 'captcha/Math');
     // Visit user register form to fill the CAPTCHA placement cache.
@@ -291,7 +291,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function _testCaptchaPointAdministration() {
+  public function noTestCaptchaPointAdministration() {
     // Generate CAPTCHA point data:
     // Drupal form ID should consist of lowercase alphanumerics and underscore).
     $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
@@ -357,7 +357,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function _testCaptchaPointAdministrationByNonAdmin() {
+  public function noTestCaptchaPointAdministrationByNonAdmin() {
     // First add a CAPTCHA point (as admin).
     $this->drupalLogin($this->adminUser);
     $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));

@@ -7,20 +7,46 @@
 
 namespace Drupal\image_captcha\Controller;
 
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Drupal\Core\Config\Config;
 
 class CaptchaImageGenerator extends StreamedResponse {
+
+  /**
+   * @var Config
+   */
   protected $config;
+
+  /**
+   * @var LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * @var resource
+   */
   protected $image;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct($callback = null, $status = 200, $headers = array()) {
-    parent::__construct(null, $status, $headers);
+  public function __construct($callback = NULL, $status = 200, $headers = array(), Config $config, LoggerChannelInterface $logger) {
+    parent::__construct(NULL, $status, $headers);
 
-    $this->config = \Drupal::config('image_captcha.settings');
+    $this->config = $config;
+    $this->logger = $logger;
+  }
+
+  public static function create($callback = NULL, $status = 200, $headers = array()) {
+    return static::create(
+      $callback,
+      $status,
+      $headers,
+      \Drupal::config('image_captcha.settings'),
+      \Drupal::service('logger.factory')->get('captcha')
+    );
   }
 
   /**
@@ -37,7 +63,7 @@ class CaptchaImageGenerator extends StreamedResponse {
       $this->image = @$this->generateImage($code);
 
       if (!$this->image) {
-        watchdog('CAPTCHA', 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', array(), WATCHDOG_ERROR);
+        $this->logger->log(WATCHDOG_ERROR, 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', array());
       }
     }
 
@@ -58,12 +84,15 @@ class CaptchaImageGenerator extends StreamedResponse {
     return parent::sendHeaders();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function sendContent() {
     if (!$this->image) {
       return;
     }
 
-    // Begin capturing the byte stream
+    // Begin capturing the byte stream.
     ob_start();
 
     $file_format = $this->config->get('image_captcha_file_format');
@@ -127,10 +156,10 @@ class CaptchaImageGenerator extends StreamedResponse {
       imagecolortransparent($image, $background_color);
     }
     imagefilledrectangle($image, 0, 0, $width, $height, $background_color);
-//
-//    // Do we need to draw in RTL mode?
-//    global $language;
-//    $rtl = $language->direction && ((bool) $this->config->get('image_captcha_rtl_support'));
+
+    // Do we need to draw in RTL mode?
+    global $language;
+    $rtl = $language->direction && ((bool) $this->config->get('image_captcha_rtl_support'));
 
     $result = $this->printString($image, $width, $height, $fonts, $font_size, $code);
     if (!$result) {
@@ -422,4 +451,3 @@ class CaptchaImageGenerator extends StreamedResponse {
     return TRUE;
   }
 }
-
