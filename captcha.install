@@ -96,7 +96,7 @@ function captcha_requirements($phase) {
     // Show the wrong response counter in the status report.
     $requirements['captcha_wrong_response_counter'] = array(
       'title' => \Drupal::translation()->translate('CAPTCHA'),
-      'value' => format_plural(
+      'value' => \Drupal::translation()->formatPlural(
         $config->get('captcha_wrong_response_counter'),
         'Already 1 blocked form submission',
         'Already @count blocked form submissions'
