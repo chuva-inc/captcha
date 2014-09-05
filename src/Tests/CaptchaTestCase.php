@@ -195,7 +195,8 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
 
     // Check if there is a CAPTCHA on home page.
-    $this->drupalGet('node');
+    // @todo This assumes standard profile login form block, manually add it?
+    $this->drupalGet('');
     $this->assertCaptchaPresence(TRUE);
 
     // Check there is a CAPTCHA on "forbidden" admin pages.
