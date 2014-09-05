@@ -222,12 +222,16 @@ function _captcha_get_captcha_placement($form_id, $form) {
   // Get CAPTCHA placement map from cache. Two levels of cache:
   // static variable in this function and storage in the variables table.
   static $placement_map = NULL;
+
+  $write_cache = FALSE;
+
   // Try first level cache.
   if ($placement_map === NULL) {
     // If first level cache missed: try second level cache.
-    $placement_map = \Drupal::state()->get('captcha_placement_map_cache', NULL);
-
-    if ($placement_map === NULL) {
+    if ($cache = \Drupal::cache()->get('captcha_placement_map_cache')) {
+      $placement_map = $cache->data;
+    }
+    else {
       // If second level cache missed: initialize the placement map
       // and let other modules hook into this with the
       // hook_captcha_placement_map hook.
@@ -235,6 +239,7 @@ function _captcha_get_captcha_placement($form_id, $form) {
       // are already correctly handled with the best effort guess
       // based on the 'actions' element (see below).
       $placement_map = \Drupal::moduleHandler()->invokeAll('captcha_placement_map');
+      $write_cache = TRUE;
     }
   }
 
@@ -271,9 +276,12 @@ function _captcha_get_captcha_placement($form_id, $form) {
 
     // Store calculated placement in cache.
     $placement_map[$form_id] = $placement;
-    \Drupal::state()->set('captcha_placement_map_cache', $placement_map);
+    $write_cache = TRUE;
   }
 
+  if ($write_cache) {
+    \Drupal::cache()->set('captcha_placement_map_cache', $placement_map);
+  }
   return $placement;
 }
 
