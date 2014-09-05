@@ -199,7 +199,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $config = \Drupal::config('captcha.settings');
     $config->set('captcha_administration_mode', $form_state['values']['captcha_administration_mode']);
     $config->set('captcha_allow_on_admin_pages', $form_state['values']['captcha_allow_on_admin_pages']);
-    $config->set('captcha_default_challenge', $form_state['values']['captcha_default_challenge']);
+    $config->set('default_challenge', $form_state['values']['captcha_default_challenge']);
 
     // CAPTCHA description stuff.
     $config->set('captcha_add_captcha_description', $form_state['values']['captcha_add_captcha_description']);

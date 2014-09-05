@@ -88,7 +88,7 @@ class CaptchaPoint extends ConfigEntityBase implements CaptchaPointInterface {
     }
     else {
       // @Todo inject config via DI.
-      return \Drupal::config('captcha.settings')->get('captcha_default_challenge');
+      return \Drupal::config('captcha.settings')->get('default_challenge');
     }
   }
 

@@ -1,4 +1,4 @@
-captcha_default_challenge: 'captcha/Math'
+default_challenge: 'captcha/Math'
 captcha_description: 'This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.'
 captcha_administration_mode: 0
 captcha_allow_on_admin_pages: 0

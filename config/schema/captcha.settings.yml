@@ -5,11 +5,11 @@ captcha.settings:
   type: mapping
   label: 'External Links Settings'
   mapping:
-    captcha_default_challenge:
+    default_challenge:
       type: string
       label: 'The default challenge for captcha.'
     captcha_description:
-      type: string
+      type: label
       label: 'The default captcha description.'
     captcha_administration_mode:
       type: boolean

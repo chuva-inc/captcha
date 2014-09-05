@@ -62,7 +62,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set to 'default'
     captcha_set_form_id_setting($comment_form_id, 'default');
-    \Drupal::config('captcha.settings')->set('captcha_default_challenge', 'foo/bar')->save();
+    \Drupal::config('captcha.settings')->set('default_challenge', 'foo/bar')->save();
     $result = captcha_get_form_id_setting($comment_form_id);
     $this->assertNotNull($result, 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
     // $this->assertEqual($result->module, 'foo', 'Setting and getting
