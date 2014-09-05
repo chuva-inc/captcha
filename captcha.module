@@ -97,8 +97,8 @@ function captcha_theme() {
   return array(
     'captcha' => array(
       'render element' => 'element',
-       'template' => 'captcha',
-       'path' => drupal_get_path('module', 'captcha') . '/templates',
+      'template' => 'captcha',
+      'path' => drupal_get_path('module', 'captcha') . '/templates',
     ),
   );
 }

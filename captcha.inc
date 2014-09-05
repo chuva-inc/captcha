@@ -283,7 +283,7 @@ function _captcha_search_buttons(array $form) {
         'weight' => $weight,
       );
     }
-    // Process children recurively.
+    // Process children recursively.
     $children_buttons = _captcha_search_buttons($form[$key]);
     foreach ($children_buttons as $b) {
       $b['path'] = array_merge(array($key), $b['path']);
@@ -306,7 +306,7 @@ function _captcha_search_buttons(array $form) {
  *       the form where the CAPTCHA element should be inserted.
  *     - 'key': the key of the element before which the CAPTCHA element
  *       should be inserted. If the field 'key' is undefined or NULL,
- *       the CAPTCHA willjust be appended in the container.
+ *       the CAPTCHA will just be appended in the container.
  *     - 'weight': if 'key' is not NULL: should be the weight of the
  *       element defined by 'key'. If 'key' is NULL and weight is not NULL:
  *       set the weight property of the CAPTCHA element to this value.
