@@ -143,9 +143,9 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(TRUE);
 
     // Get CAPTCHA session ID and solution of the challenge.
-    $captcha_sid = $this->getCaptchaSidFromForm($login_form_html_id);
-    $captcha_token = $this->getCaptchaTokenFromForm($login_form_html_id);
-    $solution = $this->getMathCaptchaSolutionFromForm($login_form_html_id);
+    $captcha_sid = $this->getCaptchaSidFromForm();
+    $captcha_token = $this->getCaptchaTokenFromForm();
+    $solution = $this->getMathCaptchaSolutionFromForm();
 
     // Log in through form.
     $edit = array(
