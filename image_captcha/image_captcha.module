@@ -244,7 +244,7 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
         );
 
         // Handle the case insensitive validation option combined with ignoring spaces.
-        switch (\Drupal::config('captcha.settings')->get('captcha_default_validation')) {
+        switch (\Drupal::config('captcha.settings')->get('default_validation')) {
           case CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE:
             $result['captcha_validate'] = 'captcha_validate_ignore_spaces';
             break;

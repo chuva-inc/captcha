@@ -137,7 +137,7 @@ function captcha_element_info() {
   // Override the default CAPTCHA validation function for case
   // insensitive validation.
   // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
-  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')->get('captcha_default_validation')) {
+  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')->get('default_validation')) {
     $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
   }
 
@@ -315,7 +315,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       );
 
       // Add a CAPTCHA description if required.
-      if (\Drupal::config('captcha.settings')->get('captcha_add_captcha_description')) {
+      if (\Drupal::config('captcha.settings')->get('add_captcha_description')) {
         $captcha_element['#description'] = _captcha_get_description();
       }
 
@@ -324,9 +324,9 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       _captcha_insert_captcha_element($form, $captcha_placement, $captcha_element);
     }
   }
-  elseif (\Drupal::config('captcha.settings')->get('captcha_administration_mode', FALSE)
+  elseif (\Drupal::config('captcha.settings')->get('administration_mode', FALSE)
     && $account->hasPermission('administer CAPTCHA settings')
-    && (\Drupal::service('router.admin_context')->isAdminRoute()  || \Drupal::config('captcha.settings')->get('captcha_allow_on_admin_pages', FALSE))) {
+    && (\Drupal::service('router.admin_context')->isAdminRoute()  || \Drupal::config('captcha.settings')->get('allow_on_admin_pages', FALSE))) {
     // Add CAPTCHA administration tools.
     module_load_include('inc', 'captcha');
 
@@ -613,11 +613,11 @@ function captcha_validate($element, &$form_state) {
 
       $form_state->setErrorByName('captcha_response', t('The answer you entered for the CAPTCHA was not correct.'));
       // Update wrong response counter.
-      if (\Drupal::config('captcha.settings')->get('captcha_enable_stats', FALSE)) {
-        Drupal::state()->set('captcha_wrong_response_counter', Drupal::state()->get('captcha_wrong_response_counter', 0) + 1);
+      if (\Drupal::config('captcha.settings')->get('enable_stats', FALSE)) {
+        Drupal::state()->set('wrong_response_counter', Drupal::state()->get('wrong_response_counter', 0) + 1);
       }
 
-      if (\Drupal::config('captcha.settings')->get('captcha_log_wrong_responses', FALSE)) {
+      if (\Drupal::config('captcha.settings')->get('log_wrong_responses', FALSE)) {
         watchdog('CAPTCHA',
           '%form_id post blocked by CAPTCHA module: challenge %challenge (by module %module), user answered "@response", but the solution was "@solution".',
           array(

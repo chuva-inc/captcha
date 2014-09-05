@@ -52,7 +52,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $node = $this->drupalCreateNode();
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -92,7 +92,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnNodeForm() {
     // Set CAPTCHA on page form.
     captcha_set_form_id_setting('page_node_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -134,7 +134,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnLoginForm() {
     // Set CAPTCHA on login form.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Go to log in form.
     // @TODO Bartik has two login forms because of sidebar's one on

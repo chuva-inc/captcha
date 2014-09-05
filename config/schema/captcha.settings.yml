@@ -1,5 +1,5 @@
 # Schema for the configuration files of the captcha module.
-#captcha_wrong_response_counter
+#wrong_response_counter
 
 captcha.settings:
   type: mapping
@@ -8,27 +8,27 @@ captcha.settings:
     default_challenge:
       type: string
       label: 'The default challenge for captcha.'
-    captcha_description:
+    description:
       type: label
       label: 'The default captcha description.'
-    captcha_administration_mode:
+    administration_mode:
       type: boolean
       label: 'Add CAPTCHA administration links to forms'
-    captcha_allow_on_admin_pages:
+    allow_on_admin_pages:
       type: boolean
       label: 'Allow CAPTCHAs and CAPTCHA administration links on administrative pages'
-    captcha_add_captcha_description:
+    add_captcha_description:
       type: boolean
       label: 'Add a description to the CAPTCHA'
-    captcha_default_validation:
+    default_validation:
       type: integer
       label: 'Default CAPTCHA validation'
-    captcha_persistence:
+    persistence:
       type: integer
       label: 'CAPTCHA Persistence'
-    captcha_enable_stats:
+    enable_stats:
       type: boolean
       label: 'Enable statistics'
-    captcha_log_wrong_responses:
+    log_wrong_responses:
       type: boolean
       label: 'Log wrong responses'

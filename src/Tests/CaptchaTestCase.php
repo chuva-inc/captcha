@@ -118,7 +118,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->drupalLogin($this->normalUser);
 
     // Test case sensitive posting.
-    $config->set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE);
+    $config->set('default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE);
     $config->save();
 
     $this->assertCommentPosting('Test 123', TRUE, 'Case sensitive validation of right casing.');
@@ -126,7 +126,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->assertCommentPosting('TEST 123', FALSE, 'Case sensitive validation of wrong casing.');
 
     // Test case insensitive posting (the default).
-    $config->set('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE);
+    $config->set('default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE);
     $config->save();
 
     $this->assertCommentPosting('Test 123', TRUE, 'Case insensitive validation of right casing.');

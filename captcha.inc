@@ -121,7 +121,7 @@ function _captcha_update_captcha_session($captcha_sid, $solution) {
  */
 function _captcha_required_for_user($captcha_sid, $form_id) {
   // Get the CAPTCHA persistence setting.
-  $captcha_persistence = \Drupal::config('captcha.settings')->get('captcha_persistence');
+  $captcha_persistence = \Drupal::config('captcha.settings')->get('persistence');
 
   // First check: should we always add a CAPTCHA?
   if ($captcha_persistence == CAPTCHA_PERSISTENCE_SHOW_ALWAYS) {

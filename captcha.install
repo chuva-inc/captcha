@@ -92,12 +92,12 @@ function captcha_requirements($phase) {
   $requirements = array();
   $config = \Drupal::config('captcha.settings');
 
-  if ($phase == 'runtime' && $config->get('captcha_enable_stats')) {
+  if ($phase == 'runtime' && $config->get('enable_stats')) {
     // Show the wrong response counter in the status report.
     $requirements['captcha_wrong_response_counter'] = array(
       'title' => \Drupal::translation()->translate('CAPTCHA'),
       'value' => \Drupal::translation()->formatPlural(
-        $config->get('captcha_wrong_response_counter'),
+        $config->get('wrong_response_counter'),
         'Already 1 blocked form submission',
         'Already @count blocked form submissions'
       ),
