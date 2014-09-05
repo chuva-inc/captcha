@@ -259,6 +259,7 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     // Make sure we can use a top level form value
     // $form_state['values']['captcha_response'], even if the form has #tree=true.
     $element['#tree'] = FALSE;
+
   }
 
   return $element;
@@ -271,11 +272,11 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
  * Render it in a section element if a description of the CAPTCHA
  * is available. Render it as is otherwise.
  */
-function theme_captcha($variables) {
+function template_preprocess_captcha(&$variables) {
   $element = $variables['element'];
 
   if (!empty($element['#description']) && isset($element['captcha_widgets'])) {
-    $fieldset = array(
+    $variables['details'] = array(
       '#type' => 'details',
       '#title' => t('CAPTCHA'),
       '#description' => $element['#description'],
@@ -286,10 +287,6 @@ function theme_captcha($variables) {
       ),
       '#open' => TRUE,
     );
-    return _theme('details', array('element' => $fieldset));
-  }
-  else {
-    return '<div class="captcha">' . drupal_render_children($element) . '</div>';
   }
 }
 
