@@ -259,7 +259,6 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     // Make sure we can use a top level form value
     // $form_state['values']['captcha_response'], even if the form has #tree=true.
     $element['#tree'] = FALSE;
-
   }
 
   return $element;
