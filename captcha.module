@@ -734,13 +734,3 @@ function captcha_captcha($op, $captcha_type = '') {
       break;
   }
 }
-
-/**
- * Implements hook_modules_enabled().
- */
-function captcha_modules_enabled() {
-  // When new modules are enabled: clear the CAPTCHA placement cache, so that
-  // new hook_captcha_placement_map hooks can be triggered.
-  $config = \Drupal::config('system.performance');
-  $config->delete('captcha_placement_map_cache');
-}
