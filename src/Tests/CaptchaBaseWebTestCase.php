@@ -38,7 +38,6 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
   public static $modules = array('captcha', 'comment');
 
-  protected $profile = 'standard';
 
   /**
    * User with various administrative permissions.
@@ -74,6 +73,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     // module for testing anonymous comments.
     parent::setUp();
     module_load_include('inc', 'captcha');
+
+    $this->drupalCreateContentType(array('type' => 'page'));
 
     // Create a normal user.
     $permissions = array(
