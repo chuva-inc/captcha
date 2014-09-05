@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Xss;
 use Drupal\captcha\Entity\CaptchaPoint;
+use Drupal\Core\Render\Element;
 
 /**
  * Helper function for adding/updating a CAPTCHA point.
@@ -291,7 +292,7 @@ function _captcha_get_captcha_placement($form_id, $form) {
 function _captcha_search_buttons(array $form) {
   $buttons = array();
 
-  foreach (element_children($form) as $key) {
+  foreach (Element::children($form, FALSE) as $key) {
     // Look for submit or button type elements.
     if (isset($form[$key]['#type']) && ($form[$key]['#type'] == 'submit' || $form[$key]['#type'] == 'button')) {
       $weight = isset($form[$key]['#weight']) ? $form[$key]['#weight'] : NULL;

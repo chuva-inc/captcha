@@ -26,7 +26,7 @@ function _captcha_available_challenge_types($add_special_options = TRUE) {
   }
   // We do our own version of Drupal's module_invoke_all() here because
   // we want to build an array with custom keys and values.
-  foreach (module_implements('captcha') as $module) {
+  foreach (\Drupal::moduleHandler()->getImplementations('captcha') as $module) {
     $result = call_user_func_array($module . '_captcha', array('list'));
     if (is_array($result)) {
       foreach ($result as $type) {
