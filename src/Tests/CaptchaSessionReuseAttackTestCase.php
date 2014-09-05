@@ -190,7 +190,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
     // Preview comment with correct CAPTCHA answer.
     $edit = $this->getCommentFormValues();
-    $comment_subject = $edit['subject'];
+    $comment_subject = $edit['subject[0][value]'];
     $edit['captcha_response'] = 'Test 123';
     $this->drupalPostForm('comment/reply/node/' . $node->id() . '/comment', $edit, t('Preview'));
     // Post should be accepted: no warnings,

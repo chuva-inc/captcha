@@ -146,7 +146,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getCommentFormValues() {
     $edit = array(
-      'subject' => 'comment_subject ' . $this->randomName(32),
+      'subject[0][value]' => 'comment_subject ' . $this->randomName(32),
       'comment_body[0][value]' => 'comment_body ' . $this->randomName(256),
     );
 

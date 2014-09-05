@@ -83,7 +83,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
     // Post comment on node.
     $edit = $this->getCommentFormValues();
-    $comment_subject = $edit['subject'];
+    $comment_subject = $edit['subject[0][value]'];
     $comment_body = $edit['comment_body[0][value]'];
     $edit['captcha_response'] = $captcha_response;
     $this->drupalPostForm('comment/reply/node/' . $node->id() . '/comment', $edit, t('Save'), array(), array(), 'comment-form');
