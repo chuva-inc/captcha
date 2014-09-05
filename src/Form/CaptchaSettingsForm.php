@@ -106,34 +106,14 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#description' => t('Add a configurable description to explain the purpose of the CAPTCHA to the visitor.'),
       '#default_value' => $config->get('captcha_add_captcha_description'),
     );
-    // Textfield(s) for the CAPTCHA description.
-    if (\Drupal::moduleHandler()->moduleExists('locale')) {
-      $langs = language_list();
-      $form['captcha_descriptions'] = array(
-        '#type' => 'details',
-        '#title' => $this->t('CAPTCHA description'),
-        '#description' => t('Configurable description of the CAPTCHA. An empty entry will reset the description to default.'),
-        '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
-      );
-      foreach ($langs as $lang_code => $lang_name) {
-        $form['captcha_descriptions']["captcha_description_$lang_code"] = array(
-          '#type' => 'textfield',
-          '#title' => $this->t('For language %lang_name (code %lang_code)', array('%lang_name' => $lang_name, '%lang_code' => $lang_code)),
-          '#default_value' => _captcha_get_description($lang_code),
-          '#maxlength' => 256,
-        );
-      }
-    }
-    else {
-      $form['captcha_description'] = array(
-        '#type' => 'textfield',
-        '#title' => $this->t('Challenge description'),
-        '#description' => $this->t('Configurable description of the CAPTCHA. An empty entry will reset the description to default.'),
-        '#default_value' => _captcha_get_description(),
-        '#maxlength' => 256,
-        '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
-      );
-    }
+    $form['captcha_description'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Challenge description'),
+      '#description' => $this->t('Configurable description of the CAPTCHA. An empty entry will reset the description to default.'),
+      '#default_value' => _captcha_get_description(),
+      '#maxlength' => 256,
+      '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
+    );
 
     // Option for case sensitive/insensitive validation of the responses.
     $form['captcha_default_validation'] = array(

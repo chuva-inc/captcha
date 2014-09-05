@@ -160,38 +160,11 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
 /**
  * Get the CAPTCHA description.
  *
- * If the locale module is enabled, the description will be returned
- * for the current language the page is rendered for. This language
- * can optionally been overriden with the $lang_code argument.
- *
- * @param string $langcode
- *   An optional language code to get the description for.
- *
  * @return string
- *   Localized CAPTCHA description.
+ *   CAPTCHA description.
  */
-function _captcha_get_description($langcode = NULL) {
-  // If no language code is given: use the language of the current page.
-  if ($langcode) {
-    /* @var \Drupal\core\Language\Language $language */
-    $language = \Drupal::languageManager()->getLanguage($langcode);
-  }
-  else {
-    /* @var \Drupal\core\Language\Language $language */
-    $language = \Drupal::languageManager()->getCurrentLanguage();
-  }
-  $id = $language->getId();
-  // The hardcoded but localizable default.
-  $default = t('This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.', array(), array('id' => $id));
-  // Look up the configured CAPTCHA description or
-  // fall back on the (localized) default.
-  if (Drupal::moduleHandler()->moduleExists('locale')) {
-    $description = \Drupal::config('captcha.settings')->get("captcha_description_$id", $default);
-  }
-  else {
-    $description = \Drupal::config('captcha.settings')->get('captcha_description', $default);
-  }
-
+function _captcha_get_description() {
+  $description = \Drupal::config('captcha.settings')->get('description');
   return Xss::filter($description);
 }
 
