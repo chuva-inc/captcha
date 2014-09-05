@@ -56,7 +56,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   /**
    * Form ID of comment form on standard (page) node.
    */
-  const COMMENT_FORM_ID = 'node__comment_comment_form';
+  const COMMENT_FORM_ID = 'comment_comment_form';
 
   const LOGIN_HTML_FORM_ID = 'user-login-form';
 
