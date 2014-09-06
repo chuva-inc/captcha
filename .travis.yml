@@ -41,6 +41,20 @@ install:
   - composer global require squizlabs/php_codesniffer:$PHPCS_VERSION
   - composer global require drupal/coder:$CODER_VERSION
 
+  # LAMP package installation (mysql is already started)
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm, travis does not support any other method with php and apache
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # Make sure the apache root is in our wanted directory
+  - echo "$(curl -fsSL https://gist.githubusercontent.com/nickveenhof/11386315/raw/b8abaf9304fe12b5cc7752d39c29c1edae8ac2e6/gistfile1.txt)" | sed -e "s,PATH,$TRAVIS_BUILD_DIR/../drupal,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
+  # Restart apache and test it
+  - sudo service apache2 restart
+  - curl -v "http://localhost"
+
 
 before_script:
   # Create a Drupal coding standard reference in PHPCS coding standards.
@@ -66,16 +80,10 @@ before_script:
   - ln -s $TESTDIR modules/$MODULE_NAME
   - drush --yes pm-enable simpletest $MODULE_NAME
 
-  # Start a web server on port 8080, run in the background; wait for
-  # initialization. This is temporarly disabled since there are no web tests
-  # yet.
-  - drush runserver 127.0.0.1:8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-
 script:
   # Run the Coder sniffer for Flag.
   - phpcs --report=full --standard=Drupal ./modules/$MODULE_NAME
   # Run the Simpletests for Rules.
-  - php ./core/scripts/run-tests.sh --php `which php` --concurrency 12 --url http://127.0.0.1:8080 --verbose --color "$MODULE_TEST_GROUP"
+  - php ./core/scripts/run-tests.sh --php `which php` --concurrency 12 --url http://localhost/ --verbose --color "$MODULE_TEST_GROUP"
   # Run the PHPUnit tests.
   - ./core/vendor/phpunit/phpunit/phpunit -c ./core/phpunit.xml.dist ./modules/$MODULE_NAME
