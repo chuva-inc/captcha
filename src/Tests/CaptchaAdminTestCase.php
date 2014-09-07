@@ -124,7 +124,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Testing of the CAPTCHA administration links.
    */
-  public function _testCaptchAdminLinks() {
+  public function noTestCaptchaAdminLinks() {
     $this->drupalLogin($this->adminUser);
 
     // Enable CAPTCHA administration links.

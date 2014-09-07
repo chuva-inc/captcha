@@ -16,19 +16,18 @@ use Drupal\Core\Config\Config;
 class CaptchaImageGeneratorController implements ContainerInjectionInterface {
 
   /**
+   * Image Captcha config storage.
+   *
    * @var Config
    */
   protected $config;
 
   /**
+   * Watchdog logger channel for captcha.
+   *
    * @var LoggerChannelInterface
    */
   protected $logger;
-
-  /**
-   * @var resource
-   */
-  protected $image;
 
   /**
    * {@inheritdoc}
@@ -38,6 +37,9 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
     $this->logger = $logger;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory')->get('image_captcha.settings'),
@@ -45,7 +47,13 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
     );
   }
 
-    public function image() {
+  /**
+   * Main method that throw ImageResponse object to generate image.
+   *
+   * @return CaptchaImageResponse
+   */
+  public function image() {
     return new CaptchaImageResponse($this->config, $this->logger);
   }
+
 }

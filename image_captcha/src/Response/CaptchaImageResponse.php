@@ -15,16 +15,22 @@ use Drupal\Core\Config\Config;
 class CaptchaImageResponse extends Response {
 
   /**
+   * Image Captcha config storage.
+   *
    * @var Config
    */
   protected $config;
 
   /**
+   * Watchdog logger channel for captcha.
+   *
    * @var LoggerChannelInterface
    */
   protected $logger;
 
   /**
+   * Recourse with generated image.
+   *
    * @var resource
    */
   protected $image;

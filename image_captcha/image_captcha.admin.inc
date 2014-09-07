@@ -2,6 +2,9 @@
 
 /**
  * Menu handler for font preview request.
+ *
+ * @param string $font_token
+ *   Name of font to generate image from.
  */
 function image_captcha_font_preview($font_token) {
   // Get the font from the given font token.
@@ -42,7 +45,7 @@ function image_captcha_font_preview($font_token) {
 
   // Draw preview text.
   if ($font == 'BUILTIN') {
-    imagestring($image, 5, 1, .5 * $height-10, $text, $color);
+    imagestring($image, 5, 1, .5 * $height - 10, $text, $color);
   }
   else {
     imagettftext($image, $font_size, 0, 1, 1.5 * $font_size, $color, realpath($font), $text);
