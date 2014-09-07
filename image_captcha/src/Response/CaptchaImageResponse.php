@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Contains CAPTCHA image generator controller class.
+ * Contains CAPTCHA image response class.
  */
 
-namespace Drupal\image_captcha\Controller;
+namespace Drupal\image_captcha\Response;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Config\Config;
 
-class CaptchaImageGenerator extends StreamedResponse {
+class CaptchaImageResponse extends Response {
 
   /**
    * @var Config
@@ -32,21 +32,11 @@ class CaptchaImageGenerator extends StreamedResponse {
   /**
    * {@inheritdoc}
    */
-  public function __construct($callback = NULL, $status = 200, $headers = array(), Config $config, LoggerChannelInterface $logger) {
+  public function __construct(Config $config, LoggerChannelInterface $logger, $callback = NULL, $status = 200, $headers = array()) {
     parent::__construct(NULL, $status, $headers);
 
     $this->config = $config;
     $this->logger = $logger;
-  }
-
-  public static function create($callback = NULL, $status = 200, $headers = array()) {
-    return static::create(
-      $callback,
-      $status,
-      $headers,
-      \Drupal::config('image_captcha.settings'),
-      \Drupal::service('logger.factory')->get('captcha')
-    );
   }
 
   /**

@@ -137,8 +137,7 @@ function captcha_element_info() {
   // Override the default CAPTCHA validation function for case
   // insensitive validation.
   // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
-  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-      ->get('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE)) {
+  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')->get('captcha_default_validation')) {
     $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
   }
 
