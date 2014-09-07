@@ -37,7 +37,7 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
   private function setUpPersistence($persistence) {
     $this->drupalLogin($this->adminUser);
     // Set persistence.
-    $edit = array('captcha_persistence' => $persistence);
+    $edit = array('persistence' => $persistence);
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, 'Save configuration');
     // Log admin out.
     $this->drupalLogout();

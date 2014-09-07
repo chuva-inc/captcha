@@ -236,14 +236,14 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test XSS vulnerability on CAPTCHA description.
    */
-  public function noTestXssOnCaptchaDescription() {
+  public function testXssOnCaptchaDescription() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register', 'captcha/Math');
 
     // Put Javascript snippet in CAPTCHA description.
     $this->drupalLogin($this->adminUser);
     $xss = '<script type="text/javascript">alert("xss")</script>';
-    $edit = array('captcha_description' => $xss);
+    $edit = array('description' => $xss);
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, 'Save configuration');
 
     // Visit user register form and check if Javascript snippet is there.
@@ -255,20 +255,20 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA placement clearing.
    */
-  public function noTestCaptchaPlacementCacheClearing() {
+  public function testCaptchaPlacementCacheClearing() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register_form', 'captcha/Math');
     // Visit user register form to fill the CAPTCHA placement cache.
     $this->drupalGet('user/register');
     // Check if there is CAPTCHA placement cache.
-    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
+    $placement_map = $this->container->get('cache.default')->get('captcha_placement_map_cache');
     $this->assertNotNull($placement_map, 'CAPTCHA placement cache should be set.');
     // Clear the cache.
     $this->drupalLogin($this->adminUser);
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, array(), t('Clear the CAPTCHA placement cache'));
     // Check that the placement cache is unset.
-    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
-    $this->assertNull($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
+    $placement_map = $this->container->get('cache.default')->get('captcha_placement_map_cache');
+    $this->assertFalse($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
   }
 
   /**
