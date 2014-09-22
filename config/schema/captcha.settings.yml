@@ -13,22 +13,22 @@ captcha.settings:
       label: 'The default captcha description.'
     captcha_administration_mode:
       type: boolean
-      label: ''
+      label: 'Add CAPTCHA administration links to forms'
     captcha_allow_on_admin_pages:
       type: boolean
-      label: ''
+      label: 'Allow CAPTCHAs and CAPTCHA administration links on administrative pages'
     captcha_add_captcha_description:
       type: boolean
-      label: ''
+      label: 'Add a description to the CAPTCHA'
     captcha_default_validation:
-      type: boolean
-      label: ''
+      type: integer
+      label: 'Default CAPTCHA validation'
     captcha_persistence:
-      type: boolean
-      label: ''
+      type: integer
+      label: 'CAPTCHA Persistence'
     captcha_enable_stats:
       type: boolean
-      label: ''
+      label: 'Enable statistics'
     captcha_log_wrong_responses:
       type: boolean
-      label: ''
+      label: 'Log wrong responses'

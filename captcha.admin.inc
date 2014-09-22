@@ -5,17 +5,20 @@
  * Functionality and helper functions for CAPTCHA administration.
  */
 
- /**
- * Return an array with the available CAPTCHA types, for use as options array
- * for a select form elements.
+/**
+ * Return an array with the available CAPTCHA types.
  *
- * @param $add_special_options if true: also add a 'none' and 'default' option
+ * For use as options array for a select form elements.
  *
- * @return an associative array mapping "$module/$type" to
- *   "$type (from module $module)" with $module the module name implementing the CAPTCHA
- *   and $type the name of the CAPTCHA type.
+ * @param bool $add_special_options
+ *   If true: also add a 'none' and 'default' option.
+ *
+ * @return array
+ *   An associative array mapping "$module/$type" to
+ *   "$type (from module $module)" with $module the module name
+ *   implementing the CAPTCHA and $type the name of the CAPTCHA type.
  */
-function _captcha_available_challenge_types($add_special_options=TRUE) {
+function _captcha_available_challenge_types($add_special_options = TRUE) {
   $captcha_types = array();
   if ($add_special_options) {
     $captcha_types['none'] = t('- No challenge -');
@@ -35,31 +38,34 @@ function _captcha_available_challenge_types($add_special_options=TRUE) {
 }
 
 /**
- * Central handler for CAPTCHA point administration (adding, disabling, deleting)
+ * Central handler for CAPTCHA point administration.
  */
-function captcha_point_admin($captcha_point_form_id=NULL, $op=NULL) {
+function captcha_point_admin($captcha_point_form_id = NULL, $op = NULL) {
   module_load_include('inc', 'captcha');
 
-  // if $captcha_point_form_id and action $op given: do the action
+  // If $captcha_point_form_id and action $op given: do the action.
   if ($captcha_point_form_id) {
     switch ($op) {
       case 'disable':
         return drupal_get_form('captcha_point_disable_confirm', $captcha_point_form_id, FALSE);
+
       case 'delete':
         return drupal_get_form('captcha_point_disable_confirm', $captcha_point_form_id, TRUE);
     }
-    // return edit form for CAPTCHA point
+
     return drupal_get_form('captcha_point_admin_form', $captcha_point_form_id);
   }
-  // return add form for CAPTCHA point
+
   return drupal_get_form('captcha_point_admin_form');
 }
 
-function captcha_point_admin_form($form, $form_state, $captcha_point_form_id=NULL) {
+/**
+ * CAPTCHA settings form.
+ */
+function captcha_point_admin_form($form, $form_state, $captcha_point_form_id = NULL) {
   $form = array();
   $default_captcha_type = 'none';
   if (isset($captcha_point_form_id)) {
-    // use given CAPTCHA point form_id
     $form['captcha_point_form_id'] = array(
       '#type' => 'textfield',
       '#title' => t('Form ID'),
@@ -73,14 +79,13 @@ function captcha_point_admin_form($form, $form_state, $captcha_point_form_id=NUL
     }
   }
   else {
-    // textfield for CAPTCHA point form_id
     $form['captcha_point_form_id'] = array(
       '#type' => 'textfield',
       '#title' => t('Form ID'),
       '#description' => t('The Drupal form_id of the form to add the CAPTCHA to.'),
     );
   }
-  // select widget for CAPTCHA type
+
   $form['captcha_type'] = array(
     '#type' => 'select',
     '#title' => t('Challenge type'),
@@ -88,9 +93,9 @@ function captcha_point_admin_form($form, $form_state, $captcha_point_form_id=NUL
     '#default_value' => $default_captcha_type,
     '#options' => _captcha_available_challenge_types(),
   );
-  // redirect to general CAPTCHA settings page after submission
+  // Redirect to general CAPTCHA settings page after submission.
   $form['#redirect'] = 'admin/config/people/captcha';
-  // submit button
+
   $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array(
     '#type' => 'submit',
@@ -99,16 +104,14 @@ function captcha_point_admin_form($form, $form_state, $captcha_point_form_id=NUL
   return $form;
 }
 
-
 /**
- * validation function for captcha_point_admin_form
+ * Validation function for captcha_point_admin_form.
  */
 function captcha_point_admin_form_validate($form, $form_state) {
   if (!preg_match('/^[a-z0-9_]+$/', $form_state['values']['captcha_point_form_id'])) {
     form_set_error('captcha_point_form_id', t('Illegal form_id'));
   }
 }
-
 
 /**
  * Submit function for captcha_point_admin_form.
@@ -121,7 +124,7 @@ function captcha_point_admin_form_submit($form, $form_state) {
 }
 
 /**
- * Confirm dialog for disabling/deleting a CAPTCHA point
+ * Confirm dialog for disabling/deleting a CAPTCHA point.
  */
 function captcha_point_disable_confirm($form, &$form_state, $captcha_point_form_id, $delete) {
   $form = array();
@@ -173,7 +176,7 @@ function _captcha_generate_example_challenge($module, $type) {
 }
 
 /**
- * Funtion for generating a page with CAPTCHA examples.
+ * Function for generating a page with CAPTCHA examples.
  *
  * If the arguments $module and $challenge are not set, generate a list with
  * examples of the available CAPTCHA types.
@@ -186,12 +189,12 @@ function captcha_examples($form, $form_state, $module, $challenge) {
   $form = array();
   if ($module && $challenge) {
     // Generate 10 example challenges.
-    for ($i=0; $i<10; $i++) {
+    for ($i = 0; $i < 10; $i++) {
       $form["challenge_{$i}"] = _captcha_generate_example_challenge($module, $challenge);
     }
   }
   else {
-    // generate a list with examples of the available CAPTCHA types
+    // Generate a list with examples of the available CAPTCHA types.
     $form['info'] = array(
       '#markup' => t('This page gives an overview of all available challenge types, generated with their current settings.'),
     );

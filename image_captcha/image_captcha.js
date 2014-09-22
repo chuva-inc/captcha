@@ -1,3 +1,10 @@
+/**
+ * @file
+ * Contains helper js for Captcha admin pages.
+ *
+ * @TODO remove and use native states.
+ */
+
 (function($) {
 
   Drupal.behaviors.captchaAdmin = {
@@ -12,7 +19,7 @@
         } else {
           $(".form-item-image-captcha-noise-level").hide(speed);
         }
-      }
+      };
       // Add onclick handler to the dot and line noise check boxes.
       $("#edit-image-captcha-dot-noise").click(noise_level_shower);
       $("#edit-image-captcha-line-noise").click(noise_level_shower);
@@ -27,7 +34,7 @@
         } else {
           $(".form-item-image-captcha-bilinear-interpolation").hide(speed);
         }
-      }
+      };
       // Add onchange handler to the distortion level select widget.
       $("#edit-image-captcha-distortion-amplitude").change(
           smooth_distortion_shower);

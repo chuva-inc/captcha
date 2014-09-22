@@ -16,9 +16,9 @@ function image_captcha_requirements($phase) {
     // Check if the GD library is available and raise an error when not.
     if (_image_captcha_check_setup(FALSE) & IMAGE_CAPTCHA_ERROR_NO_GDLIB) {
       $requirements['image_captcha_requires_gd'] = array(
-        'title' => $t('Image CAPTCHA requires GD library'),
+        'title' => \Drupal::translation()->translate('Image CAPTCHA requires GD library'),
         'description' =>
-          t('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
+          \Drupal::translation()->translate('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
             array('!gddoc' => 'http://www.php.net/manual/en/book.image.php',)
           ),
         'severity' => REQUIREMENT_ERROR,
@@ -29,11 +29,13 @@ function image_captcha_requirements($phase) {
 }
 
 /**
- * On uninstall: remove module variables and clear variable cache
+ * Implements hook_install().
  */
-function image_captcha_uninstall() {
-  db_delete('variable')
-    ->condition('name', db_like('image_captcha_') . '%', 'LIKE')
-    ->execute();
-  cache()->deleteTags(array('variables' => TRUE));
+function image_captcha_install() {
+  $config = \Drupal::config('image_captcha.settings');
+
+  $config->set('image_captcha_fonts', array(
+    drupal_get_path('module', 'image_captcha') . '/fonts/Tesox/tesox.ttf',
+    drupal_get_path('module', 'image_captcha') . '/fonts/Tuffy/Tuffy.ttf',
+  ))->save();
 }
