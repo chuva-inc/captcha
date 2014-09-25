@@ -64,21 +64,6 @@ function captcha_help($path, $arg) {
 }
 
 /**
- * Implements hook_permission().
- */
-function captcha_permission() {
-  return array(
-    'administer CAPTCHA settings' => array(
-      'title' => t('Administer CAPTCHA settings'),
-    ),
-    'skip CAPTCHA' => array(
-      'title' => t('Skip CAPTCHA'),
-      'description' => t('Users with this permission will not be offered a CAPTCHA.'),
-    ),
-  );
-}
-
-/**
  * Loader for Captcha Point entity.
  *
  * @param string $id
