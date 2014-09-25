@@ -5,3 +5,6 @@ package: Spam control
 version: 8.x
 core: 8.x
 configure: admin/config/people/captcha
+
+dependencies:
+  - node

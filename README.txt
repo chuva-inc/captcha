@@ -1,6 +1,8 @@
 Readme file for the CAPTCHA module for Drupal
 ---------------------------------------------
 
+[![Build Status](https://travis-ci.org/M1r1k/captcha.svg)](https://travis-ci.org/M1r1k/captcha)
+
 captcha.module is the basic CAPTCHA module, offering general CAPTCHA
 administration and a simple math challenge.
 

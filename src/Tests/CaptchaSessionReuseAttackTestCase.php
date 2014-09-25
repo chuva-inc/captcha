@@ -52,7 +52,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $node = $this->drupalCreateNode();
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -92,7 +92,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnNodeForm() {
     // Set CAPTCHA on page form.
     captcha_set_form_id_setting('page_node_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -134,7 +134,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnLoginForm() {
     // Set CAPTCHA on login form.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('captcha_persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Go to log in form.
     // @TODO Bartik has two login forms because of sidebar's one on
@@ -143,9 +143,9 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(TRUE);
 
     // Get CAPTCHA session ID and solution of the challenge.
-    $captcha_sid = $this->getCaptchaSidFromForm($login_form_html_id);
-    $captcha_token = $this->getCaptchaTokenFromForm($login_form_html_id);
-    $solution = $this->getMathCaptchaSolutionFromForm($login_form_html_id);
+    $captcha_sid = $this->getCaptchaSidFromForm();
+    $captcha_token = $this->getCaptchaTokenFromForm();
+    $solution = $this->getMathCaptchaSolutionFromForm();
 
     // Log in through form.
     $edit = array(
@@ -190,7 +190,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
     // Preview comment with correct CAPTCHA answer.
     $edit = $this->getCommentFormValues();
-    $comment_subject = $edit['subject'];
+    $comment_subject = $edit['subject[0][value]'];
     $edit['captcha_response'] = 'Test 123';
     $this->drupalPostForm('comment/reply/node/' . $node->id() . '/comment', $edit, t('Preview'));
     // Post should be accepted: no warnings,

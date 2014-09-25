@@ -48,7 +48,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA point setting getter/setter.
    */
-  public function _testCaptchaPointSettingGetterAndSetter() {
+  public function noTestCaptchaPointSettingGetterAndSetter() {
     $comment_form_id = self::COMMENT_FORM_ID;
     captcha_set_form_id_setting($comment_form_id, 'none');
     /* @var CaptchaPoint $result */
@@ -62,7 +62,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set to 'default'
     captcha_set_form_id_setting($comment_form_id, 'default');
-    \Drupal::config('captcha.settings')->set('captcha_default_challenge', 'foo/bar')->save();
+    \Drupal::config('captcha.settings')->set('default_challenge', 'foo/bar')->save();
     $result = captcha_get_form_id_setting($comment_form_id);
     $this->assertNotNull($result, 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
     // $this->assertEqual($result->module, 'foo', 'Setting and getting
@@ -124,7 +124,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Testing of the CAPTCHA administration links.
    */
-  public function _testCaptchAdminLinks() {
+  public function noTestCaptchaAdminLinks() {
     $this->drupalLogin($this->adminUser);
 
     // Enable CAPTCHA administration links.
@@ -208,7 +208,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test untrusted user posting.
    */
-  public function _testUntrustedUserPosting() {
+  public function noTestUntrustedUserPosting() {
     // Set CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
 
@@ -236,14 +236,14 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test XSS vulnerability on CAPTCHA description.
    */
-  public function _testXssOnCaptchaDescription() {
+  public function testXssOnCaptchaDescription() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register', 'captcha/Math');
 
     // Put Javascript snippet in CAPTCHA description.
     $this->drupalLogin($this->adminUser);
     $xss = '<script type="text/javascript">alert("xss")</script>';
-    $edit = array('captcha_description' => $xss);
+    $edit = array('description' => $xss);
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, 'Save configuration');
 
     // Visit user register form and check if Javascript snippet is there.
@@ -255,20 +255,20 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA placement clearing.
    */
-  public function _testCaptchaPlacementCacheClearing() {
+  public function testCaptchaPlacementCacheClearing() {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register_form', 'captcha/Math');
     // Visit user register form to fill the CAPTCHA placement cache.
     $this->drupalGet('user/register');
     // Check if there is CAPTCHA placement cache.
-    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
+    $placement_map = $this->container->get('cache.default')->get('captcha_placement_map_cache');
     $this->assertNotNull($placement_map, 'CAPTCHA placement cache should be set.');
     // Clear the cache.
     $this->drupalLogin($this->adminUser);
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, array(), t('Clear the CAPTCHA placement cache'));
     // Check that the placement cache is unset.
-    $placement_map = $this->container->get('state')->get('captcha_placement_map_cache');
-    $this->assertNull($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
+    $placement_map = $this->container->get('cache.default')->get('captcha_placement_map_cache');
+    $this->assertFalse($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
   }
 
   /**
@@ -291,7 +291,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function _testCaptchaPointAdministration() {
+  public function noTestCaptchaPointAdministration() {
     // Generate CAPTCHA point data:
     // Drupal form ID should consist of lowercase alphanumerics and underscore).
     $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
@@ -357,7 +357,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function _testCaptchaPointAdministrationByNonAdmin() {
+  public function noTestCaptchaPointAdministrationByNonAdmin() {
     // First add a CAPTCHA point (as admin).
     $this->drupalLogin($this->adminUser);
     $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));

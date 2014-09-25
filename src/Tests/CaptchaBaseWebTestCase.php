@@ -38,7 +38,6 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
   public static $modules = array('captcha', 'comment');
 
-  protected $profile = 'standard';
 
   /**
    * User with various administrative permissions.
@@ -57,7 +56,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   /**
    * Form ID of comment form on standard (page) node.
    */
-  const COMMENT_FORM_ID = 'node__comment_comment_form';
+  const COMMENT_FORM_ID = 'comment_comment_form';
 
   const LOGIN_HTML_FORM_ID = 'user-login-form';
 
@@ -74,6 +73,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     // module for testing anonymous comments.
     parent::setUp();
     module_load_include('inc', 'captcha');
+
+    $this->drupalCreateContentType(array('type' => 'page'));
 
     // Create a normal user.
     $permissions = array(
@@ -145,7 +146,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getCommentFormValues() {
     $edit = array(
-      'subject' => 'comment_subject ' . $this->randomName(32),
+      'subject[0][value]' => 'comment_subject ' . $this->randomName(32),
       'comment_body[0][value]' => 'comment_body ' . $this->randomName(256),
     );
 

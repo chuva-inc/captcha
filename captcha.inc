@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Xss;
 use Drupal\captcha\Entity\CaptchaPoint;
+use Drupal\Core\Render\Element;
 
 /**
  * Helper function for adding/updating a CAPTCHA point.
@@ -120,7 +121,7 @@ function _captcha_update_captcha_session($captcha_sid, $solution) {
  */
 function _captcha_required_for_user($captcha_sid, $form_id) {
   // Get the CAPTCHA persistence setting.
-  $captcha_persistence = \Drupal::config('captcha.settings')->get('captcha_persistence');
+  $captcha_persistence = \Drupal::config('captcha.settings')->get('persistence');
 
   // First check: should we always add a CAPTCHA?
   if ($captcha_persistence == CAPTCHA_PERSISTENCE_SHOW_ALWAYS) {
@@ -159,38 +160,11 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
 /**
  * Get the CAPTCHA description.
  *
- * If the locale module is enabled, the description will be returned
- * for the current language the page is rendered for. This language
- * can optionally been overriden with the $lang_code argument.
- *
- * @param string $langcode
- *   An optional language code to get the description for.
- *
  * @return string
- *   Localized CAPTCHA description.
+ *   CAPTCHA description.
  */
-function _captcha_get_description($langcode = NULL) {
-  // If no language code is given: use the language of the current page.
-  if ($langcode) {
-    /* @var \Drupal\core\Language\Language $language */
-    $language = \Drupal::languageManager()->getLanguage($langcode);
-  }
-  else {
-    /* @var \Drupal\core\Language\Language $language */
-    $language = \Drupal::languageManager()->getCurrentLanguage();
-  }
-  $id = $language->getId();
-  // The hardcoded but localizable default.
-  $default = t('This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.', array(), array('id' => $id));
-  // Look up the configured CAPTCHA description or
-  // fall back on the (localized) default.
-  if (Drupal::moduleHandler()->moduleExists('locale')) {
-    $description = \Drupal::config('captcha.settings')->get("captcha_description_$id", $default);
-  }
-  else {
-    $description = \Drupal::config('captcha.settings')->get('captcha_description', $default);
-  }
-
+function _captcha_get_description() {
+  $description = \Drupal::config('captcha.settings')->get('description');
   return Xss::filter($description);
 }
 
@@ -209,7 +183,7 @@ function _captcha_parse_captcha_type($captcha_type) {
     return array(NULL, NULL);
   }
   if ($captcha_type == 'default') {
-    $captcha_type = \Drupal::config('captcha.settings')->get('captcha_default_challenge', 'captcha/Math');
+    $captcha_type = \Drupal::config('captcha.settings')->get('default_challenge', 'captcha/Math');
   }
   return explode('/', $captcha_type);
 }
@@ -221,12 +195,16 @@ function _captcha_get_captcha_placement($form_id, $form) {
   // Get CAPTCHA placement map from cache. Two levels of cache:
   // static variable in this function and storage in the variables table.
   static $placement_map = NULL;
+
+  $write_cache = FALSE;
+
   // Try first level cache.
   if ($placement_map === NULL) {
     // If first level cache missed: try second level cache.
-    $placement_map = \Drupal::state()->get('captcha_placement_map_cache', NULL);
-
-    if ($placement_map === NULL) {
+    if ($cache = \Drupal::cache()->get('captcha_placement_map_cache')) {
+      $placement_map = $cache->data;
+    }
+    else {
       // If second level cache missed: initialize the placement map
       // and let other modules hook into this with the
       // hook_captcha_placement_map hook.
@@ -234,6 +212,7 @@ function _captcha_get_captcha_placement($form_id, $form) {
       // are already correctly handled with the best effort guess
       // based on the 'actions' element (see below).
       $placement_map = \Drupal::moduleHandler()->invokeAll('captcha_placement_map');
+      $write_cache = TRUE;
     }
   }
 
@@ -270,9 +249,12 @@ function _captcha_get_captcha_placement($form_id, $form) {
 
     // Store calculated placement in cache.
     $placement_map[$form_id] = $placement;
-    \Drupal::state()->set('captcha_placement_map_cache', $placement_map);
+    $write_cache = TRUE;
   }
 
+  if ($write_cache) {
+    \Drupal::cache()->set('captcha_placement_map_cache', $placement_map);
+  }
   return $placement;
 }
 
@@ -291,7 +273,7 @@ function _captcha_get_captcha_placement($form_id, $form) {
 function _captcha_search_buttons(array $form) {
   $buttons = array();
 
-  foreach (element_children($form) as $key) {
+  foreach (Element::children($form, FALSE) as $key) {
     // Look for submit or button type elements.
     if (isset($form[$key]['#type']) && ($form[$key]['#type'] == 'submit' || $form[$key]['#type'] == 'button')) {
       $weight = isset($form[$key]['#weight']) ? $form[$key]['#weight'] : NULL;
@@ -301,7 +283,7 @@ function _captcha_search_buttons(array $form) {
         'weight' => $weight,
       );
     }
-    // Process children recurively.
+    // Process children recursively.
     $children_buttons = _captcha_search_buttons($form[$key]);
     foreach ($children_buttons as $b) {
       $b['path'] = array_merge(array($key), $b['path']);
@@ -324,7 +306,7 @@ function _captcha_search_buttons(array $form) {
  *       the form where the CAPTCHA element should be inserted.
  *     - 'key': the key of the element before which the CAPTCHA element
  *       should be inserted. If the field 'key' is undefined or NULL,
- *       the CAPTCHA willjust be appended in the container.
+ *       the CAPTCHA will just be appended in the container.
  *     - 'weight': if 'key' is not NULL: should be the weight of the
  *       element defined by 'key'. If 'key' is NULL and weight is not NULL:
  *       set the weight property of the CAPTCHA element to this value.

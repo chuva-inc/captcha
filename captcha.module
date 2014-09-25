@@ -64,21 +64,6 @@ function captcha_help($path, $arg) {
 }
 
 /**
- * Implements hook_permission().
- */
-function captcha_permission() {
-  return array(
-    'administer CAPTCHA settings' => array(
-      'title' => t('Administer CAPTCHA settings'),
-    ),
-    'skip CAPTCHA' => array(
-      'title' => t('Skip CAPTCHA'),
-      'description' => t('Users with this permission will not be offered a CAPTCHA.'),
-    ),
-  );
-}
-
-/**
  * Loader for Captcha Point entity.
  *
  * @param string $id
@@ -97,8 +82,8 @@ function captcha_theme() {
   return array(
     'captcha' => array(
       'render element' => 'element',
-       'template' => 'captcha',
-       'path' => drupal_get_path('module', 'captcha') . '/templates',
+      'template' => 'captcha',
+      'path' => drupal_get_path('module', 'captcha') . '/templates',
     ),
   );
 }
@@ -137,8 +122,7 @@ function captcha_element_info() {
   // Override the default CAPTCHA validation function for case
   // insensitive validation.
   // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
-  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-      ->get('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE)) {
+  if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')->get('default_validation')) {
     $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
   }
 
@@ -202,17 +186,17 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
   list($captcha_type_module, $captcha_type_challenge) = _captcha_parse_captcha_type($element['#captcha_type']);
 
   // Store CAPTCHA information for further processing in
-  // - $form_state['captcha_info'], which survives a form rebuild (e.g. node
+  // - $form_state->get('captcha_info'), which survives a form rebuild (e.g. node
   //   preview), useful in _captcha_get_posted_captcha_info().
   // - $element['#captcha_info'], for post processing functions that do not
   //   receive a $form_state argument (e.g. the pre_render callback).
-  $form_state['captcha_info'] = array(
+  $form_state->set('captcha_info', array(
     'this_form_id' => $this_form_id,
     'posted_form_id' => $posted_form_id,
     'captcha_sid' => $captcha_sid,
     'module' => $captcha_type_module,
     'captcha_type' => $captcha_type_challenge,
-  );
+  ));
   $element['#captcha_info'] = array(
     'form_id' => $this_form_id,
     'captcha_sid' => $captcha_sid,
@@ -258,7 +242,7 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     $element['#captcha_info']['solution'] = $captcha['solution'];
 
     // Make sure we can use a top level form value
-    // $form_state['values']['captcha_response'], even if the form has #tree=true.
+    // $form_state->getValue('captcha_response'), even if the form has #tree=true.
     $element['#tree'] = FALSE;
   }
 
@@ -272,11 +256,11 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
  * Render it in a section element if a description of the CAPTCHA
  * is available. Render it as is otherwise.
  */
-function theme_captcha($variables) {
+function template_preprocess_captcha(&$variables) {
   $element = $variables['element'];
 
   if (!empty($element['#description']) && isset($element['captcha_widgets'])) {
-    $fieldset = array(
+    $variables['details'] = array(
       '#type' => 'details',
       '#title' => t('CAPTCHA'),
       '#description' => $element['#description'],
@@ -287,10 +271,6 @@ function theme_captcha($variables) {
       ),
       '#open' => TRUE,
     );
-    return _theme('details', array('element' => $fieldset));
-  }
-  else {
-    return '<div class="captcha">' . drupal_render_children($element) . '</div>';
   }
 }
 
@@ -320,7 +300,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       );
 
       // Add a CAPTCHA description if required.
-      if (\Drupal::config('captcha.settings')->get('captcha_add_captcha_description')) {
+      if (\Drupal::config('captcha.settings')->get('add_captcha_description')) {
         $captcha_element['#description'] = _captcha_get_description();
       }
 
@@ -329,9 +309,9 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       _captcha_insert_captcha_element($form, $captcha_placement, $captcha_element);
     }
   }
-  elseif (\Drupal::config('captcha.settings')->get('captcha_administration_mode', FALSE)
+  elseif (\Drupal::config('captcha.settings')->get('administration_mode', FALSE)
     && $account->hasPermission('administer CAPTCHA settings')
-    && (\Drupal::service('router.admin_context')->isAdminRoute()  || \Drupal::config('captcha.settings')->get('captcha_allow_on_admin_pages', FALSE))) {
+    && (\Drupal::service('router.admin_context')->isAdminRoute()  || \Drupal::config('captcha.settings')->get('allow_on_admin_pages', FALSE))) {
     // Add CAPTCHA administration tools.
     module_load_include('inc', 'captcha');
 
@@ -496,26 +476,27 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *   if the values could not be found, e.g. for a fresh form).
  */
 function _captcha_get_posted_captcha_info(array $element, FormStateInterface $form_state, $this_form_id) {
-  if ($form_state['submitted'] && isset($form_state['captcha_info'])) {
+  if ($form_state->isSubmitted() && $form_state->has('captcha_info')) {
     // We are handling (or rebuilding) an already submitted form,
     // so we already determined the posted form ID and CAPTCHA session ID
     // for this form (from before submitting). Reuse this info.
-    $posted_form_id = $form_state['captcha_info']['posted_form_id'];
-    $posted_captcha_sid = $form_state['captcha_info']['captcha_sid'];
+    $posted_form_id = $form_state->get('captcha_info')['posted_form_id'];
+    $posted_captcha_sid = $form_state->get('captcha_info')['captcha_sid'];
   }
   else {
     // We have to determine the posted form ID and CAPTCHA session ID
     // from the post data.
     // Because we possibly use raw post data here,
     // we should be extra cautious and filter this data.
-    $posted_form_id = isset($form_state['input']['form_id']) ?
-      preg_replace("/[^a-z0-9_]/", "", (string) $form_state['input']['form_id'])
+    $input = &$form_state->getUserInput();
+    $posted_form_id = isset($input['form_id']) ?
+      preg_replace("/[^a-z0-9_]/", "", (string) $input['form_id'])
       : NULL;
-    $posted_captcha_sid = isset($form_state['input']['captcha_sid']) ?
-      (int) $form_state['input']['captcha_sid']
+    $posted_captcha_sid = isset($input['captcha_sid']) ?
+      (int) $input['captcha_sid']
       : NULL;
-    $posted_captcha_token = isset($form_state['input']['captcha_token']) ?
-      preg_replace("/[^a-zA-Z0-9]/", "", (string) $form_state['input']['captcha_token'])
+    $posted_captcha_token = isset($input['captcha_token']) ?
+      preg_replace("/[^a-zA-Z0-9]/", "", (string) $input['captcha_token'])
       : NULL;
 
     if ($posted_form_id == $this_form_id) {
@@ -559,13 +540,13 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
  * captcha_form_alter(), and subsequently don't include additional include
  * files).
  */
-function captcha_validate($element, &$form_state) {
+function captcha_validate($element, FormStateInterface &$form_state) {
 
-  $captcha_info = $form_state['captcha_info'];
+  $captcha_info = $form_state->get('captcha_info');
   $form_id = $captcha_info['this_form_id'];
 
   // Get CAPTCHA response.
-  $captcha_response = $form_state['values']['captcha_response'];
+  $captcha_response = $form_state->getValue('captcha_response');
 
   // Get CAPTCHA session from CAPTCHA info
   // TODO: is this correct in all cases: see comments in previous revisions?
@@ -583,7 +564,7 @@ function captcha_validate($element, &$form_state) {
     // Unknown challenge_id.
     // TODO: this probably never happens anymore now that there is detection
     // for CAPTCHA session reuse attacks in _captcha_get_posted_captcha_info().
-    form_set_error('captcha', $form_state, t('CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.'));
+    $form_state->setErrorByName('captcha', t('CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.'));
     watchdog('CAPTCHA',
       'CAPTCHA validation error: unknown CAPTCHA session ID (%csid).',
       array('%csid' => var_export($csid, TRUE)),
@@ -616,13 +597,13 @@ function captcha_validate($element, &$form_state) {
         ->expression('attempts', 'attempts + 1')
         ->execute();
 
-      form_set_error('captcha_response', $form_state, t('The answer you entered for the CAPTCHA was not correct.'));
+      $form_state->setErrorByName('captcha_response', t('The answer you entered for the CAPTCHA was not correct.'));
       // Update wrong response counter.
-      if (\Drupal::config('captcha.settings')->get('captcha_enable_stats', FALSE)) {
-        Drupal::state()->set('captcha_wrong_response_counter', Drupal::state()->get('captcha_wrong_response_counter', 0) + 1);
+      if (\Drupal::config('captcha.settings')->get('enable_stats', FALSE)) {
+        Drupal::state()->set('wrong_response_counter', Drupal::state()->get('wrong_response_counter', 0) + 1);
       }
 
-      if (\Drupal::config('captcha.settings')->get('captcha_log_wrong_responses', FALSE)) {
+      if (\Drupal::config('captcha.settings')->get('log_wrong_responses', FALSE)) {
         watchdog('CAPTCHA',
           '%form_id post blocked by CAPTCHA module: challenge %challenge (by module %module), user answered "@response", but the solution was "@solution".',
           array(
@@ -738,14 +719,4 @@ function captcha_captcha($op, $captcha_type = '') {
       }
       break;
   }
-}
-
-/**
- * Implements hook_modules_enabled().
- */
-function captcha_modules_enabled() {
-  // When new modules are enabled: clear the CAPTCHA placement cache, so that
-  // new hook_captcha_placement_map hooks can be triggered.
-  $config = \Drupal::config('system.performance');
-  $config->delete('captcha_placement_map_cache');
 }

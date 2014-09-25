@@ -1,1 +1,5 @@
-<div class="captcha">{{ element }}</div>
+{% if details %}
+  {{ details }}
+{% else %}
+    <div class="captcha">{{ element }}</div>
+{% endif %}

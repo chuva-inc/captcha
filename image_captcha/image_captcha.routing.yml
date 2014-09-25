@@ -15,6 +15,6 @@ image_captcha.font_preview:
 image_captcha.generator:
   path: '/image-captcha-generate/{session_id}/{timestamp}'
   defaults:
-    _controller: '\Drupal\image_captcha\Controller\CaptchaImageGenerator::create'
+    _controller: '\Drupal\image_captcha\Controller\CaptchaImageGeneratorController::image'
   requirements:
     _permission: 'access content'
