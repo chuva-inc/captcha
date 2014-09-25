@@ -25,7 +25,7 @@ class CaptchaPointDeleteForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getCancelRoute() {
+  public function getCancelUrl() {
     return new Url('captcha_point.list');
   }
 
@@ -39,16 +39,9 @@ class CaptchaPointDeleteForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submit(array $form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->entity->delete();
     drupal_set_message($this->t('Captcha point %label has been deleted.', array('%label' => $this->entity->label())));
-    $form_state['redirect_route'] = $this->getCancelRoute();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCancelUrl() {
-    return new Url('captcha_point.list');
+    $form_state->setRedirectUrl($this->getCancelUrl());
   }
 }

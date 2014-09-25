@@ -201,17 +201,17 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
   list($captcha_type_module, $captcha_type_challenge) = _captcha_parse_captcha_type($element['#captcha_type']);
 
   // Store CAPTCHA information for further processing in
-  // - $form_state['captcha_info'], which survives a form rebuild (e.g. node
+  // - $form_state->get('captcha_info'), which survives a form rebuild (e.g. node
   //   preview), useful in _captcha_get_posted_captcha_info().
   // - $element['#captcha_info'], for post processing functions that do not
   //   receive a $form_state argument (e.g. the pre_render callback).
-  $form_state['captcha_info'] = array(
+  $form_state->set('captcha_info', array(
     'this_form_id' => $this_form_id,
     'posted_form_id' => $posted_form_id,
     'captcha_sid' => $captcha_sid,
     'module' => $captcha_type_module,
     'captcha_type' => $captcha_type_challenge,
-  );
+  ));
   $element['#captcha_info'] = array(
     'form_id' => $this_form_id,
     'captcha_sid' => $captcha_sid,
@@ -257,7 +257,7 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     $element['#captcha_info']['solution'] = $captcha['solution'];
 
     // Make sure we can use a top level form value
-    // $form_state['values']['captcha_response'], even if the form has #tree=true.
+    // $form_state->getValue('captcha_response'), even if the form has #tree=true.
     $element['#tree'] = FALSE;
   }
 
@@ -491,26 +491,27 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *   if the values could not be found, e.g. for a fresh form).
  */
 function _captcha_get_posted_captcha_info(array $element, FormStateInterface $form_state, $this_form_id) {
-  if ($form_state['submitted'] && isset($form_state['captcha_info'])) {
+  if ($form_state->get('submitted') && $form_state->has('captcha_info')) {
     // We are handling (or rebuilding) an already submitted form,
     // so we already determined the posted form ID and CAPTCHA session ID
     // for this form (from before submitting). Reuse this info.
-    $posted_form_id = $form_state['captcha_info']['posted_form_id'];
-    $posted_captcha_sid = $form_state['captcha_info']['captcha_sid'];
+    $posted_form_id = $form_state->get('captcha_info')['posted_form_id'];
+    $posted_captcha_sid = $form_state->get('captcha_info')['captcha_sid'];
   }
   else {
     // We have to determine the posted form ID and CAPTCHA session ID
     // from the post data.
     // Because we possibly use raw post data here,
     // we should be extra cautious and filter this data.
-    $posted_form_id = isset($form_state['input']['form_id']) ?
-      preg_replace("/[^a-z0-9_]/", "", (string) $form_state['input']['form_id'])
+    $input = &$form_state->getUserInput();
+    $posted_form_id = isset($input['form_id']) ?
+      preg_replace("/[^a-z0-9_]/", "", (string) $input['form_id'])
       : NULL;
-    $posted_captcha_sid = isset($form_state['input']['captcha_sid']) ?
-      (int) $form_state['input']['captcha_sid']
+    $posted_captcha_sid = isset($input['captcha_sid']) ?
+      (int) $input['captcha_sid']
       : NULL;
-    $posted_captcha_token = isset($form_state['input']['captcha_token']) ?
-      preg_replace("/[^a-zA-Z0-9]/", "", (string) $form_state['input']['captcha_token'])
+    $posted_captcha_token = isset($input['captcha_token']) ?
+      preg_replace("/[^a-zA-Z0-9]/", "", (string) $input['captcha_token'])
       : NULL;
 
     if ($posted_form_id == $this_form_id) {
@@ -554,13 +555,13 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
  * captcha_form_alter(), and subsequently don't include additional include
  * files).
  */
-function captcha_validate($element, &$form_state) {
+function captcha_validate($element, FormStateInterface &$form_state) {
 
-  $captcha_info = $form_state['captcha_info'];
+  $captcha_info = $form_state->get('captcha_info');
   $form_id = $captcha_info['this_form_id'];
 
   // Get CAPTCHA response.
-  $captcha_response = $form_state['values']['captcha_response'];
+  $captcha_response = $form_state->getValue('captcha_response');
 
   // Get CAPTCHA session from CAPTCHA info
   // TODO: is this correct in all cases: see comments in previous revisions?

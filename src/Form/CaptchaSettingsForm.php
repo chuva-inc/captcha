@@ -179,19 +179,19 @@ class CaptchaSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('captcha.settings');
-    $config->set('administration_mode', $form_state['values']['administration_mode']);
-    $config->set('allow_on_admin_pages', $form_state['values']['allow_on_admin_pages']);
-    $config->set('default_challenge', $form_state['values']['default_challenge']);
+    $config->set('administration_mode', $form_state->getValue('administration_mode'));
+    $config->set('allow_on_admin_pages', $form_state->getValue('allow_on_admin_pages'));
+    $config->set('default_challenge', $form_state->getValue('default_challenge'));
 
     // CAPTCHA description stuff.
-    $config->set('add_captcha_description', $form_state['values']['add_captcha_description']);
+    $config->set('add_captcha_description', $form_state->getValue('add_captcha_description'));
     // Save (or reset) the CAPTCHA descriptions.
-    $config->set('description', $form_state['values']['description']);
+    $config->set('description', $form_state->getValue('description'));
 
-    $config->set('default_validation', $form_state['values']['default_validation']);
-    $config->set('persistence', $form_state['values']['persistence']);
-    $config->set('enable_stats', $form_state['values']['enable_stats']);
-    $config->set('log_wrong_responses', $form_state['values']['log_wrong_responses']);
+    $config->set('default_validation', $form_state->getValue('default_validation'));
+    $config->set('persistence', $form_state->getValue('persistence'));
+    $config->set('enable_stats', $form_state->getValue('enable_stats'));
+    $config->set('log_wrong_responses', $form_state->getValue('log_wrong_responses'));
     $config->save();
     drupal_set_message(t('The CAPTCHA settings have been saved.'), 'status');
 

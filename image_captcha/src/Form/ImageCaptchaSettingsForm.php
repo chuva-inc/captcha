@@ -205,35 +205,35 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
 
     // Check image_captcha_image_allowed_chars for spaces.
-    if (preg_match('/\s/', $form_state['values']['image_captcha_image_allowed_chars'])) {
-      form_set_error('image_captcha_image_allowed_chars', $form_state, t('The list of characters to use should not contain spaces.'));
+    if (preg_match('/\s/', $form_state->getValue('image_captcha_image_allowed_chars'))) {
+      $form_state->setErrorByName('image_captcha_image_allowed_chars', t('The list of characters to use should not contain spaces.'));
     }
 
     if (!isset($form['image_captcha_font_settings']['no_ttf_support'])) {
       // Check the selected fonts.
       // Filter the image_captcha fonts array to pick out the selected ones.
-      $fonts = array_filter($form_state['values']['image_captcha_fonts']);
+      $fonts = array_filter($form_state->getValue('image_captcha_fonts'));
       if (count($fonts) < 1) {
-        form_set_error('image_captcha_fonts', $form_state, t('You need to select at least one font.'));
+        $form_state->setErrorByName('image_captcha_fonts', t('You need to select at least one font.'));
       }
-      if ($form_state['values']['image_captcha_fonts']['BUILTIN']) {
+      if ($form_state->getValue('image_captcha_fonts')['BUILTIN']) {
         // With the built in font, only latin2 characters should be used.
-        if (preg_match('/[^a-zA-Z0-9]/', $form_state['values']['image_captcha_image_allowed_chars'])) {
-          form_set_error('image_captcha_image_allowed_chars', $form_state, t('The built-in font only supports Latin2 characters. Only use "a" to "z" and numbers.'));
+        if (preg_match('/[^a-zA-Z0-9]/', $form_state->getValue('image_captcha_image_allowed_chars'))) {
+          $form_state->setErrorByName('image_captcha_image_allowed_chars', t('The built-in font only supports Latin2 characters. Only use "a" to "z" and numbers.'));
         }
       }
       list($readable_fonts, $problem_fonts) = _image_captcha_check_fonts($fonts);
       if (count($problem_fonts) > 0) {
-        form_set_error('image_captcha_fonts', $form_state, t('The following fonts are not readable: %fonts.', array('%fonts' => implode(', ', $problem_fonts))));
+        $form_state->setErrorByName('image_captcha_fonts', t('The following fonts are not readable: %fonts.', array('%fonts' => implode(', ', $problem_fonts))));
       }
     }
 
     // Check color settings.
-    if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $form_state['values']['image_captcha_background_color'])) {
-      form_set_error('image_captcha_background_color', $form_state, t('Background color is not a valid hexadecimal color value.'));
+    if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $form_state->getValue('image_captcha_background_color'))) {
+      $form_state->setErrorByName('image_captcha_background_color', t('Background color is not a valid hexadecimal color value.'));
     }
-    if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $form_state['values']['image_captcha_foreground_color'])) {
-      form_set_error('image_captcha_foreground_color', $form_state, t('Text color is not a valid hexadecimal color value.'));
+    if (!preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $form_state->getValue('image_captcha_foreground_color'))) {
+      $form_state->setErrorByName('image_captcha_foreground_color', t('Text color is not a valid hexadecimal color value.'));
     }
 
     parent::validateForm($form, $form_state);
@@ -245,7 +245,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if (!isset($form['image_captcha_font_settings']['no_ttf_support'])) {
       // Filter the image_captcha fonts array to pick out the selected ones.
-      $fonts = array_filter($form_state['values']['image_captcha_fonts']);
+      $fonts = array_filter($form_state->getValue('image_captcha_fonts'));
       $this->config('image_captcha.settings')->set('image_captcha_fonts', $fonts)->save();
     }
 
