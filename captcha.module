@@ -206,6 +206,12 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     // Generate a CAPTCHA and its solution
     // (note that the CAPTCHA session ID is given as third argument).
     $captcha = \Drupal::moduleHandler()->invoke($captcha_type_module, 'captcha', array('generate', $captcha_type_challenge, $captcha_sid));
+
+    // @todo Isn't this moment a bit late to figure out that we don't need CAPTCHA?
+    if(!isset($captcha)) {
+      return $element;
+    }
+
     if (!isset($captcha['form']) || !isset($captcha['solution'])) {
       // The selected module did not return what we expected: log about it and quit.
       \Drupal::logger('CAPTCHA')->error(
