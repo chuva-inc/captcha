@@ -24,7 +24,6 @@ use Drupal\captcha\CaptchaPointInterface;
  *       "delete" = "Drupal\captcha\Form\CaptchaPointDeleteForm"
  *     }
  *   },
- *   fieldable = FALSE,
  *   config_prefix = "captcha_point",
  *   admin_permission = "administer CAPTCHA settings",
  *   entity_keys = {
