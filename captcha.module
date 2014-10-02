@@ -11,6 +11,7 @@
 
 use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Constants for CAPTCHA persistence.
@@ -370,12 +371,11 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     else {
       $captcha_element['#title'] = t('CAPTCHA: no challenge enabled');
       $captcha_element['add_captcha'] = array(
-        '#markup' => l(
+        '#markup' => \Drupal::l(
           t('Place a CAPTCHA here for untrusted users.'),
-          "admin/config/people/captcha/captcha-points/$form_id",
-          array(
+          Url::fromRoute('captcha_point.edit', array('captcha_point' => $form_id), array(
             'query' => drupal_get_destination(),
-          )
+          ))
         ),
       );
     }
