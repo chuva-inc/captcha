@@ -2,6 +2,7 @@ CAPTCHA module for Drupal
 ---------------------------------------------
 
 [![Build Status](https://travis-ci.org/chuva-inc/captcha.svg?branch=8.x-1.x)](https://travis-ci.org/chuva-inc/captcha)
+[![Code Climate](https://codeclimate.com/github/chuva-inc/captcha/badges/gpa.svg)](https://codeclimate.com/github/chuva-inc/captcha)
 
 captcha.module is the basic CAPTCHA module, offering general CAPTCHA
 administration and a simple math challenge.
