@@ -11,6 +11,7 @@
 
 use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Constants for CAPTCHA persistence.
@@ -206,6 +207,12 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
     // Generate a CAPTCHA and its solution
     // (note that the CAPTCHA session ID is given as third argument).
     $captcha = \Drupal::moduleHandler()->invoke($captcha_type_module, 'captcha', array('generate', $captcha_type_challenge, $captcha_sid));
+
+    // @todo Isn't this moment a bit late to figure out that we don't need CAPTCHA?
+    if(!isset($captcha)) {
+      return $element;
+    }
+
     if (!isset($captcha['form']) || !isset($captcha['solution'])) {
       // The selected module did not return what we expected: log about it and quit.
       \Drupal::logger('CAPTCHA')->error(
@@ -330,7 +337,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     if ($captcha_point !== NULL && $captcha_point->getCaptchaType()) {
       $captcha_element['#title'] = t('CAPTCHA: challenge "@type" enabled', array('@type' => $captcha_point->getCaptchaType()));
       $captcha_element['#description'] = t('Untrusted users will see a CAPTCHA here (<a href="@settings">general CAPTCHA settings</a>).',
-        array('@settings' => url('admin/config/people/captcha'))
+        array('@settings' => Url::fromRoute('captcha_settings')->toString())
       );
       $captcha_element['challenge'] = array(
         '#type' => 'item',
@@ -364,12 +371,11 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     else {
       $captcha_element['#title'] = t('CAPTCHA: no challenge enabled');
       $captcha_element['add_captcha'] = array(
-        '#markup' => l(
+        '#markup' => \Drupal::l(
           t('Place a CAPTCHA here for untrusted users.'),
-          "admin/config/people/captcha/captcha-points/$form_id",
-          array(
+          Url::fromRoute('captcha_point.edit', array('captcha_point' => $form_id), array(
             'query' => drupal_get_destination(),
-          )
+          ))
         ),
       );
     }
