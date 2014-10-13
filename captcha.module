@@ -571,10 +571,9 @@ function captcha_validate($element, FormStateInterface &$form_state) {
     // TODO: this probably never happens anymore now that there is detection
     // for CAPTCHA session reuse attacks in _captcha_get_posted_captcha_info().
     $form_state->setErrorByName('captcha', t('CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.'));
-    watchdog('CAPTCHA',
+    \Drupal::logger('CAPTCHA')->error(
       'CAPTCHA validation error: unknown CAPTCHA session ID (%csid).',
-      array('%csid' => var_export($csid, TRUE)),
-      WATCHDOG_ERROR);
+      array('%csid' => var_export($csid, TRUE)));
   }
   else {
     // Get CAPTCHA validate function or fall back on strict equality.
@@ -610,7 +609,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
       }
 
       if (\Drupal::config('captcha.settings')->get('log_wrong_responses', FALSE)) {
-        watchdog('CAPTCHA',
+        \Drupal::logger('CAPTCHA')->notice(
           '%form_id post blocked by CAPTCHA module: challenge %challenge (by module %module), user answered "@response", but the solution was "@solution".',
           array(
             '%form_id' => $form_id,
@@ -618,8 +617,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
             '@solution' => $solution,
             '%challenge' => $captcha_info['captcha_type'],
             '%module' => $captcha_info['module'],
-          ),
-          WATCHDOG_NOTICE);
+          ));
       }
     }
   }
