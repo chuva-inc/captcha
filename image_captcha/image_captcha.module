@@ -103,7 +103,7 @@ function _image_captcha_utf8_split($str) {
         $width = 4;
       }
       else {
-        watchdog('CAPTCHA', 'Encountered an illegal byte while splitting an utf8 string in characters.', array(), WATCHDOG_ERROR);
+        \Drupal::logger('CAPTCHA')->error('Encountered an illegal byte while splitting an utf8 string in characters.');
         return $characters;
       }
     }
