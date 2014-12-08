@@ -58,7 +58,8 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
 function captcha_get_form_id_setting($form_id, $symbolic=FALSE) {
   if (module_exists('ctools')) {
     ctools_include('export');
-    $captcha_point = array_pop(ctools_export_load_object('captcha_points', 'names', array($form_id)));
+    $captcha_points = ctools_export_load_object('captcha_points', 'names', array($form_id));
+    $captcha_point = array_pop($captcha_points);
   }
   else {
     $result = db_query("SELECT module, captcha_type FROM {captcha_points} WHERE form_id = '%s'", $form_id);
