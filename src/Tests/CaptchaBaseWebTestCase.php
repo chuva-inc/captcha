@@ -19,6 +19,8 @@
 // TODO: refactor the 'comment_body[0][value]' stuff.
 namespace Drupal\captcha\Tests;
 
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
 use Drupal\Core\Language\Language;
 
@@ -93,9 +95,10 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     // Open comment for page content type.
     $this->container->get('comment.manager')->addDefaultField('node', 'page');
 
-    // @TODO do we need this in Drupal8?
     // Put comments on page nodes on a separate page.
-    // variable_set('comment_form_location_page', COMMENT_FORM_SEPARATE_PAGE);
+    $comment_field = FieldConfig::loadByName('node', 'page', 'comment');
+    $comment_field->settings['form_location'] = CommentItemInterface::FORM_SEPARATE_PAGE;
+    $comment_field->save();
   }
 
   /**

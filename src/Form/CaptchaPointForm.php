@@ -24,10 +24,17 @@ class CaptchaPointForm extends EntityForm {
     /* @var CaptchaPointInterface $captchaPoint */
     $captcha_point = $this->entity;
 
+    // Support to set a default form_id through a query argument.
+    $request = \Drupal::request();
+    if ($captcha_point->isNew() && !$captcha_point->id() && $request->query->has('form_id')) {
+      $captcha_point->set('formId', $request->query->get('form_id'));
+      $captcha_point->set('label', $request->query->get('form_id'));
+    }
+
     $form['label'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Form ID'),
-      '#default_value' => $captcha_point->id(),
+      '#default_value' => $captcha_point->label(),
     );
 
     $form['formId'] = array(
@@ -58,13 +65,13 @@ class CaptchaPointForm extends EntityForm {
     $captcha_point = $this->entity;
     $status = $captcha_point->save();
 
-    if ($status) {
-      drupal_set_message($this->t('Captcha Point for %label form was saved.', array(
+    if ($status == SAVED_NEW) {
+      drupal_set_message($this->t('Captcha Point for %label form was created.', array(
         '%label' => $captcha_point->label(),
       )));
     }
     else {
-      drupal_set_message($this->t('Captcha Point for %label form was not saved.', array(
+      drupal_set_message($this->t('Captcha Point for %label form was updated.', array(
         '%label' => $captcha_point->label(),
       )));
     }

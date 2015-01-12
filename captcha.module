@@ -292,15 +292,15 @@ function template_preprocess_captcha(&$variables) {
  */
 function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   $account = \Drupal::currentUser();
+  $config = \Drupal::config('captcha.settings');
+  // Visitor does not have permission to skip CAPTCHAs.
+  module_load_include('inc', 'captcha');
   if (!$account->hasPermission('skip CAPTCHA')) {
-    // Visitor does not have permission to skip CAPTCHAs.
-    module_load_include('inc', 'captcha');
 
     /* @var CaptchaPoint $captcha_point */
     $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load($form_id);
 
     if ($captcha_point) {
-      module_load_include('inc', 'captcha');
       // Build CAPTCHA form element.
       $captcha_element = array(
         '#type' => 'captcha',
@@ -308,7 +308,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       );
 
       // Add a CAPTCHA description if required.
-      if (\Drupal::config('captcha.settings')->get('add_captcha_description')) {
+      if ($config->get('add_captcha_description')) {
         $captcha_element['#description'] = _captcha_get_description();
       }
 
@@ -317,11 +317,9 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       _captcha_insert_captcha_element($form, $captcha_placement, $captcha_element);
     }
   }
-  elseif (\Drupal::config('captcha.settings')->get('administration_mode', FALSE)
-    && $account->hasPermission('administer CAPTCHA settings')
-    && (\Drupal::service('router.admin_context')->isAdminRoute()  || \Drupal::config('captcha.settings')->get('allow_on_admin_pages', FALSE))) {
+  elseif ($config->get('administration_mode') && $account->hasPermission('administer CAPTCHA settings')
+    && (!\Drupal::service('router.admin_context')->isAdminRoute()  || $config->get('allow_on_admin_pages'))) {
     // Add CAPTCHA administration tools.
-    module_load_include('inc', 'captcha');
 
     /* var $captcha_point CaptchaPoint */
     $captcha_point = captcha_get_form_id_setting($form_id);
@@ -345,8 +343,8 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
         '#title' => t('Enabled challenge'),
         '#markup' => t('%type (<a href="@change">change</a>, <a href="@disable">disable</a>)', array(
           '%type' => $captcha_point->getCaptchaType(),
-          '@change' => url("admin/config/people/captcha/captcha-points/$form_id", array('query' => drupal_get_destination())),
-          '@disable' => url("admin/config/people/captcha/captcha-points/$form_id/disable", array('query' => drupal_get_destination())),
+          '@change' => $captcha_point->url('edit-form', array('query' => drupal_get_destination())),
+          //'@disable' => url("admin/config/people/captcha/captcha-points/$form_id/disable", array('query' => drupal_get_destination())),
         )),
       );
 //      // Add an example challenge with solution.
@@ -374,8 +372,8 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       $captcha_element['add_captcha'] = array(
         '#markup' => \Drupal::l(
           t('Place a CAPTCHA here for untrusted users.'),
-          Url::fromRoute('captcha_point.edit', array('captcha_point' => $form_id), array(
-            'query' => drupal_get_destination(),
+          Url::fromRoute('captcha_point.add', [], array(
+            'query' => drupal_get_destination() + array('form_id' => $form_id),
           ))
         ),
       );

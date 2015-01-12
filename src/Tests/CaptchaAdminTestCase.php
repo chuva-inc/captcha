@@ -118,7 +118,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Enable CAPTCHA administration links.
     $edit = array(
-      'captcha_administration_mode' => TRUE,
+      'administration_mode' => TRUE,
     );
 
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, t('Save configuration'));
@@ -141,7 +141,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->clickLink(t('Place a CAPTCHA here for untrusted users.'));
 
     // Enable Math CAPTCHA.
-    $edit = array('captcha_type' => 'captcha/Math');
+    $edit = array('captchaType' => 'captcha/Math');
     $this->drupalPostForm($this->getUrl(), $edit, t('Save'));
 
     // Check if returned to original comment form.
@@ -160,7 +160,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->clickLink(t('change'));
 
     // Enable Math CAPTCHA.
-    $edit = array('captcha_type' => 'default');
+    $edit = array('captchaType' => 'default');
     $this->drupalPostForm($this->getUrl(), $edit, t('Save'));
 
     // Check if returned to original comment form.
@@ -270,11 +270,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
    *    Object with mysql query result.
    */
   protected function getCaptchaPointSettingFromDatabase($form_id) {
-    $result = db_query(
-      "SELECT * FROM {captcha_points} WHERE form_id = :form_id",
-      array(':form_id' => $form_id)
-    )->fetchObject();
-    return $result;
+    $ids = \Drupal::entityQuery('captcha_point')
+      ->condition('formId', $form_id)
+      ->execute();
+    return $ids ? CaptchaPoint::load(reset($ids)) : NULL;
   }
 
   /**
@@ -294,10 +293,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set CAPTCHA point through admin/user/captcha/captcha/captcha_point.
     $form_values = array(
-      'captcha_point_form_id' => $captcha_point_form_id,
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'formId' => $captcha_point_form_id,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
-    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point', $form_values, t('Save'));
+    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/add', $form_values, t('Save'));
     $this->assertText(t('Saved CAPTCHA point settings.'),
       'Saving of CAPTCHA point settings');
 
@@ -321,7 +320,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set CAPTCHA point via admin/user/captcha/captcha/captcha_point/$form_id.
     $form_values = array(
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . $captcha_point_form_id, $form_values, t('Save'));
     $this->assertText(t('Saved CAPTCHA point settings.'),
@@ -353,15 +352,14 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $captcha_point_module = 'captcha';
     $captcha_point_type = 'Math';
     $form_values = array(
-      'captcha_point_form_id' => $captcha_point_form_id,
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'formId' => $captcha_point_form_id,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/', $form_values, 'Save');
     $this->assertText(t('Saved CAPTCHA point settings.'),
       'Saving of CAPTCHA point settings');
 
     // Switch from admin to non-admin.
-    $this->drupalGet(url('logout', array('absolute' => TRUE)));
     $this->drupalLogin($this->normalUser);
 
     // Try to set CAPTCHA point
@@ -387,7 +385,6 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'Non admin should not be able to delete a CAPTCHA point');
 
     // Switch from nonadmin to admin again.
-    $this->drupalGet(url('logout', array('absolute' => TRUE)));
     $this->drupalLogin($this->adminUser);
 
     // Check if original CAPTCHA point still exists in database.
