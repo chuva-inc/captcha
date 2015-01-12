@@ -606,7 +606,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
       $form_state->setErrorByName('captcha_response', t('The answer you entered for the CAPTCHA was not correct.'));
       // Update wrong response counter.
       if (\Drupal::config('captcha.settings')->get('enable_stats', FALSE)) {
-        Drupal::state()->set('wrong_response_counter', Drupal::state()->get('wrong_response_counter', 0) + 1);
+        Drupal::state()->set('captcha.wrong_response_counter', Drupal::state()->get('captcha.wrong_response_counter', 0) + 1);
       }
 
       if (\Drupal::config('captcha.settings')->get('log_wrong_responses', FALSE)) {
