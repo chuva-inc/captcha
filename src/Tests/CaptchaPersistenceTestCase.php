@@ -17,16 +17,6 @@ namespace Drupal\captcha\Tests;
  * @group captcha
  */
 class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
-  /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('CAPTCHA persistence functionality'),
-      'description' => t('Testing of the CAPTCHA persistence functionality.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
 
   /**
    * Set up the persistence and CAPTCHA settings.

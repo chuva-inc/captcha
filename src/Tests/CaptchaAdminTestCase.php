@@ -20,17 +20,6 @@ use stdClass;
 class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('CAPTCHA administration functionality'),
-      'description' => t('Testing of the CAPTCHA administration interface and functionality.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Test access to the admin pages.
    */
   public function testAdminAccess() {
@@ -294,7 +283,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaPointAdministration() {
     // Generate CAPTCHA point data:
     // Drupal form ID should consist of lowercase alphanumerics and underscore).
-    $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
+    $captcha_point_form_id = 'form_' . strtolower($this->randomMachineName(32));
     // The Math CAPTCHA by the CAPTCHA module is always available,
     // so let's use it.
     $captcha_point_module = 'captcha';
@@ -360,7 +349,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaPointAdministrationByNonAdmin() {
     // First add a CAPTCHA point (as admin).
     $this->drupalLogin($this->adminUser);
-    $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
+    $captcha_point_form_id = 'form_' . strtolower($this->randomMachineName(32));
     $captcha_point_module = 'captcha';
     $captcha_point_type = 'Math';
     $form_values = array(
@@ -383,7 +372,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Try to set CAPTCHA point through
     // admin/user/captcha/captcha/captcha_point/$form_id.
-    $this->drupalGet(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . 'form_' . strtolower($this->randomName(32)));
+    $this->drupalGet(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . 'form_' . strtolower($this->randomMachineName(32)));
     $this->assertText(t('You are not authorized to access this page.'),
       'Non admin should not be able to set a CAPTCHA point');
 

@@ -146,8 +146,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getCommentFormValues() {
     $edit = array(
-      'subject[0][value]' => 'comment_subject ' . $this->randomName(32),
-      'comment_body[0][value]' => 'comment_body ' . $this->randomName(256),
+      'subject[0][value]' => 'comment_subject ' . $this->randomMachineName(32),
+      'comment_body[0][value]' => 'comment_body ' . $this->randomMachineName(256),
     );
 
     return $edit;
@@ -158,8 +158,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getNodeFormValues() {
     $edit = array(
-      'title[0][value]' => 'node_title ' . $this->randomName(32),
-      'body[0][value]' => 'node_body ' . $this->randomName(256),
+      'title[0][value]' => 'node_title ' . $this->randomMachineName(32),
+      'body[0][value]' => 'node_body ' . $this->randomMachineName(256),
     );
 
     return $edit;
@@ -250,16 +250,4 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
       ));
   }
 
-  /**
-   * Helper function to generate random names.
-   */
-  protected function randomName($length = 8) {
-    $values = array_merge(range(65, 90), range(97, 122), range(48, 57));
-    $max = count($values) - 1;
-    $str = chr(mt_rand(97, 122));
-    for ($i = 1; $i < $length; $i++) {
-      $str .= chr($values[mt_rand(0, $max)]);
-    }
-    return $str;
-  }
 }
