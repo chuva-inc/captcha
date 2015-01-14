@@ -7,5 +7,3 @@ default_validation: 1
 persistence: 1
 enable_stats: 0
 log_wrong_responses: 0
-wrong_response_counter: 0
-image_captcha_fonts_preview_map_cache: []

@@ -15,17 +15,6 @@ namespace Drupal\captcha\Tests;
 class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('General CAPTCHA functionality'),
-      'description' => t('Testing of the basic CAPTCHA functionality.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Testing the protection of the user log in form.
    */
   public function testCaptchaOnLoginForm() {

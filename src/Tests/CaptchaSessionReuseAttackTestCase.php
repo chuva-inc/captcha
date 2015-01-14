@@ -19,17 +19,6 @@ namespace Drupal\captcha\Tests;
 class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('CAPTCHA session reuse attack tests'),
-      'description' => t('Testing of the protection against CAPTCHA session reuse attacks.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Assert that the CAPTCHA session ID reuse attack was detected.
    */
   protected function assertCaptchaSessionIdReuseAttackDetection() {

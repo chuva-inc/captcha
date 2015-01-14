@@ -20,17 +20,6 @@ use stdClass;
 class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('CAPTCHA administration functionality'),
-      'description' => t('Testing of the CAPTCHA administration interface and functionality.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Test access to the admin pages.
    */
   public function testAdminAccess() {
@@ -48,7 +37,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test the CAPTCHA point setting getter/setter.
    */
-  public function noTestCaptchaPointSettingGetterAndSetter() {
+  public function testCaptchaPointSettingGetterAndSetter() {
     $comment_form_id = self::COMMENT_FORM_ID;
     captcha_set_form_id_setting($comment_form_id, 'none');
     /* @var CaptchaPoint $result */
@@ -124,12 +113,12 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Testing of the CAPTCHA administration links.
    */
-  public function noTestCaptchaAdminLinks() {
+  public function testCaptchaAdminLinks() {
     $this->drupalLogin($this->adminUser);
 
     // Enable CAPTCHA administration links.
     $edit = array(
-      'captcha_administration_mode' => TRUE,
+      'administration_mode' => TRUE,
     );
 
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, t('Save configuration'));
@@ -152,7 +141,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->clickLink(t('Place a CAPTCHA here for untrusted users.'));
 
     // Enable Math CAPTCHA.
-    $edit = array('captcha_type' => 'captcha/Math');
+    $edit = array('captchaType' => 'captcha/Math');
     $this->drupalPostForm($this->getUrl(), $edit, t('Save'));
 
     // Check if returned to original comment form.
@@ -171,7 +160,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->clickLink(t('change'));
 
     // Enable Math CAPTCHA.
-    $edit = array('captcha_type' => 'default');
+    $edit = array('captchaType' => 'default');
     $this->drupalPostForm($this->getUrl(), $edit, t('Save'));
 
     // Check if returned to original comment form.
@@ -208,7 +197,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Test untrusted user posting.
    */
-  public function noTestUntrustedUserPosting() {
+  public function testUntrustedUserPosting() {
     // Set CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
 
@@ -281,20 +270,19 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
    *    Object with mysql query result.
    */
   protected function getCaptchaPointSettingFromDatabase($form_id) {
-    $result = db_query(
-      "SELECT * FROM {captcha_points} WHERE form_id = :form_id",
-      array(':form_id' => $form_id)
-    )->fetchObject();
-    return $result;
+    $ids = \Drupal::entityQuery('captcha_point')
+      ->condition('formId', $form_id)
+      ->execute();
+    return $ids ? CaptchaPoint::load(reset($ids)) : NULL;
   }
 
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function noTestCaptchaPointAdministration() {
+  public function testCaptchaPointAdministration() {
     // Generate CAPTCHA point data:
     // Drupal form ID should consist of lowercase alphanumerics and underscore).
-    $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
+    $captcha_point_form_id = 'form_' . strtolower($this->randomMachineName(32));
     // The Math CAPTCHA by the CAPTCHA module is always available,
     // so let's use it.
     $captcha_point_module = 'captcha';
@@ -305,10 +293,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set CAPTCHA point through admin/user/captcha/captcha/captcha_point.
     $form_values = array(
-      'captcha_point_form_id' => $captcha_point_form_id,
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'formId' => $captcha_point_form_id,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
-    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point', $form_values, t('Save'));
+    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/add', $form_values, t('Save'));
     $this->assertText(t('Saved CAPTCHA point settings.'),
       'Saving of CAPTCHA point settings');
 
@@ -332,7 +320,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Set CAPTCHA point via admin/user/captcha/captcha/captcha_point/$form_id.
     $form_values = array(
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . $captcha_point_form_id, $form_values, t('Save'));
     $this->assertText(t('Saved CAPTCHA point settings.'),
@@ -357,22 +345,21 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
   /**
    * Method for testing the CAPTCHA point administration.
    */
-  public function noTestCaptchaPointAdministrationByNonAdmin() {
+  public function testCaptchaPointAdministrationByNonAdmin() {
     // First add a CAPTCHA point (as admin).
     $this->drupalLogin($this->adminUser);
-    $captcha_point_form_id = 'form_' . strtolower($this->randomName(32));
+    $captcha_point_form_id = 'form_' . strtolower($this->randomMachineName(32));
     $captcha_point_module = 'captcha';
     $captcha_point_type = 'Math';
     $form_values = array(
-      'captcha_point_form_id' => $captcha_point_form_id,
-      'captcha_type' => $captcha_point_module . '/' . $captcha_point_type,
+      'formId' => $captcha_point_form_id,
+      'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/', $form_values, 'Save');
     $this->assertText(t('Saved CAPTCHA point settings.'),
       'Saving of CAPTCHA point settings');
 
     // Switch from admin to non-admin.
-    $this->drupalGet(url('logout', array('absolute' => TRUE)));
     $this->drupalLogin($this->normalUser);
 
     // Try to set CAPTCHA point
@@ -383,7 +370,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Try to set CAPTCHA point through
     // admin/user/captcha/captcha/captcha_point/$form_id.
-    $this->drupalGet(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . 'form_' . strtolower($this->randomName(32)));
+    $this->drupalGet(self::CAPTCHA_ADMIN_PATH . '/captcha/captcha_point/' . 'form_' . strtolower($this->randomMachineName(32)));
     $this->assertText(t('You are not authorized to access this page.'),
       'Non admin should not be able to set a CAPTCHA point');
 
@@ -398,7 +385,6 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'Non admin should not be able to delete a CAPTCHA point');
 
     // Switch from nonadmin to admin again.
-    $this->drupalGet(url('logout', array('absolute' => TRUE)));
     $this->drupalLogin($this->adminUser);
 
     // Check if original CAPTCHA point still exists in database.
