@@ -32,7 +32,7 @@ function image_captcha_requirements($phase) {
  * Implements hook_install().
  */
 function image_captcha_install() {
-  $config = \Drupal::config('image_captcha.settings');
+  $config = \Drupal::configFactory()->getEditable('image_captcha.settings');
 
   $config->set('image_captcha_fonts', array(
     drupal_get_path('module', 'image_captcha') . '/fonts/Tesox/tesox.ttf',

@@ -26,6 +26,13 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return ['image_captcha.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('image_captcha.settings');
     // Add CSS and JS for theming and added usability on admin form.

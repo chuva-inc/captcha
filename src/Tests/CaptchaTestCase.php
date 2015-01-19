@@ -99,7 +99,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    * Testing the case sensitive/insensitive validation.
    */
   public function testCaseInsensitiveValidation() {
-    $config = \Drupal::config('captcha.settings');
+    $config = $this->config('captcha.settings');
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
 

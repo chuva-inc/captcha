@@ -41,6 +41,13 @@ class CaptchaSettingsForm extends ConfigFormBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['captcha.settings'];
+  }
+
+  /**
    * Implements \Drupal\Core\Form\FormInterface::getFormID().
    */
   public function getFormID() {

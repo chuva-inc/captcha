@@ -31,7 +31,7 @@ captcha_point.add:
   requirements:
     _permission: 'administer CAPTCHA settings'
 
-captcha_point.edit:
+entity.captcha_point.edit_form:
   path: '/admin/config/people/captcha/captcha-points/{captcha_point}'
   defaults:
     _entity_form: 'captcha_point.edit'
@@ -41,7 +41,7 @@ captcha_point.edit:
   requirements:
     _permission: 'administer CAPTCHA settings'
 
-captcha_point.delete:
+entity.captcha_point.delete_form:
   path: '/admin/config/people/captcha/captcha-points/{captcha_point}/delete'
   defaults:
     _entity_form: 'captcha_point.delete'

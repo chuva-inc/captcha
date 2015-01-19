@@ -31,8 +31,8 @@ use Drupal\captcha\CaptchaPointInterface;
  *     "label" = "label",
  *   },
  *   links = {
- *     "edit-form" = "captcha_point.edit",
- *     "delete-form" = "captcha_point.delete",
+ *     "edit-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}",
+ *     "delete-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/delete",
  *   }
  * )
  */
