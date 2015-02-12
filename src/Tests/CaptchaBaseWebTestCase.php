@@ -20,9 +20,9 @@
 namespace Drupal\captcha\Tests;
 
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
-use Drupal\Core\Language\Language;
 
 /**
  * Base class for CAPTCHA tests.
@@ -30,6 +30,8 @@ use Drupal\Core\Language\Language;
  * Provides common setup stuff and various helper functions.
  */
 abstract class CaptchaBaseWebTestCase extends WebTestBase {
+
+  use CommentTestTrait;
 
   // Some constants for better reuse.
   const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE = 'The answer you entered for the CAPTCHA was not correct.';
@@ -93,7 +95,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     $this->adminUser = $this->drupalCreateUser($permissions);
 
     // Open comment for page content type.
-    $this->container->get('comment.manager')->addDefaultField('node', 'page');
+    $this->addDefaultCommentField('node', 'page');
 
     // Put comments on page nodes on a separate page.
     $comment_field = FieldConfig::loadByName('node', 'page', 'comment');
