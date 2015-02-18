@@ -13,7 +13,7 @@ env:
     - MODULE_TEST_GROUP='captcha'
     - DRUPAL_REPO='git://drupalcode.org/project/drupal.git'
     - DRUPAL_VERSION='8.0.x'
-    - PHPCS_VERSION='2.0.*@dev'
+    - PHPCS_VERSION='dev-master'
     - CODER_VERSION='dev-8.x-2.x'
 
 mysql:
