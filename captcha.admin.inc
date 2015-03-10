@@ -24,6 +24,7 @@ function _captcha_available_challenge_types($add_special_options = TRUE) {
     $captcha_types['none'] = t('- No challenge -');
     $captcha_types['default'] = t('Default challenge type');
   }
+
   // We do our own version of Drupal's module_invoke_all() here because
   // we want to build an array with custom keys and values.
   foreach (\Drupal::moduleHandler()->getImplementations('captcha') as $module) {

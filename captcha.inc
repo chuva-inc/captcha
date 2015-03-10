@@ -76,8 +76,10 @@ function captcha_get_form_id_setting($form_id, $symbolic = FALSE) {
  */
 function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_STATUS_UNSOLVED) {
   $user = \Drupal::currentUser();
+
   // Initialize solution with random data.
   $solution = md5(mt_rand());
+
   // Insert an entry and thankfully receive the value
   // of the autoincrement field 'csid'.
   $captcha_sid = db_insert('captcha_sessions')
