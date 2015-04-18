@@ -12,76 +12,76 @@ use Drupal\Core\Url;
  * Implements hook_schema().
  */
 function captcha_schema() {
-  $schema['captcha_sessions'] = array(
+  $schema['captcha_sessions'] = [
     'description' => 'Stores the data about CAPTCHA sessions (solution, IP address, timestamp, ...).',
-    'fields' => array(
-      'csid' => array(
+    'fields' => [
+      'csid' => [
         'description' => 'CAPTCHA session ID.',
         'type' => 'serial',
         'not null' => TRUE,
-      ),
-      'token' => array(
+      ],
+      'token' => [
         'description' => 'One time CAPTCHA token.',
         'type' => 'varchar',
         'length' => 64,
         'not null' => FALSE,
-      ),
-      'uid' => array(
+      ],
+      'uid' => [
         'description' => "User's {users}.uid.",
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
-      ),
-      'sid' => array(
+      ],
+      'sid' => [
         'description' => "Session ID of the user.",
         'type' => 'varchar',
         'length' => 64,
         'not null' => TRUE,
         'default' => '',
-      ),
-      'ip_address' => array(
+      ],
+      'ip_address' => [
         'description' => 'IP address of the visitor.',
         'type' => 'varchar',
         'length' => 128,
         'not null' => FALSE,
-      ),
-      'timestamp' => array(
+      ],
+      'timestamp' => [
         'description' => 'A Unix timestamp indicating when the challenge was generated.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
-      ),
-      'form_id' => array(
+      ],
+      'form_id' => [
         'description' => 'The form_id of the form where the CAPTCHA is added to.',
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
-      ),
-      'solution' => array(
+      ],
+      'solution' => [
         'description' => 'Solution of the challenge.',
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
         'default' => '',
-      ),
-      'status' => array(
+      ],
+      'status' => [
         'description' => 'Status of the CAPTCHA session (unsolved, solved, ...)',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
-      ),
-      'attempts' => array(
+      ],
+      'attempts' => [
         'description' => 'The number of attempts.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
-      ),
-    ),
-    'primary key' => array('csid'),
-    'indexes' => array(
-      'csid_ip' => array('csid', 'ip_address'),
-    ),
-  );
+      ],
+    ],
+    'primary key' => ['csid'],
+    'indexes' => [
+      'csid_ip' => ['csid', 'ip_address'],
+    ],
+  ];
 
   return $schema;
 }
@@ -90,12 +90,12 @@ function captcha_schema() {
  * Implements hook_requirements().
  */
 function captcha_requirements($phase) {
-  $requirements = array();
+  $requirements = [];
   $config = \Drupal::config('captcha.settings');
 
   if ($phase == 'runtime' && $config->get('enable_stats')) {
     // Show the wrong response counter in the status report.
-    $requirements['captcha_wrong_response_counter'] = array(
+    $requirements['captcha_wrong_response_counter'] = [
       'title' => \Drupal::translation()->translate('CAPTCHA'),
       'value' => \Drupal::translation()->formatPlural(
         \Drupal::state()->get('captcha.wrong_response_counter'),
@@ -103,7 +103,7 @@ function captcha_requirements($phase) {
         'Already @count blocked form submissions'
       ),
       'severity' => REQUIREMENT_INFO,
-    );
+    ];
   }
   return $requirements;
 }
@@ -113,7 +113,7 @@ function captcha_requirements($phase) {
  */
 function captcha_install() {
   // Insert some default CAPTCHA points.
-  $form_ids = array(
+  $form_ids = [
     'contact_site_form',
     'contact_personal_form',
     'user_register_form',
@@ -121,16 +121,16 @@ function captcha_install() {
     'user_login_form',
     'user_login_block',
     'forum_node_form',
-  );
+  ];
   // Add form_ids of all currently known node types too.
   foreach (node_type_get_names() as $type => $name) {
     $form_ids[] = $type . '_node_form';
   }
   foreach ($form_ids as $form_id) {
-    $values = array(
+    $values = [
       'formId' => $form_id,
       'captchaType' => 'none',
-    );
+    ];
     $captcha_point = new CaptchaPoint($values, 'captcha_point');
     $captcha_point->save();
   }
@@ -140,11 +140,11 @@ function captcha_install() {
   //   other module does this? Could be weird within an install profile, for
   //   example.
   drupal_set_message(\Drupal::translation()->translate('You can now <a href="!captcha_admin">configure the CAPTCHA module</a> for your site.',
-    array('!captcha_admin' => Url::fromUri('internal:/admin/config/people/captcha')->toString())), 'status');
+    ['!captcha_admin' => Url::fromUri('internal:/admin/config/people/captcha')->toString()]), 'status');
 
   // Explain to users that page caching may be disabled.
   if ($config = \Drupal::config('system.performance')->get('cache.page.use_internal') != 0) {
     drupal_set_message(\Drupal::translation()->translate('Note that the CAPTCHA module disables <a href="!performance_admin">page caching</a> of pages that include a CAPTCHA challenge.',
-      array('!performance_admin' => Url::fromUri('internal:/admin/config/development/performance')->toString())), 'warning');
+      ['!performance_admin' => Url::fromUri('internal:/admin/config/development/performance')->toString()]), 'warning');
   }
 }
