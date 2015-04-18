@@ -33,16 +33,16 @@ enter "foo" in a textfield.
 function foo_captcha_captcha($op, $captcha_type='') {
   switch ($op) {
     case 'list':
-      return array('Foo CAPTCHA');
+      return ['Foo CAPTCHA'];
     case 'generate':
       if ($captcha_type == 'Foo CAPTCHA') {
-        $captcha = array();
+        $captcha = [];
         $captcha['solution'] = 'foo';
-        $captcha['form']['captcha_response'] = array(
+        $captcha['form']['captcha_response'] = [
           '#type' => 'textfield',
           '#title' => t('Enter "foo"'),
           '#required' => TRUE,
-        );
+        ];
         return $captcha;
       }
       break;
@@ -88,14 +88,14 @@ For our simple foo CAPTCHA module this would mean:
  * Implementation of hook_menu().
  */
 function foo_captcha_menu($may_cache) {
-  $items = array();
+  $items = [];
   if ($may_cache) {
-    $items['admin/config/people/captcha/foo_captcha'] = array(
+    $items['admin/config/people/captcha/foo_captcha'] = [
       'title' => t('Foo CAPTCHA'),
       'page callback' => 'drupal_get_form',
-      'page arguments' => array('foo_captcha_settings_form'),
+      'page arguments' => ['foo_captcha_settings_form'],
       'type' => MENU_LOCAL_TASK,
-    );
+    ];
   }
   return $items;
 }
@@ -142,7 +142,7 @@ function foo_captcha_captcha($op, $captcha_type='') {
     ...
     case 'generate':
       if ($captcha_type == 'Foo CAPTCHA') {
-        $captcha = array();
+        $captcha = [];
         $captcha['solution'] = ...
         $captcha['form'] = ...
         $captcha['captcha_validate'] = 'foo_captcha_custom_validation';
@@ -200,16 +200,16 @@ For example:
  * Implementation of hook_captcha_placement_map
  */
 function hook_captcha_placement_map() {
-  return array(
-    'my_fancy_form' => array(
-      'path' => array('items', 'buttons'),
+  return [
+    'my_fancy_form' => [
+      'path' => ['items', 'buttons'],
       'key' => 'savebutton',
-    ),
-    'another_form' => array(
-      'path' => array(),
+    ],
+    'another_form' => [
+      'path' => [],
       'weight' => 34,
-    ),
-  );
+    ],
+  ];
 }
 """
 This will place the CAPTCHA element

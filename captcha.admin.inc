@@ -19,7 +19,7 @@
  *   implementing the CAPTCHA and $type the name of the CAPTCHA type.
  */
 function _captcha_available_challenge_types($add_special_options = TRUE) {
-  $captcha_types = array();
+  $captcha_types = [];
   if ($add_special_options) {
     $captcha_types['none'] = t('- No challenge -');
     $captcha_types['default'] = t('Default challenge type');
@@ -28,10 +28,10 @@ function _captcha_available_challenge_types($add_special_options = TRUE) {
   // We do our own version of Drupal's module_invoke_all() here because
   // we want to build an array with custom keys and values.
   foreach (\Drupal::moduleHandler()->getImplementations('captcha') as $module) {
-    $result = call_user_func_array($module . '_captcha', array('list'));
+    $result = call_user_func_array($module . '_captcha', ['list']);
     if (is_array($result)) {
       foreach ($result as $type) {
-        $captcha_types["$module/$type"] = t('@type (from module @module)', array('@type' => $type, '@module' => $module));
+        $captcha_types["$module/$type"] = t('@type (from module @module)', ['@type' => $type, '@module' => $module]);
       }
     }
   }
@@ -43,9 +43,9 @@ function _captcha_available_challenge_types($add_special_options = TRUE) {
  * Helper function for generating an example challenge.
  */
 function _captcha_generate_example_challenge($module, $type) {
-  return array(
+  return [
     '#type' => 'captcha',
     '#captcha_type' => $module . '/' . $type,
     '#captcha_admin_mode' => TRUE,
-  );
+  ];
 }

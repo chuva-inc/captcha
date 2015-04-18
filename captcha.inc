@@ -31,7 +31,7 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
     $captcha_point->setCaptchaType($captcha_type);
   }
   else {
-    $captcha_point = new CaptchaPoint(array('formId' => $form_id, 'captchaType' => $captcha_type), 'captcha_point');
+    $captcha_point = new CaptchaPoint(['formId' => $form_id, 'captchaType' => $captcha_type], 'captcha_point');
   }
 
   $captcha_point->save();
@@ -83,7 +83,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
   // Insert an entry and thankfully receive the value
   // of the autoincrement field 'csid'.
   $captcha_sid = db_insert('captcha_sessions')
-  ->fields(array(
+  ->fields([
     'uid' => $user->id(),
     'sid' => session_id(),
     'ip_address' => Drupal::request()->getClientIp(),
@@ -92,7 +92,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
     'solution' => $solution,
     'status' => $status,
     'attempts' => 0,
-  ))
+  ])
   ->execute();
   return $captcha_sid;
 }
@@ -108,10 +108,10 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
 function _captcha_update_captcha_session($captcha_sid, $solution) {
   db_update('captcha_sessions')
     ->condition('csid', $captcha_sid)
-    ->fields(array(
+    ->fields([
       'timestamp' => REQUEST_TIME,
       'solution' => $solution,
-    ))
+    ])
     ->execute();
 }
 
@@ -131,7 +131,7 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
   }
 
   // Get the status of the current CAPTCHA session.
-  $captcha_session_status = db_query('SELECT status FROM {captcha_sessions} WHERE csid = :csid', array(':csid' => $captcha_sid))->fetchField();
+  $captcha_session_status = db_query('SELECT status FROM {captcha_sessions} WHERE csid = :csid', [':csid' => $captcha_sid])->fetchField();
   // Second check: if the current session is already
   // solved: omit further CAPTCHAs.
   if ($captcha_session_status == CAPTCHA_STATUS_SOLVED) {
@@ -144,7 +144,7 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
     return TRUE;
   }
   else {
-    $captcha_success_form_ids = isset($_SESSION['captcha_success_form_ids']) ? (array) ($_SESSION['captcha_success_form_ids']) : array();
+    $captcha_success_form_ids = isset($_SESSION['captcha_success_form_ids']) ? (array) ($_SESSION['captcha_success_form_ids']) : [];
     switch ($captcha_persistence) {
       case CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL:
         return (count($captcha_success_form_ids) == 0);
@@ -182,7 +182,7 @@ function _captcha_get_description() {
  */
 function _captcha_parse_captcha_type($captcha_type) {
   if ($captcha_type == 'none') {
-    return array(NULL, NULL);
+    return [NULL, NULL];
   }
   if ($captcha_type == 'default') {
     $captcha_type = \Drupal::config('captcha.settings')->get('default_challenge', 'captcha/Math');
@@ -228,12 +228,12 @@ function _captcha_get_captcha_placement($form_id, $form) {
     // If there is an "actions" button group, a good placement
     // is just before that.
     if (isset($form['actions']) && isset($form['actions']['#type']) && $form['actions']['#type'] === 'actions') {
-      $placement = array(
-        'path' => array(),
+      $placement = [
+        'path' => [],
         'key' => 'actions',
         // #type 'actions' defaults to 100.
         'weight' => (isset($form['actions']['#weight']) ? $form['actions']['#weight'] - 1 : 99),
-      );
+      ];
     }
     else {
       // Search the form for buttons and guess placement from it.
@@ -273,22 +273,22 @@ function _captcha_get_captcha_placement($form_id, $form) {
  *   (or NULL if undefined).
  */
 function _captcha_search_buttons(array $form) {
-  $buttons = array();
+  $buttons = [];
 
   foreach (Element::children($form, FALSE) as $key) {
     // Look for submit or button type elements.
     if (isset($form[$key]['#type']) && ($form[$key]['#type'] == 'submit' || $form[$key]['#type'] == 'button')) {
       $weight = isset($form[$key]['#weight']) ? $form[$key]['#weight'] : NULL;
-      $buttons[] = array(
-        'path' => array(),
+      $buttons[] = [
+        'path' => [],
         'key' => $key,
         'weight' => $weight,
-      );
+      ];
     }
     // Process children recursively.
     $children_buttons = _captcha_search_buttons($form[$key]);
     foreach ($children_buttons as $b) {
-      $b['path'] = array_merge(array($key), $b['path']);
+      $b['path'] = array_merge([$key], $b['path']);
       $buttons[] = $b;
     }
   }
@@ -319,7 +319,7 @@ function _captcha_insert_captcha_element(array &$form, array $placement, array $
   // Get path, target and target weight or use defaults if not available.
   $target_key = isset($placement['key']) ? $placement['key'] : NULL;
   $target_weight = isset($placement['weight']) ? $placement['weight'] : NULL;
-  $path = isset($placement['path']) ? $placement['path'] : array();
+  $path = isset($placement['path']) ? $placement['path'] : [];
 
   // Walk through the form along the path.
   $form_stepper = &$form;

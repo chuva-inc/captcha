@@ -38,7 +38,7 @@ class CaptchaImageResponse extends Response {
   /**
    * {@inheritdoc}
    */
-  public function __construct(Config $config, LoggerChannelInterface $logger, $callback = NULL, $status = 200, $headers = array()) {
+  public function __construct(Config $config, LoggerChannelInterface $logger, $callback = NULL, $status = 200, $headers = []) {
     parent::__construct(NULL, $status, $headers);
 
     $this->config = $config;
@@ -52,14 +52,14 @@ class CaptchaImageResponse extends Response {
     $session_id = $request->get('session_id');
 
     $code = db_query("SELECT solution FROM {captcha_sessions} WHERE csid = :csid",
-      array(':csid' => $session_id)
+      [':csid' => $session_id]
     )->fetchField();
 
     if ($code !== FALSE) {
       $this->image = @$this->generateImage($code);
 
       if (!$this->image) {
-        $this->logger->log(WATCHDOG_ERROR, 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', array());
+        $this->logger->log(WATCHDOG_ERROR, 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', []);
       }
     }
 
@@ -116,7 +116,7 @@ class CaptchaImageResponse extends Response {
       $hex = $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
     }
     $c = hexdec($hex);
-    $rgb = array();
+    $rgb = [];
     for ($i = 16; $i >= 0; $i -= 8) {
       $rgb[] = ($c >> $i) & 0xFF;
     }
@@ -162,7 +162,7 @@ class CaptchaImageResponse extends Response {
       return FALSE;
     }
 
-    $noise_colors = array();
+    $noise_colors = [];
     for ($i = 0; $i < 20; $i++) {
       $noise_colors[] = imagecolorallocate($image, mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255));
     }
@@ -343,14 +343,14 @@ class CaptchaImageResponse extends Response {
     $foreground_color = imagecolorallocate($image, $foreground_rgb[0], $foreground_rgb[1], $foreground_rgb[2]);
     // Precalculate the value ranges for color randomness.
     $foreground_randomness = $this->config->get('image_captcha_foreground_color_randomness');
-    $foreground_color_range = array();
+    $foreground_color_range = [];
 
     if ($foreground_randomness) {
       for ($i = 0; $i < 3; $i++) {
-        $foreground_color_range[$i] = array(
+        $foreground_color_range[$i] = [
           max(0, $foreground_rgb[$i] - $foreground_randomness),
           min(255, $foreground_rgb[$i] + $foreground_randomness),
-        );
+        ];
       }
     }
 
@@ -390,7 +390,7 @@ class CaptchaImageResponse extends Response {
       else {
         $character_width = imagefontwidth(5);
         $character_height = imagefontheight(5);
-        $bbox = array(
+        $bbox = [
           0,
           $character_height,
           $character_width,
@@ -399,7 +399,7 @@ class CaptchaImageResponse extends Response {
           0,
           0,
           0,
-        );
+        ];
       }
 
       // Random (but small) rotation of the character.
