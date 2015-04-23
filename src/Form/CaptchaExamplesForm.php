@@ -8,6 +8,7 @@
 namespace Drupal\captcha\Form;
 
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -53,7 +54,7 @@ class CaptchaExamplesForm extends FormBase {
               '#title' => t('Challenge %challenge by module %module', array('%challenge' => $challenge, '%module' => $module)),
               'challenge' => _captcha_generate_example_challenge($module, $challenge),
               'more_examples' => array(
-                '#markup' => l(t('10 more examples of this challenge.'), "admin/config/people/captcha/examples/$module/$challenge"),
+                '#markup' => \Drupal::l(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples')),
               ),
             );
           }
@@ -61,7 +62,7 @@ class CaptchaExamplesForm extends FormBase {
       }
     }
 
-    return parent::buildForm($form, $form_state);
+    return $form;
   }
 
   /**
