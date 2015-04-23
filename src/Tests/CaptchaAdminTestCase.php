@@ -47,11 +47,12 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $result = captcha_get_form_id_setting($comment_form_id, TRUE);
     $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
     $this->assertEqual($result, 'none', 'Setting and symbolic getting CAPTCHA point: "none"', 'CAPTCHA');
+
     // Set to 'default'
     captcha_set_form_id_setting($comment_form_id, 'default');
     $this->config('captcha.settings')->set('default_challenge', 'foo/bar')->save();
     $result = captcha_get_form_id_setting($comment_form_id);
-    $this->assertNotNull($result, 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
+    $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
     $this->assertEqual($result->getCaptchaType(), 'foo/bar', 'Setting and getting CAPTCHA point: default', 'CAPTCHA');
     $result = captcha_get_form_id_setting($comment_form_id, TRUE);
     $this->assertNotNull($result, 'Setting and symbolic getting CAPTCHA point: "default"', 'CAPTCHA');
@@ -60,7 +61,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Set to 'baz/boo'.
     captcha_set_form_id_setting($comment_form_id, 'baz/boo');
     $result = captcha_get_form_id_setting($comment_form_id);
-    $this->assertNotNull($result, 'Setting and getting CAPTCHA point: baz/boo', 'CAPTCHA');
+    $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
     $this->assertEqual($result->getCaptchaType(), 'baz/boo', 'Setting and getting CAPTCHA point: baz/boo', 'CAPTCHA');
     $result = captcha_get_form_id_setting($comment_form_id, TRUE);
     $this->assertEqual($result, 'baz/boo', 'Setting and symbolic getting CAPTCHA point: "baz/boo"', 'CAPTCHA');
@@ -68,9 +69,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Set to NULL (which should delete the CAPTCHA point setting entry).
     captcha_set_form_id_setting($comment_form_id, NULL);
     $result = captcha_get_form_id_setting($comment_form_id);
-    $this->assertNull($result, 'Setting and getting CAPTCHA point: NULL', 'CAPTCHA');
+    $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
+    $this->assertEqual($result->getCaptchaType(), 'foo/bar', 'Setting and getting CAPTCHA point: NULL', 'CAPTCHA');
     $result = captcha_get_form_id_setting($comment_form_id, TRUE);
-    $this->assertNull($result, 'Setting and symbolic getting CAPTCHA point: NULL', 'CAPTCHA');
+    $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
 
     // Set with object.
     $captcha_type = new stdClass();
