@@ -41,6 +41,26 @@ entity.captcha_point.edit_form:
   requirements:
     _permission: 'administer CAPTCHA settings'
 
+entity.captcha_point.disable_form:
+  path: '/admin/config/people/captcha/captcha-points/{captcha_point}/disable'
+  defaults:
+    _entity_form: 'captcha_point.disable'
+    _title: 'Disable CAPTCHA point'
+  options:
+      _admin_route: TRUE
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+
+entity.captcha_point.enable_form:
+  path: '/admin/config/people/captcha/captcha-points/{captcha_point}/enable'
+  defaults:
+    _entity_form: 'captcha_point.enable'
+    _title: 'Enable CAPTCHA point'
+  options:
+      _admin_route: TRUE
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+
 entity.captcha_point.delete_form:
   path: '/admin/config/people/captcha/captcha-points/{captcha_point}/delete'
   defaults:

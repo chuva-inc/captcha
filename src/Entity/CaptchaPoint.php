@@ -8,6 +8,7 @@
 namespace Drupal\captcha\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\captcha\CaptchaPointInterface;
 
 /**
@@ -21,6 +22,8 @@ use Drupal\captcha\CaptchaPointInterface;
  *     "form" = {
  *       "add" = "Drupal\captcha\Form\CaptchaPointForm",
  *       "edit" = "Drupal\captcha\Form\CaptchaPointForm",
+ *       "disable" = "Drupal\captcha\Form\CaptchaPointDisableForm",
+ *       "enable" = "Drupal\captcha\Form\CaptchaPointEnableForm",
  *       "delete" = "Drupal\captcha\Form\CaptchaPointDeleteForm"
  *     }
  *   },
@@ -32,6 +35,8 @@ use Drupal\captcha\CaptchaPointInterface;
  *   },
  *   links = {
  *     "edit-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}",
+ *     "disable-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/disable",
+ *     "enable-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/enable",
  *     "delete-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/delete",
  *   }
  * )
@@ -89,6 +94,14 @@ class CaptchaPoint extends ConfigEntityBase implements CaptchaPointInterface {
       // @Todo inject config via DI.
       return \Drupal::config('captcha.settings')->get('default_challenge');
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function disable() {
+    Cache::invalidateTags($this->getCacheTags());
+    return $this->setStatus(FALSE);
   }
 
   /**

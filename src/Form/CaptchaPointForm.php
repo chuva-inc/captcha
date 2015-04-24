@@ -7,6 +7,7 @@
 
 namespace Drupal\captcha\Form;
 
+use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\captcha\CaptchaPointInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -62,17 +63,18 @@ class CaptchaPointForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    /* @var CaptchaPoint $captcha_point */
     $captcha_point = $this->entity;
     $status = $captcha_point->save();
 
     if ($status == SAVED_NEW) {
       drupal_set_message($this->t('Captcha Point for %label form was created.', array(
-        '%label' => $captcha_point->label(),
+        '%label' => $captcha_point->getFormId(),
       )));
     }
     else {
       drupal_set_message($this->t('Captcha Point for %label form was updated.', array(
-        '%label' => $captcha_point->label(),
+        '%label' => $captcha_point->getFormId(),
       )));
     }
     $form_state->setRedirect('captcha_point.list');
