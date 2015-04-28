@@ -14,7 +14,7 @@ use Drupal\image_captcha\Response\CaptchaImageResponse;
 use Drupal\Core\Config\Config;
 
 /**
- * Class CaptchaImageGeneratorController.
+ * Controller which generates the image from defined settings.
  *
  * @package Drupal\image_captcha\Controller
  */

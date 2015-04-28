@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * Class CaptchaFontPreview.
+ * A Controller to preview the captcha font on the settings page.
  *
  * @package Drupal\image_captcha\Controller
  */

@@ -11,7 +11,7 @@ use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Class CaptchaPointListBuilder.
+ * Builds the list of capture points for the captcha point form.
  *
  * @package Drupal\captcha\Controller
  */

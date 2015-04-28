@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Config\Config;
 
 /**
- * Class CaptchaImageResponse.
+ * Response which is returned as the captcha for image_captcha.
  *
  * @package Drupal\image_captcha\Response
  */
