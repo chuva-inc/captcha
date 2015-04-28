@@ -13,7 +13,8 @@ use Drupal\captcha\CaptchaPointInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class CaptchaPointForm
+ * Class CaptchaPointForm.
+ *
  * @package Drupal\captcha\Form
  */
 class CaptchaPointForm extends EntityForm {

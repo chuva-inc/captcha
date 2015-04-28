@@ -189,5 +189,5 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->drupalGet('');
     $this->assertCaptchaPresence(TRUE);
   }
-  
+
 }

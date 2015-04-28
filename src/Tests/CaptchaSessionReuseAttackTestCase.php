@@ -187,4 +187,5 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaResponseAccepted();
     $this->assertText($comment_subject);
   }
+
 }

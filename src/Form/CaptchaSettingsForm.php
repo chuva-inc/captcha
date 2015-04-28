@@ -21,6 +21,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
 
   /**
    * The cache backend.
+   *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cacheBackend;
@@ -50,7 +51,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
   /**
    * Implements \Drupal\Core\Form\FormInterface::getFormID().
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'captcha_settings';
   }
 

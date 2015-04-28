@@ -23,8 +23,8 @@ class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
    *   The Event to process.
    */
   public function onSave(ConfigCrudEvent $event) {
-    // Changing the Captcha settings means that any cached page might result in
-    // different settings for captcha so the cached definitions need to be cleared.
+    // Changing the Captcha settings means that any page might result in other
+    // settings for captcha so the cached definitions need to be cleared.
     if ($event->getConfig()->getName() === 'captcha.settings') {
       \Drupal::service('element_info')->clearCachedDefinitions();
     }
