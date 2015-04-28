@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Config\Config;
 
+/**
+ * Class CaptchaImageResponse.
+ *
+ * @package Drupal\image_captcha\Response
+ */
 class CaptchaImageResponse extends Response {
 
   /**
@@ -111,7 +116,7 @@ class CaptchaImageResponse extends Response {
    * @return array
    *   Array representation of RGB color value.
    */
-  protected function hexToRGB($hex) {
+  protected function hexToRgb($hex) {
     if (strlen($hex) == 4) {
       $hex = $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
     }
@@ -236,7 +241,7 @@ class CaptchaImageResponse extends Response {
               $r = (int) ((1 - $v) * ((1 - $u) * $color_00_r + $u * $color_10_r) + $v * ((1 - $u) * $color_01_r + $u * $color_11_r));
               $g = (int) ((1 - $v) * ((1 - $u) * $color_00_g + $u * $color_10_g) + $v * ((1 - $u) * $color_01_g + $u * $color_11_g));
               $b = (int) ((1 - $v) * ((1 - $u) * $color_00_b + $u * $color_10_b) + $v * ((1 - $u) * $color_01_b + $u * $color_11_b));
-              $color = ($r<<16) + ($g<<8) + $b;
+              $color = ($r << 16) + ($g << 8) + $b;
             }
 
             imagesetpixel($distorted_image, $x, $y, $color);
@@ -446,4 +451,5 @@ class CaptchaImageResponse extends Response {
 
     return TRUE;
   }
+
 }

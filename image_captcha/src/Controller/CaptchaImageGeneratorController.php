@@ -13,6 +13,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\image_captcha\Response\CaptchaImageResponse;
 use Drupal\Core\Config\Config;
 
+/**
+ * Class CaptchaImageGeneratorController.
+ *
+ * @package Drupal\image_captcha\Controller
+ */
 class CaptchaImageGeneratorController implements ContainerInjectionInterface {
 
   /**

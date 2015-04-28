@@ -83,7 +83,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
   // Insert an entry and thankfully receive the value
   // of the autoincrement field 'csid'.
   $captcha_sid = db_insert('captcha_sessions')
-  ->fields([
+    ->fields([
     'uid' => $user->id(),
     'sid' => session_id(),
     'ip_address' => Drupal::request()->getClientIp(),
@@ -93,7 +93,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
     'status' => $status,
     'attempts' => 0,
   ])
-  ->execute();
+    ->execute();
   return $captcha_sid;
 }
 

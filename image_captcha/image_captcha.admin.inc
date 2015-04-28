@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Contains \Drupal\captcha\image_captcha\image_captcha.admin.inc.
+ */
 
 /**
  * Menu handler for font preview request.

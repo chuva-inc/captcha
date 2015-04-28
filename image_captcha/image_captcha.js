@@ -16,7 +16,8 @@
         if ($("#edit-image-captcha-dot-noise").is(":checked")
             || $("#edit-image-captcha-line-noise").is(":checked")) {
           $(".form-item-image-captcha-noise-level").show(speed);
-        } else {
+        }
+        else {
           $(".form-item-image-captcha-noise-level").hide(speed);
         }
       };
@@ -32,7 +33,8 @@
         speed = (typeof speed == 'undefined') ? 'slow' : speed;
         if ($("#edit-image-captcha-distortion-amplitude").val() > 0) {
           $(".form-item-image-captcha-bilinear-interpolation").show(speed);
-        } else {
+        }
+        else {
           $(".form-item-image-captcha-bilinear-interpolation").hide(speed);
         }
       };
