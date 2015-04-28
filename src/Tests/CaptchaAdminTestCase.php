@@ -334,7 +334,6 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $captcha_point_module = 'captcha';
     $captcha_point_type = 'Math';
 
-
     $this->drupalLogin($this->adminUser);
 
     $form_values = array(
@@ -374,4 +373,5 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/' . $captcha_point_form_id . '/delete', array(), 'Delete');
     $this->assertRaw(t('Captcha point %label has been deleted.', array('%label' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
   }
+
 }

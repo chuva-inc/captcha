@@ -50,4 +50,5 @@ class CaptchaPointEnableForm extends EntityConfirmFormBase {
     $this->entity->save();
     drupal_set_message($this->t('Captcha point %label has been enabled.', array('%label' => $this->entity->label())));
   }
+
 }

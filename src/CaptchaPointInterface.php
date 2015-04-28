@@ -64,4 +64,5 @@ interface CaptchaPointInterface extends ConfigEntityInterface {
    * {@inheritdoc}
    */
   public function disable();
+
 }

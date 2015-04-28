@@ -51,4 +51,5 @@ class CaptchaPointDisableForm extends EntityConfirmFormBase {
     $this->entity->save();
     drupal_set_message($this->t('Captcha point %label has been disabled.', array('%label' => $this->entity->getOriginalId())));
   }
+
 }

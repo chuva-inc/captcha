@@ -12,6 +12,10 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\captcha\CaptchaPointInterface;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Class CaptchaPointForm
+ * @package Drupal\captcha\Form
+ */
 class CaptchaPointForm extends EntityForm {
 
   /**
@@ -79,4 +83,5 @@ class CaptchaPointForm extends EntityForm {
     }
     $form_state->setRedirect('captcha_point.list');
   }
+
 }

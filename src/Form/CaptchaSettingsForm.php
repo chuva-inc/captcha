@@ -222,4 +222,5 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $this->cacheBackend->delete('captcha_placement_map_cache');
     drupal_set_message($this->t('Cleared the CAPTCHA placement cache.'));
   }
+
 }

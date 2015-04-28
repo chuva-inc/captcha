@@ -213,4 +213,5 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(FALSE);
     $this->assertDifferentCsid($captcha_sid_initial);
   }
+
 }
