@@ -60,9 +60,4 @@ interface CaptchaPointInterface extends ConfigEntityInterface {
    */
   public function setCaptchaType($captcha_type);
 
-  /**
-   * {@inheritdoc}
-   */
-  public function disable();
-
 }

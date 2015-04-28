@@ -29,6 +29,9 @@ use Drupal\captcha\CaptchaPointInterface;
  *   },
  *   config_prefix = "captcha_point",
  *   admin_permission = "administer CAPTCHA settings",
+ *   list_cache_tags = {
+ *    "rendered"
+ *   },
  *   entity_keys = {
  *     "id" = "formId",
  *     "label" = "label",
@@ -94,14 +97,6 @@ class CaptchaPoint extends ConfigEntityBase implements CaptchaPointInterface {
       // @Todo inject config via DI.
       return \Drupal::config('captcha.settings')->get('default_challenge');
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function disable() {
-    Cache::invalidateTags($this->getCacheTags());
-    return $this->setStatus(FALSE);
   }
 
   /**

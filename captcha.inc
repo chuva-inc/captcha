@@ -92,7 +92,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
     'solution' => $solution,
     'status' => $status,
     'attempts' => 0,
-  ])
+    ])
     ->execute();
   return $captcha_sid;
 }

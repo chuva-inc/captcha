@@ -39,7 +39,7 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
     // (because posting the CAPTCHA admin form would set the CAPTCHA to 'none').
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->drupalGet('user');
-    $this->assertCaptchaPresence(FALSE);
+    $this->assertCaptchaPresence(TRUE);
     captcha_set_form_id_setting('user_register_form', 'captcha/Test');
     $this->drupalGet('user/register');
     $this->assertCaptchaPresence(TRUE);
@@ -203,7 +203,6 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
     $this->assertPreservedCsid($captcha_sid_initial);
 
     // Start a new form instance/session
-    $this->drupalGet('node');
     $this->drupalGet('user');
     $this->assertCaptchaPresence(FALSE);
     $this->assertDifferentCsid($captcha_sid_initial);

@@ -327,7 +327,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         '#process' => ['form_process_checkboxes'],
         ];
 
-        $form['image_captcha_font_size'] = [
+      $form['image_captcha_font_size'] = [
         '#type' => 'select',
         '#title' => t('Font size'),
         '#options' => [
@@ -342,7 +342,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         ],
         '#default_value' => (int) $config->get('image_captcha_font_size'),
         '#description' => t('The font size influences the size of the image. Note that larger values make the image generation more CPU intensive.'),
-        ];
+      ];
     }
 
     // Character spacing (available for both the TrueType

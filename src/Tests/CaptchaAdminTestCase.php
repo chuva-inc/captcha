@@ -283,9 +283,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Log in as admin.
     $this->drupalLogin($this->adminUser);
-
+    $label = 'TEST';
     // Set CAPTCHA point through admin/user/captcha/captcha/captcha_point.
     $form_values = array(
+      'label' => $label,
       'formId' => $captcha_point_form_id,
       'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
@@ -300,7 +301,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Disable CAPTCHA point again.
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/' . $captcha_point_form_id . '/disable', array(), t('Disable'));
-    $this->assertRaw(t('Captcha point %label has been disabled.', array('%label' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
+    $this->assertRaw(t('Captcha point %label has been disabled.', array('%label' => $label)), 'Disabling of CAPTCHA point');
 
     // Check in database.
     $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
@@ -310,7 +311,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
       'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/' . $captcha_point_form_id, $form_values, t('Save'));
-    $this->assertRaw(t('Captcha Point for %label form was updated.', array('%label' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
+    $this->assertRaw(t('Captcha Point for %form_id form was updated.', array('%form_id' => $captcha_point_form_id)), 'Saving of CAPTCHA point settings');
 
     // Check in database.
     $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
@@ -319,7 +320,8 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
 
     // Delete CAPTCHA point.
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/' . $captcha_point_form_id . '/delete', array(), t('Delete'));
-    $this->assertRaw(t('Captcha point %label has been deleted.', array('%label' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
+    $this->assertRaw(t('Captcha point %label has been deleted.', array('%label' => $label)),
+      'Deleting of CAPTCHA point');
 
     $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertFalse($result, 'Deleted CAPTCHA point should be in database');
@@ -333,15 +335,17 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $captcha_point_form_id = 'form_' . strtolower($this->randomMachineName(32));
     $captcha_point_module = 'captcha';
     $captcha_point_type = 'Math';
+    $label = 'TEST_2';
 
     $this->drupalLogin($this->adminUser);
 
     $form_values = array(
+      'label' => $label,
       'formId' => $captcha_point_form_id,
       'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/add', $form_values, 'Save');
-    $this->assertRaw(t('Captcha Point for %label form was created.', array('%label' => $captcha_point_form_id)));
+    $this->assertRaw(t('Captcha Point for %form_id form was created.', array('%form_id' => $captcha_point_form_id)));
 
     // Switch from admin to non-admin.
     $this->drupalLogin($this->normalUser);
@@ -369,9 +373,9 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     $result = $this->getCaptchaPointSettingFromDatabase($captcha_point_form_id);
     $this->assertEqual($result->captchaType, $captcha_point_module . '/' . $captcha_point_type, 'Enabled CAPTCHA point should have module and type set');
 
-    // Delete CAPTCHA point.
+    // Delete captcha point.
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/' . $captcha_point_form_id . '/delete', array(), 'Delete');
-    $this->assertRaw(t('Captcha point %label has been deleted.', array('%label' => $captcha_point_form_id)), 'Disabling of CAPTCHA point');
+    $this->assertRaw(t('Captcha point %label has been deleted.', array('%label' => $label)), 'Disabling of CAPTCHA point');
   }
 
 }

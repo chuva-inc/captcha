@@ -41,6 +41,7 @@ class CaptchaPointForm extends EntityForm {
       '#type' => 'textfield',
       '#title' => $this->t('Form ID'),
       '#default_value' => $captcha_point->label(),
+      '#required' => TRUE,
     );
 
     $form['formId'] = array(
@@ -50,6 +51,7 @@ class CaptchaPointForm extends EntityForm {
         'exists' => 'captcha_point_load',
       ),
       '#disable' => !$captcha_point->isNew(),
+      '#required' => TRUE,
     );
 
     // Select widget for CAPTCHA type.
@@ -73,13 +75,13 @@ class CaptchaPointForm extends EntityForm {
     $status = $captcha_point->save();
 
     if ($status == SAVED_NEW) {
-      drupal_set_message($this->t('Captcha Point for %label form was created.', array(
-        '%label' => $captcha_point->getFormId(),
+      drupal_set_message($this->t('Captcha Point for %form_id form was created.', array(
+        '%form_id' => $captcha_point->getFormId(),
       )));
     }
     else {
-      drupal_set_message($this->t('Captcha Point for %label form was updated.', array(
-        '%label' => $captcha_point->getFormId(),
+      drupal_set_message($this->t('Captcha Point for %form_id form was updated.', array(
+        '%form_id' => $captcha_point->getFormId(),
       )));
     }
     $form_state->setRedirect('captcha_point.list');
