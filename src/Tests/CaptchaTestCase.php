@@ -37,7 +37,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
       'pass' => $user->pass_raw,
       'captcha_response' => '?',
     );
-    $this->drupalPostForm('user', $edit, t('Log in'), array(), array(), self::LOGIN_HTML_FORM_ID);
+    $this->drupalPostForm(NULL, $edit, t('Log in'), array(), array(), self::LOGIN_HTML_FORM_ID);
     // Check for error message.
     $this->assertText(self::CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE, 'CAPTCHA should block user login form', 'CAPTCHA');
 
@@ -163,7 +163,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    */
   public function testCaptchaSessionReuseOnNodeForms() {
     // Set Test CAPTCHA on page form.
-    captcha_set_form_id_setting('page_node_form', 'captcha/Test');
+    captcha_set_form_id_setting('node_page_form', 'captcha/Test');
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -171,7 +171,8 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     // Page settings to post, with correct CAPTCHA answer.
     $edit = $this->getNodeFormValues();
     $edit['captcha_response'] = 'Test 123';
-    $this->drupalPostForm('node/add/page', $edit, t('Preview'));
+    $this->drupalGet('node/add/page');
+    $this->drupalPostForm(NULL, $edit, t('Preview'));
 
     $this->assertCaptchaPresence(FALSE);
   }
@@ -186,10 +187,6 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     // Check if there is a CAPTCHA on home page.
     // @todo This assumes standard profile login form block, manually add it?
     $this->drupalGet('');
-    $this->assertCaptchaPresence(TRUE);
-
-    // Check there is a CAPTCHA on "forbidden" admin pages.
-    $this->drupalGet('admin');
     $this->assertCaptchaPresence(TRUE);
   }
 }
