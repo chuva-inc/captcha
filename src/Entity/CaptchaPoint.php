@@ -35,11 +35,12 @@ use Drupal\captcha\CaptchaPointInterface;
  *   entity_keys = {
  *     "id" = "formId",
  *     "label" = "label",
+ *     "status" = "status",
  *   },
  *   links = {
  *     "edit-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}",
- *     "disable-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/disable",
- *     "enable-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/enable",
+ *     "disable" = "/admin/config/people/captcha/captcha-points/{captcha_point}/disable",
+ *     "enable" = "/admin/config/people/captcha/captcha-points/{captcha_point}/enable",
  *     "delete-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/delete",
  *   }
  * )

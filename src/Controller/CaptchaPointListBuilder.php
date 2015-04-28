@@ -7,7 +7,7 @@
 
 namespace Drupal\captcha\Controller;
 
-use Drupal\Core\Entity\EntityListBuilder;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
@@ -15,7 +15,7 @@ use Drupal\Core\Entity\EntityInterface;
  *
  * @package Drupal\captcha\Controller
  */
-class CaptchaPointListBuilder extends EntityListBuilder {
+class CaptchaPointListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
