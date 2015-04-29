@@ -203,6 +203,7 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
     $this->assertPreservedCsid($captcha_sid_initial);
 
     // Start a new form instance/session
+    $this->drupalGet('node');
     $this->drupalGet('user');
     $this->assertCaptchaPresence(FALSE);
     $this->assertDifferentCsid($captcha_sid_initial);

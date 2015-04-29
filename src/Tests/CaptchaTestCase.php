@@ -188,6 +188,10 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     // @todo This assumes standard profile login form block, manually add it?
     $this->drupalGet('');
     $this->assertCaptchaPresence(TRUE);
+
+    // Check there is a CAPTCHA on "forbidden" admin pages.
+    $this->drupalGet('admin');
+    $this->assertCaptchaPresence(TRUE);
   }
 
 }

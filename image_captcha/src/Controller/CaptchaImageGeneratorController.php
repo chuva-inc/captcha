@@ -15,8 +15,6 @@ use Drupal\Core\Config\Config;
 
 /**
  * Controller which generates the image from defined settings.
- *
- * @package Drupal\image_captcha\Controller
  */
 class CaptchaImageGeneratorController implements ContainerInjectionInterface {
 

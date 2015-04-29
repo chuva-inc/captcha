@@ -14,6 +14,10 @@ use Drupal\captcha\CaptchaPointInterface;
 /**
  * Defines the CaptchaPoint entity.
  *
+ * The 'rendered' tag for the List cache is neccessary since captchas have to be
+ * rerendered once they are modified. Invalidating the render cache ensures
+ * we always display the correct captcha for every form.
+ *
  * @ConfigEntityType(
  *   id = "captcha_point",
  *   label = @Translation("Captcha Point"),

@@ -1,7 +1,6 @@
 <?php
 /**
- * @file
- * Contains \Drupal\captcha\image_captcha\image_captcha.admin.inc.
+ * Contains functions used in the backend forms.
  */
 
 /**
