@@ -334,19 +334,20 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     ];
 
     if ($captcha_point !== NULL && $captcha_point->getCaptchaType()) {
-      $markup = $captcha_point->status() ? '%type (<a href="@change">change</a>, <a href="@disable">disable</a>)' : '%type (<a href="@change">change</a>, <a href="@enable">enable</a>)';
+      $markup = '<a href="@change">change</a>';
       $captcha_element['#title'] = $captcha_point->status() ? t('CAPTCHA: challenge "@type" enabled', ['@type' => $captcha_point->getCaptchaType()]) : t('CAPTCHA: challenge "@type" disabled', ['@type' => $captcha_point->getCaptchaType()]);
-      $captcha_element['#description'] = t('Untrusted users will see a CAPTCHA here (<a href="@settings">general CAPTCHA settings</a>).',
+      $captcha_point->status() ? $captcha_element['#description'] = t('Untrusted users will see a CAPTCHA here (<a href="@settings">general CAPTCHA settings</a>).',
+        ['@settings' => Url::fromRoute('captcha_settings')->toString()]) : $captcha_element['#description'] = t('CAPTCHA disabled, Untrusted users won\'t see the captcha (<a href="@settings">general CAPTCHA settings</a>).',
         ['@settings' => Url::fromRoute('captcha_settings')->toString()]
-      );
+        );
       $captcha_element['challenge'] = [
         '#type' => 'item',
         '#title' => t('Enabled challenge'),
         '#markup' => t($markup, [
           '%type' => $captcha_point->getCaptchaType(),
           '@change' => $captcha_point->url('edit-form', ['query' => Drupal::destination()->getAsArray()]),
-          '@disable' => $captcha_point->url('disable-form', ['query' => Drupal::destination()->getAsArray()]),
-          '@enable' => $captcha_point->url('enable-form', ['query' => Drupal::destination()->getAsArray()]),
+       // '@disable' => $captcha_point->url('disable', ['query' => Drupal::destination()->getAsArray()]),
+       // '@enable' => $captcha_point->url('enable', ['query' => Drupal::destination()->getAsArray()]),
         ]),
       ];
 //      // Add an example challenge with solution.
