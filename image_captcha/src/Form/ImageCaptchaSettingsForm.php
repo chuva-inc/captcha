@@ -19,7 +19,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'image_captcha_settings';
   }
 
@@ -325,7 +325,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         '#options' => $available_fonts,
         '#attributes' => ['class' => ['image_captcha_admin_fonts_selection']],
         '#process' => ['form_process_checkboxes'],
-      ];
+        ];
 
       $form['image_captcha_font_size'] = [
         '#type' => 'select',
@@ -396,4 +396,5 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
 
     return $fonts;
   }
+
 }

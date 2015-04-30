@@ -40,7 +40,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     // Create commentable node.
     $node = $this->drupalCreateNode();
     // Set Test CAPTCHA on comment form.
-    captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
+    captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
     $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
@@ -53,7 +53,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     // Get CAPTCHA session ID and solution of the challenge.
     $captcha_sid = $this->getCaptchaSidFromForm();
     $captcha_token = $this->getCaptchaTokenFromForm();
-    $solution = $this->getMathCaptchaSolutionFromForm();
+    $solution = "Test 123";
 
     // Post the form with the solution.
     $edit = $this->getCommentFormValues();
@@ -80,7 +80,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
    */
   public function testCaptchaSessionReuseAttackDetectionOnNodeForm() {
     // Set CAPTCHA on page form.
-    captcha_set_form_id_setting('page_node_form', 'captcha/Math');
+    captcha_set_form_id_setting('node_page_form', 'captcha/Test');
     $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
@@ -93,7 +93,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     // Get CAPTCHA session ID and solution of the challenge.
     $captcha_sid = $this->getCaptchaSidFromForm();
     $captcha_token = $this->getCaptchaTokenFromForm();
-    $solution = $this->getMathCaptchaSolutionFromForm();
+    $solution = "Test 123";
 
     // Page settings to post, with correct CAPTCHA answer.
     $edit = $this->getNodeFormValues();
@@ -122,7 +122,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
    */
   public function testCaptchaSessionReuseAttackDetectionOnLoginForm() {
     // Set CAPTCHA on login form.
-    captcha_set_form_id_setting('user_login_form', 'captcha/Math');
+    captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Go to log in form.
@@ -134,7 +134,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     // Get CAPTCHA session ID and solution of the challenge.
     $captcha_sid = $this->getCaptchaSidFromForm();
     $captcha_token = $this->getCaptchaTokenFromForm();
-    $solution = $this->getMathCaptchaSolutionFromForm();
+    $solution = "Test 123";
 
     // Log in through form.
     $edit = array(
@@ -147,7 +147,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(FALSE);
     // If a "log out" link appears on the page, it is almost certainly because
     // the login was successful.
-    $this->assertLink(t('Log out'), 0, t('User %name successfully logged in.', array('%name' => $this->normalUser->getUsername())), t('User login'));
+    $this->assertText($this->normalUser->getUsername());
 
     // Log out again.
     $this->drupalLogout();
@@ -171,7 +171,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testMultipleCaptchaProtectedFormsOnOnePage() {
     // Set Test CAPTCHA on comment form and login block.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
-    captcha_set_form_id_setting('user_login_form', 'captcha/Math');
+    captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->allowCommentPostingForAnonymousVisitors();
 
     // Create a node with comments enabled.
@@ -187,4 +187,5 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaResponseAccepted();
     $this->assertText($comment_subject);
   }
+
 }

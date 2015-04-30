@@ -21,6 +21,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
 
   /**
    * The cache backend.
+   *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cacheBackend;
@@ -50,7 +51,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
   /**
    * Implements \Drupal\Core\Form\FormInterface::getFormID().
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'captcha_settings';
   }
 
@@ -222,4 +223,5 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $this->cacheBackend->delete('captcha_placement_map_cache');
     drupal_set_message($this->t('Cleared the CAPTCHA placement cache.'));
   }
+
 }

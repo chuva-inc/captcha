@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\captcha\Form\CaptchaPointDeleteForm.
+ * Contains \Drupal\captcha\Form\CaptchaPointEnableForm.
  */
 
 namespace Drupal\captcha\Form;
@@ -13,15 +13,21 @@ use Drupal\Core\Url;
 /**
  * Builds the form to delete a Captcha Point.
  */
-class CaptchaPointDeleteForm extends EntityConfirmFormBase {
+class CaptchaPointEnableForm extends EntityConfirmFormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete %name?', array('%name' => $this->entity->label()));
+    return $this->t('Are you sure you want to enable the Captcha?');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescription() {
+    return $this->t('This will enable the captcha.');
+  }
   /**
    * {@inheritdoc}
    */
@@ -33,16 +39,17 @@ class CaptchaPointDeleteForm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return $this->t('Delete');
+    return $this->t('Enable');
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->entity->delete();
-    drupal_set_message($this->t('Captcha point %label has been deleted.', array('%label' => $this->entity->label())));
-    $form_state->setRedirectUrl($this->getCancelUrl());
+    $this->entity->enable();
+    $this->entity->save();
+    drupal_set_message($this->t('Captcha point %label has been enabled.', array('%label' => $this->entity->label())));
+    $form_state->setRedirect('captcha_point.list');
   }
 
 }

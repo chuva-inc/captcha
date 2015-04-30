@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Contains functions used in the backend forms.
+ */
 
 /**
  * Menu handler for font preview request.

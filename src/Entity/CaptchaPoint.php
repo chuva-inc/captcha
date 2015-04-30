@@ -8,10 +8,15 @@
 namespace Drupal\captcha\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\captcha\CaptchaPointInterface;
 
 /**
  * Defines the CaptchaPoint entity.
+ *
+ * The 'rendered' tag for the List cache is neccessary since captchas have to be
+ * rerendered once they are modified. Invalidating the render cache ensures
+ * we always display the correct captcha for every form.
  *
  * @ConfigEntityType(
  *   id = "captcha_point",
@@ -21,17 +26,25 @@ use Drupal\captcha\CaptchaPointInterface;
  *     "form" = {
  *       "add" = "Drupal\captcha\Form\CaptchaPointForm",
  *       "edit" = "Drupal\captcha\Form\CaptchaPointForm",
+ *       "disable" = "Drupal\captcha\Form\CaptchaPointDisableForm",
+ *       "enable" = "Drupal\captcha\Form\CaptchaPointEnableForm",
  *       "delete" = "Drupal\captcha\Form\CaptchaPointDeleteForm"
  *     }
  *   },
  *   config_prefix = "captcha_point",
  *   admin_permission = "administer CAPTCHA settings",
+ *   list_cache_tags = {
+ *    "rendered"
+ *   },
  *   entity_keys = {
  *     "id" = "formId",
  *     "label" = "label",
+ *     "status" = "status",
  *   },
  *   links = {
  *     "edit-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}",
+ *     "disable" = "/admin/config/people/captcha/captcha-points/{captcha_point}/disable",
+ *     "enable" = "/admin/config/people/captcha/captcha-points/{captcha_point}/enable",
  *     "delete-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}/delete",
  *   }
  * )
@@ -97,4 +110,5 @@ class CaptchaPoint extends ConfigEntityBase implements CaptchaPointInterface {
   public function setCaptchaType($captcha_type) {
     $this->captchaType = $captcha_type != 'default' ? $captcha_type : NULL;
   }
+
 }

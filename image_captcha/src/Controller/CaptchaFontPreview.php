@@ -10,6 +10,9 @@ namespace Drupal\image_captcha\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * A Controller to preview the captcha font on the settings page.
+ */
 class CaptchaFontPreview extends StreamedResponse {
   /**
    * {@inheritdoc}
@@ -22,7 +25,8 @@ class CaptchaFontPreview extends StreamedResponse {
     }
     else {
       // Get the mapping of font tokens to font file objects.
-      $fonts = \Drupal::config('image_captcha.settings')->get('image_captcha_fonts_preview_map_cache');
+      $fonts = \Drupal::config('image_captcha.settings')
+        ->get('image_captcha_fonts_preview_map_cache');
       $config = \Drupal::config('captcha.settings');
       $fonts = $config->get('image_captcha_fonts_preview_map_cache');
       if (!isset($fonts[$token])) {
@@ -71,4 +75,5 @@ class CaptchaFontPreview extends StreamedResponse {
     // Close connection.
     exit();
   }
+
 }

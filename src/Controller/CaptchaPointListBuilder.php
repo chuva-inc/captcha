@@ -7,10 +7,13 @@
 
 namespace Drupal\captcha\Controller;
 
-use Drupal\Core\Entity\EntityListBuilder;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
-class CaptchaPointListBuilder extends EntityListBuilder {
+/**
+ * Builds the list of capture points for the captcha point form.
+ */
+class CaptchaPointListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */

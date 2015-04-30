@@ -19,7 +19,7 @@ class CaptchaExamplesForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'captcha_examples';
   }
 
