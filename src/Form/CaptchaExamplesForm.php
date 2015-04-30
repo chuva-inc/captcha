@@ -9,7 +9,6 @@ namespace Drupal\captcha\Form;
 
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
