@@ -32,7 +32,7 @@ class CaptchaExamplesForm extends FormBase {
     $module = $this->getRequest()->get('module');
     $challenge = $this->getRequest()->get('challenge');
 
-    $form = array();
+    $form = [];
     if ($module && $challenge) {
       // Generate 10 example challenges.
       for ($i = 0; $i < 10; $i++) {
@@ -41,22 +41,22 @@ class CaptchaExamplesForm extends FormBase {
     }
     else {
       // Generate a list with examples of the available CAPTCHA types.
-      $form['info'] = array(
+      $form['info'] = [
         '#markup' => t('This page gives an overview of all available challenge types, generated with their current settings.'),
-      );
+      ];
       foreach (\Drupal::moduleHandler()->getImplementations('captcha') as $mkey => $module) {
-        $challenges = call_user_func_array($module . '_captcha', array('list'));
+        $challenges = call_user_func_array($module . '_captcha', ['list']);
 
         if ($challenges) {
           foreach ($challenges as $ckey => $challenge) {
-            $form["captcha_{$mkey}_{$ckey}"] = array(
+            $form["captcha_{$mkey}_{$ckey}"] = [
               '#type' => 'details',
-              '#title' => t('Challenge %challenge by module %module', array('%challenge' => $challenge, '%module' => $module)),
+              '#title' => t('Challenge %challenge by module %module', ['%challenge' => $challenge, '%module' => $module]),
               'challenge' => _captcha_generate_example_challenge($module, $challenge),
-              'more_examples' => array(
+              'more_examples' => [
                 '#markup' => \Drupal::l(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples')),
-              ),
-            );
+              ],
+            ];
           }
         }
       }

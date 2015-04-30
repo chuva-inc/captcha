@@ -67,84 +67,84 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $form['#attached']['library'][] = 'captcha/base';
 
     // Configuration of which forms to protect, with what challenge.
-    $form['form_protection'] = array(
+    $form['form_protection'] = [
       '#type' => 'details',
       '#title' => $this->t('Form protection'),
       '#description' => $this->t("Select the challenge type you want for each of the listed forms (identified by their so called <em>form_id</em>'s). You can easily add arbitrary forms with the textfield at the bottom of the table or with the help of the option <em>Add CAPTCHA administration links to forms</em> below."),
       '#open' => TRUE,
-    );
+    ];
 
-    $form['form_protection']['default_challenge'] = array(
+    $form['form_protection']['default_challenge'] = [
       '#type' => 'select',
       '#title' => $this->t('Default challenge type'),
       '#description' => $this->t('Select the default challenge type for CAPTCHAs. This can be overriden for each form if desired.'),
       '#options' => _captcha_available_challenge_types(FALSE),
       '#default_value' => $config->get('default_challenge'),
-    );
+    ];
 
     // Field for the CAPTCHA administration mode.
-    $form['form_protection']['administration_mode'] = array(
+    $form['form_protection']['administration_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add CAPTCHA administration links to forms'),
       '#default_value' => $config->get('administration_mode'),
       '#description' => $this->t('This option makes it easy to manage CAPTCHA settings on forms. When enabled, users with the <em>administer CAPTCHA settings</em> permission will see a fieldset with CAPTCHA administration links on all forms, except on administrative pages.'),
-    );
+    ];
     // Field for the CAPTCHAs on admin pages.
-    $form['form_protection']['allow_on_admin_pages'] = array(
+    $form['form_protection']['allow_on_admin_pages'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow CAPTCHAs and CAPTCHA administration links on administrative pages'),
       '#default_value' => $config->get('allow_on_admin_pages'),
       '#description' => $this->t("This option makes it possible to add CAPTCHAs to forms on administrative pages. CAPTCHAs are disabled by default on administrative pages (which shouldn't be accessible to untrusted users normally) to avoid the related overhead. In some situations, e.g. in the case of demo sites, it can be usefull to allow CAPTCHAs on administrative pages."),
-    );
+    ];
 
     // Button for clearing the CAPTCHA placement cache.
     // Based on Drupal core's "Clear all caches" (performance settings page).
-    $form['form_protection']['placement_caching'] = array(
+    $form['form_protection']['placement_caching'] = [
       '#type' => 'item',
       '#title' => t('CAPTCHA placement caching'),
       '#description' => t('For efficiency, the positions of the CAPTCHA elements in each of the configured forms are cached. Most of the time, the structure of a form does not change and it would be a waste to recalculate the positions every time. Occasionally however, the form structure can change (e.g. during site building) and clearing the CAPTCHA placement cache can be required to fix the CAPTCHA placement.'),
-    );
-    $form['form_protection']['placement_caching']['placement_cache_clear'] = array(
+    ];
+    $form['form_protection']['placement_caching']['placement_cache_clear'] = [
       '#type' => 'submit',
       '#value' => t('Clear the CAPTCHA placement cache'),
-      '#submit' => array('::clearCaptchaPlacementCacheSubmit'),
-    );
+      '#submit' => ['::clearCaptchaPlacementCacheSubmit'],
+    ];
 
     // Configuration option for adding a CAPTCHA description.
-    $form['add_captcha_description'] = array(
+    $form['add_captcha_description'] = [
       '#type' => 'checkbox',
       '#title' => t('Add a description to the CAPTCHA'),
       '#description' => t('Add a configurable description to explain the purpose of the CAPTCHA to the visitor.'),
       '#default_value' => $config->get('add_captcha_description'),
-    );
-    $form['description'] = array(
+    ];
+    $form['description'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Challenge description'),
       '#description' => $this->t('Configurable description of the CAPTCHA. An empty entry will reset the description to default.'),
       '#default_value' => _captcha_get_description(),
       '#maxlength' => 256,
-      '#attributes' => array('id' => 'edit-captcha-description-wrapper'),
-    );
+      '#attributes' => ['id' => 'edit-captcha-description-wrapper'],
+    ];
 
     // Option for case sensitive/insensitive validation of the responses.
-    $form['default_validation'] = array(
+    $form['default_validation'] = [
       '#type' => 'radios',
       '#title' => t('Default CAPTCHA validation'),
       '#description' => t('Define how the response should be processed by default. Note that the modules that provide the actual challenges can override or ignore this.'),
-      '#options' => array(
+      '#options' => [
         CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE => $this->t('Case sensitive validation: the response has to exactly match the solution.'),
         CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE => $this->t('Case insensitive validation: lowercase/uppercase errors are ignored.'),
-      ),
+      ],
       '#default_value' => $config->get('default_validation'),
-    );
+    ];
 
     // Field for CAPTCHA persistence.
     // TODO for D7: Rethink/simplify the explanation and UI strings.
-    $form['persistence'] = array(
+    $form['persistence'] = [
       '#type' => 'radios',
       '#title' => t('Persistence'),
       '#default_value' => $config->get('persistence'),
-      '#options' => array(
+      '#options' => [
         CAPTCHA_PERSISTENCE_SHOW_ALWAYS =>
         $this->t('Always add a challenge.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE =>
@@ -153,36 +153,36 @@ class CaptchaSettingsForm extends ConfigFormBase {
         $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL =>
         $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
-      ),
+      ],
       '#description' => t('Define if challenges should be omitted during the rest of a session once the user successfully responds to a challenge.'),
-    );
+    ];
 
     // Enable wrong response counter.
-    $form['enable_stats'] = array(
+    $form['enable_stats'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable statistics'),
-      '#description' => $this->t('Keep CAPTCHA related counters in the <a href="!statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', array('!statusreport' => Url::fromRoute('system.status')->toString())),
+      '#description' => $this->t('Keep CAPTCHA related counters in the <a href="!statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', ['!statusreport' => Url::fromRoute('system.status')->toString()]),
       '#default_value' => $config->get('enable_stats'),
-    );
+    ];
 
     // Option for logging wrong responses.
-    $form['log_wrong_responses'] = array(
+    $form['log_wrong_responses'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Log wrong responses'),
       '#description' => $this->t('Report information about wrong responses to the log.'),
       '#default_value' => $config->get('log_wrong_responses'),
-    );
+    ];
     // Replace the description with a link if dblog.module is enabled.
     if (\Drupal::moduleHandler()->moduleExists('dblog')) {
-      $form['#description'] = $this->t('Report information about wrong responses to the <a href="!dblog">log</a>.', array('!dblog' => Url::fromRoute('dblog.overview')->toString()));
+      $form['#description'] = $this->t('Report information about wrong responses to the <a href="!dblog">log</a>.', ['!dblog' => Url::fromRoute('dblog.overview')->toString()]);
     }
 
     // Submit button.
-    $form['actions'] = array('#type' => 'actions');
-    $form['actions']['submit'] = array(
+    $form['actions'] = ['#type' => 'actions'];
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => t('Save configuration'),
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }
