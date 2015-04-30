@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Contains functions used in the backend forms.
  */
 
