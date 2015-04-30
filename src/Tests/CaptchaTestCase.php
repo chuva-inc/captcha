@@ -8,11 +8,18 @@
 namespace Drupal\captcha\Tests;
 
 /**
- * Tests CAPTCHA main test case.
+ * Tests CAPTCHA main test case sensitivity.
  *
  * @group captcha
  */
 class CaptchaTestCase extends CaptchaBaseWebTestCase {
+
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = ['block'];
 
   /**
    * Testing the protection of the user log in form.
@@ -184,8 +191,10 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     // Set a CAPTCHA on login block form.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
 
+    // Enable the user login block.
+    $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));
+
     // Check if there is a CAPTCHA on home page.
-    // @todo This assumes standard profile login form block, manually add it?
     $this->drupalGet('');
     $this->assertCaptchaPresence(TRUE);
 

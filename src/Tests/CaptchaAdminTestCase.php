@@ -285,12 +285,17 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Log in as admin.
     $this->drupalLogin($this->adminUser);
     $label = 'TEST';
-    // Set CAPTCHA point through admin/user/captcha/captcha/captcha_point.
+
+    // Try and set CAPTCHA point without the #required label. Should fail.
     $form_values = array(
-      'label' => $label,
       'formId' => $captcha_point_form_id,
       'captchaType' => $captcha_point_module . '/' . $captcha_point_type,
     );
+    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/add', $form_values, t('Save'));
+    $this->assertText(t('Form ID field is required.'));
+
+    // Set CAPTCHA point through admin/user/captcha/captcha/captcha_point.
+    $form_values['label'] = $label;
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/add', $form_values, t('Save'));
     $this->assertRaw(t('Captcha Point for %label form was created.', array('%label' => $captcha_point_form_id)));
 
