@@ -54,6 +54,7 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
    * Main method that throw ImageResponse object to generate image.
    *
    * @return CaptchaImageResponse
+   *   Make a CaptchaImageResponse with the correct configuration and return it.
    */
   public function image() {
     return new CaptchaImageResponse($this->config, $this->logger);

@@ -110,4 +110,5 @@ class CaptchaPoint extends ConfigEntityBase implements CaptchaPointInterface {
   public function setCaptchaType($captcha_type) {
     $this->captchaType = $captcha_type != 'default' ? $captcha_type : NULL;
   }
+
 }
