@@ -99,7 +99,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
     // Put comments on page nodes on a separate page.
     $comment_field = FieldConfig::loadByName('node', 'page', 'comment');
-    $comment_field->settings['form_location'] = CommentItemInterface::FORM_SEPARATE_PAGE;
+    $comment_field->setSetting('form_location', CommentItemInterface::FORM_SEPARATE_PAGE);
     $comment_field->save();
   }
 

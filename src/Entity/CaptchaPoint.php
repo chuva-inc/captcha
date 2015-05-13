@@ -41,6 +41,12 @@ use Drupal\captcha\CaptchaPointInterface;
  *     "label" = "label",
  *     "status" = "status",
  *   },
+ *   config_export = {
+ *     "formId",
+ *     "captchaType",
+ *     "label",
+ *     "uuid",
+ *   },
  *   links = {
  *     "edit-form" = "/admin/config/people/captcha/captcha-points/{captcha_point}",
  *     "disable" = "/admin/config/people/captcha/captcha-points/{captcha_point}/disable",
