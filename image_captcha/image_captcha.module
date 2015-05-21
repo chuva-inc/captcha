@@ -241,6 +241,7 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
           '#required' => TRUE,
           '#size' => 15,
           '#attributes' => ['autocomplete' => 'off'],
+          '#cache' => ['max-age' => 0],
         ];
 
         // Handle the case insensitive validation option combined with ignoring spaces.
@@ -252,6 +253,7 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
             $result['captcha_validate'] = 'captcha_validate_case_insensitive_ignore_spaces';
             break;
         }
+        \Drupal::service('page_cache_kill_switch')->trigger();
 
         return $result;
       }
