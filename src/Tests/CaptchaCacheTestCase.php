@@ -35,12 +35,15 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
     $sid = $this->getCaptchaSidFromForm();
     $this->drupalGet('user/login');
-    $this->assertEquals($this->getCaptchaSidFromForm(), $sid);
+    $this->assertNotEqual($this->getCaptchaSidFromForm(), $sid);
 
     // Repeat the same after setting the captcha challange to captcha/Test.
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->drupalGet('user/login');
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
+    $sid = $this->getCaptchaSidFromForm();
+    $this->drupalGet('user/login');
+    $this->assertNotEqual($this->getCaptchaSidFromForm(), $sid);
 
     // Repeat the same after setting the captcha challange to captcha/Image.
     // @todo: Find out why image_captcha is broken
