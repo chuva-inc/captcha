@@ -252,6 +252,10 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Check that the placement cache is unset.
     $placement_map = $this->container->get('cache.default')->get('captcha_placement_map_cache');
     $this->assertFalse($placement_map, 'CAPTCHA placement cache should be unset after cache clear.');
+    // Check for cache results.
+    $this->drupalLogout();
+    $this->drupalGet('user/login');
+    $this->assertFalse($this->drupalGetHeader('x-drupal-cache') == 'HIT', 'Captcha cache has been deleted.');
   }
 
   /**

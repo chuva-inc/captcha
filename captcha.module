@@ -144,8 +144,7 @@ function captcha_element_process(array $element, FormStateInterface $form_state,
   // This needs to be done even if the CAPTCHA will be ommitted later:
   // other untrusted users should not get a cached page when
   // the current untrusted user can skip the current CAPTCHA.
-  global $conf;
-  $conf['cache'] = FALSE;
+  \Drupal::service('page_cache_kill_switch')->trigger();
 
   // Get the form ID of the form we are currently processing (which is not
   // necessary the same form that is submitted (if any).
