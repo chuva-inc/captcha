@@ -41,21 +41,34 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     // Repeat the same after enabling captcha/Math.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
     $this->drupalGet('');
+    $sid = $this->getCaptchaSidFromForm();
+    $math_challenge = (string) $this->xpath('//span[@class="field-prefix"]')[0];
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache is disabled');
+    $this->drupalGet('');
+    $this->assertNotEqual($sid, $this->getCaptchaSidFromForm());
+    $this->assertNotEqual($math_challenge, (string) $this->xpath('//span[@class="field-prefix"]')[0]);
 
     // Repeat the same after setting the captcha challange to captcha/Test.
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->drupalGet('');
+    $sid = $this->getCaptchaSidFromForm();
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache is disabled');
+    $this->drupalGet('');
+    $this->assertNotEqual($sid, $this->getCaptchaSidFromForm());
 
     // Repeat the same after setting the captcha challange to captcha/Image.
-    // @todo: Find out why image_captcha is broken
     captcha_set_form_id_setting('user_login_form', 'image_captcha/Image');
     $this->drupalGet('');
-    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
     $image_path = (string) $this->xpath('//img[2]//@src')[0];
+    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
+    // Check that we get a new image when vising the page again.
+    $this->drupalGet('');
+    $this->assertNotEqual($image_path, (string) $this->xpath('//img[2]//@src')[0]);
+    // Check image caching.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
+    // Do another request for ImageGenerator.
+    // If caching is enabled, this will break.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
   }
