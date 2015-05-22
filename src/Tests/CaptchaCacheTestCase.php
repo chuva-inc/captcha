@@ -55,7 +55,9 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
     $image_path = (string) $this->xpath('//img[2]//@src')[0];
     $this->drupalGet($image_path);
+    $this->assertResponse(200);
     $this->drupalGet($image_path);
+    $this->assertResponse(200);
   }
 
   /**
