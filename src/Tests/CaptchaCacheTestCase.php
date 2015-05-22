@@ -56,7 +56,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     // Switch challenge to image_captcha/Image, check the captcha isn't cached.
     captcha_set_form_id_setting('user_login_form', 'image_captcha/Image');
     $this->drupalGet('');
-    $image_path = (string) $this->xpath('//img[2]//@src')[0];
+    $image_path = (string) $this->xpath('//div[@class="details-wrapper"]/img/@src')[0];
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
     // Check that we get a new image when vising the page again.
     $this->drupalGet('');
