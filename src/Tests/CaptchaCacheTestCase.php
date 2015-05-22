@@ -67,7 +67,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     // Check image caching.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
-    // Do another request for ImageGenerator.
+    // Do another request for CaptchaImageGeneratorController.
     // If caching is enabled, this will break.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
