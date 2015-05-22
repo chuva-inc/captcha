@@ -22,10 +22,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
   function setUp() {
     parent::setUp();
 
-    $this->adminUser = $this->drupalCreateUser(array('administer blocks'));
-    $this->drupalLogin($this->adminUser);
     $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));
-    $this->drupalLogout($this->adminUser);
   }
 
   /**
@@ -38,7 +35,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->drupalGet('');
     $this->assertEqual($this->drupalGetHeader('x-drupal-cache'), 'HIT');
 
-    // Repeat the same after enabling captcha/Math.
+    // Enable captcha on login block and test caching.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
     $this->drupalGet('');
     $sid = $this->getCaptchaSidFromForm();
@@ -48,7 +45,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->assertNotEqual($sid, $this->getCaptchaSidFromForm());
     $this->assertNotEqual($math_challenge, (string) $this->xpath('//span[@class="field-prefix"]')[0]);
 
-    // Repeat the same after setting the captcha challange to captcha/Test.
+    // Switch challenge to captcha/Test, check the captcha isn't cached.
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
     $this->drupalGet('');
     $sid = $this->getCaptchaSidFromForm();
@@ -56,7 +53,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->drupalGet('');
     $this->assertNotEqual($sid, $this->getCaptchaSidFromForm());
 
-    // Repeat the same after setting the captcha challange to captcha/Image.
+    // Switch challenge to image_captcha/Image, check the captcha isn't cached.
     captcha_set_form_id_setting('user_login_form', 'image_captcha/Image');
     $this->drupalGet('');
     $image_path = (string) $this->xpath('//img[2]//@src')[0];
@@ -67,30 +64,9 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     // Check image caching.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
-    // Do another request for ImageGenerator.
-    // If caching is enabled, this will break.
+    // Request image twice to make sure no errors happen (due to page caching).
     $this->drupalGet($image_path);
     $this->assertResponse(200);
-  }
-
-  /**
-   * Helper function for checking CAPTCHA setting of a form.
-   *
-   * @param string $form_id
-   *   The form_id of the form to investigate.
-   * @param string $challenge_type
-   *   What the challenge type should be:
-   *   NULL, 'none', 'default' or something like 'captcha/Math'.
-   */
-  protected function assertCaptchaSetting($form_id, $challenge_type) {
-    $result = captcha_get_form_id_setting(self::COMMENT_FORM_ID, TRUE);
-    $this->assertEqual($result, $challenge_type,
-      t('Check CAPTCHA setting for form: expected: @expected, received: @received.',
-        array(
-          '@expected' => var_export($challenge_type, TRUE),
-          '@received' => var_export($result, TRUE),
-        )),
-        'CAPTCHA');
   }
 
 }
