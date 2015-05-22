@@ -17,8 +17,14 @@ use Drupal\Core\Url;
  */
 class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
 
+  /**
+   * Modules to install for this Test class.
+   */
   public static $modules = ['block', 'image_captcha'];
 
+  /**
+   * {@inheritdoc}
+   */
   function setUp() {
     parent::setUp();
 

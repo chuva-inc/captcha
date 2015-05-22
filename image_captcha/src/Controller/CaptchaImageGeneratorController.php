@@ -34,6 +34,8 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
   protected $logger;
 
   /**
+   * Kill Switch for page caching.
+   *
    * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
    */
   protected $killSwitch;
