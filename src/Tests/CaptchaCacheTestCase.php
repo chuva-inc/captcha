@@ -19,37 +19,43 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
 
   public static $modules = ['block', 'image_captcha'];
 
+  function setUp() {
+    parent::setUp();
+
+    $this->adminUser = $this->drupalCreateUser(array('administer blocks'));
+    $this->drupalLogin($this->adminUser);
+    $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));
+    $this->drupalLogout($this->adminUser);
+  }
+
   /**
    * Test the cache tags.
    */
   public function testCacheTags() {
     // Check caching without captcha as anonymous user.
-    $this->drupalGet('user/login');
+    $this->drupalGet('');
     $this->assertEqual($this->drupalGetHeader('x-drupal-cache'), 'MISS');
-    $this->drupalGet('user/login');
+    $this->drupalGet('');
     $this->assertEqual($this->drupalGetHeader('x-drupal-cache'), 'HIT');
 
     // Repeat the same after enabling captcha/Math.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
-    $this->drupalGet('user/login');
-    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
-    $sid = $this->getCaptchaSidFromForm();
-    $this->drupalGet('user/login');
-    $this->assertNotEqual($this->getCaptchaSidFromForm(), $sid);
+    $this->drupalGet('');
+    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache is disabled');
 
     // Repeat the same after setting the captcha challange to captcha/Test.
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
-    $this->drupalGet('user/login');
-    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
-    $sid = $this->getCaptchaSidFromForm();
-    $this->drupalGet('user/login');
-    $this->assertNotEqual($this->getCaptchaSidFromForm(), $sid);
+    $this->drupalGet('');
+    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache is disabled');
 
     // Repeat the same after setting the captcha challange to captcha/Image.
     // @todo: Find out why image_captcha is broken
-//    captcha_set_form_id_setting('user_login_form', 'captcha/Image');
-//    $this->drupalGet('user/login');
-//    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
+    captcha_set_form_id_setting('user_login_form', 'image_captcha/Image');
+    $this->drupalGet('');
+    $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
+    $image_path = (string) $this->xpath('//img[2]//@src')[0];
+    $this->drupalGet($image_path);
+    $this->drupalGet($image_path);
   }
 
   /**
