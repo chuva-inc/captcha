@@ -60,7 +60,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     $this->assertFalse($this->drupalGetHeader('x-drupal-cache'), 'Cache disabled');
     // Check that we get a new image when vising the page again.
     $this->drupalGet('');
-    $this->assertNotEqual($image_path, (string) $this->xpath('//img[2]//@src')[0]);
+    $this->assertNotEqual($image_path, (string) $this->xpath('//div[@class="details-wrapper"]/img/@src')[0]);
     // Check image caching.
     $this->drupalGet($image_path);
     $this->assertResponse(200);
