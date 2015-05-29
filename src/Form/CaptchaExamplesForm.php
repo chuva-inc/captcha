@@ -26,11 +26,8 @@ class CaptchaExamplesForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, $module = NULL, $challenge = NULL) {
     module_load_include('inc', 'captcha', 'captcha.admin');
-
-    $module = $this->getRequest()->get('module');
-    $challenge = $this->getRequest()->get('challenge');
 
     $form = [];
     if ($module && $challenge) {
@@ -54,7 +51,7 @@ class CaptchaExamplesForm extends FormBase {
               '#title' => t('Challenge %challenge by module %module', ['%challenge' => $challenge, '%module' => $module]),
               'challenge' => _captcha_generate_example_challenge($module, $challenge),
               'more_examples' => [
-                '#markup' => \Drupal::l(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples')),
+                '#markup' => \Drupal::l(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples', array('module' => $module, 'challenge' => $challenge))),
               ],
             ];
           }
