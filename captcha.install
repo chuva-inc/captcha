@@ -114,17 +114,16 @@ function captcha_requirements($phase) {
 function captcha_install() {
   // Insert some default CAPTCHA points.
   $form_ids = [
-    'contact_site_form',
-    'contact_personal_form',
+    'contact_message_feedback_form',
+    'contact_message_personal_form',
     'user_register_form',
     'user_pass',
     'user_login_form',
-    'user_login_block',
-    'forum_node_form',
+    'node_forum_form',
   ];
   // Add form_ids of all currently known node types too.
   foreach (node_type_get_names() as $type => $name) {
-    $form_ids[] = $type . '_node_form';
+    $form_ids[] = 'node_' . $type . '_form';
   }
   foreach ($form_ids as $form_id) {
     $values = [
