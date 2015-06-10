@@ -222,14 +222,14 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
         // Generate image source URL (add timestamp to avoid problems with
         // client side caching: subsequent images of the same CAPTCHA session
         // have the same URL, but should display a different code).
-        $img_src = \Drupal::url('image_captcha.generator', ['session_id' => $captcha_sid, 'timestamp' => REQUEST_TIME]);
         list($width, $height) = _image_captcha_image_size($code);
-        // TODO: start using a theming funtion for generating the image markup?
         $result['form']['captcha_image'] = [
-          '#type' => 'markup',
-          '#markup' => '<img src="' . $img_src
-            . '" width="'. $width . '" height="' . $height
-            . '" alt="' . t('Image CAPTCHA') . '" title="' . t('Image CAPTCHA') . '" />',
+          '#theme' => 'image',
+          '#uri' => \Drupal::url('image_captcha.generator', ['session_id' => $captcha_sid, 'timestamp' => REQUEST_TIME]),
+          '#width' => $width,
+          '#height' => $height,
+          '#alt' => t('Image CAPTCHA'),
+          '#title' => t('Image CAPTCHA'),
           '#weight' => -2,
         ];
 
