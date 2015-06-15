@@ -132,7 +132,7 @@ function captcha_install() {
       'captchaType' => 'none',
     ];
     $captcha_point = new CaptchaPoint($values, 'captcha_point');
-    $captcha_point->save();
+    $captcha_point->trustData()->save();
   }
 
   // Be friendly to your users: what to do after install?
