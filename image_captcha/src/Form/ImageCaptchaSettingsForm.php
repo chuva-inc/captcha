@@ -262,7 +262,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   /**
    * Form elements for the font specific setting.
    *
-   * This is refactored to a separate function to avoid poluting the
+   * This is refactored to a separate function to avoid polluting the
    * general form function image_captcha_settings_form with some
    * specific logic.
    *

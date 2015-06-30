@@ -59,7 +59,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $edit = $this->getCommentFormValues();
     $edit['captcha_response'] = $solution;
     $this->drupalPostForm(NULL, $edit, t('Preview'));
-    // Answer should be accepted and further CAPTCHA ommitted.
+    // Answer should be accepted and further CAPTCHA omitted.
     $this->assertCaptchaResponseAccepted();
     $this->assertCaptchaPresence(FALSE);
 

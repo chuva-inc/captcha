@@ -362,7 +362,7 @@ class CaptchaImageResponse extends Response {
     // Set default text color.
     $color = $foreground_color;
 
-    // The image is seperated in different character cages, one for
+    // The image is separated in different character cages, one for
     // each character that will be somewhere inside that cage.
     $ccage_width = $width / $character_quantity;
     $ccage_height = $height;

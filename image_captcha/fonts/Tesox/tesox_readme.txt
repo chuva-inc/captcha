@@ -20,5 +20,5 @@ dedicated typeface for the image CAPTCHA module from scratch.
 
 Licencing
 ---------
-The Tesox typeface is GPLv2 licenced to be compatible with the drupal.org code
+The Tesox typeface is GPLv2 licensed to be compatible with the drupal.org code
 hosting and packaging policies, as explained above.

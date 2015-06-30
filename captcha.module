@@ -381,7 +381,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     _captcha_insert_captcha_element($form, $captcha_placement, $captcha_element);
   }
 
-  // Add a warning about caching on the Perfomance settings page.
+  // Add a warning about caching on the Performance settings page.
   if ($form_id == 'system_performance_settings') {
     $form['caching']['captcha'] = [
       '#type' => 'item',
