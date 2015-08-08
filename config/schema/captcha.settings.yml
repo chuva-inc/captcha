@@ -2,7 +2,7 @@
 #wrong_response_counter
 
 captcha.settings:
-  type: mapping
+  type: config_object
   label: 'External Links Settings'
   mapping:
     default_challenge:
