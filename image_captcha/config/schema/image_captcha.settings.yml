@@ -1,5 +1,5 @@
 image_captcha.settings:
-  type: mapping
+  type: config_object
   label: 'Image Captcha settings'
   mapping:
     image_captcha_fonts_preview_map_cache:
