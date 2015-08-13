@@ -169,6 +169,8 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
    * Test multiple captcha widgets on single page.
    */
   public function testMultipleCaptchaProtectedFormsOnOnePage() {
+    \Drupal::service('module_installer')->install(['block']);
+    $this->drupalPlaceBlock('user_login_block');
     // Set Test CAPTCHA on comment form and login block.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
     captcha_set_form_id_setting('user_login_form', 'captcha/Test');
