@@ -188,16 +188,6 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     // no CAPTCHA reuse detection (which could be used by user log in block).
     $this->assertCaptchaResponseAccepted();
     $this->assertText($comment_subject);
-
-    // Repeat the same to test form caching error.
-    $this->drupalGet('comment/reply/node/' . $node->id() . '/comment');
-    $edit['captcha_sid'] = $this->getCaptchaSidFromForm();
-    $edit['captcha_token'] = $this->getCaptchaTokenFromForm();
-    $edit['subject[0][value]'] = 'Second test';
-    $edit['captcha_response'] = 'Test 123';
-    $this->drupalPostForm(NULL, $edit, t('Preview'));
-    $this->assertCaptchaResponseAccepted();
-    $this->assertText($edit['subject[0][value]']);
   }
 
 }
