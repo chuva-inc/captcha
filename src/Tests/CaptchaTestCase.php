@@ -32,7 +32,10 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $this->drupalLogout();
 
     // Set a CAPTCHA on login form.
-    captcha_set_form_id_setting('user_login_form', 'captcha/Math');
+    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point->setCaptchaType('captcha/Math');
+    $captcha_point->enable()->save();
 
     // Check if there is a CAPTCHA on the login form (look for the title).
     $this->drupalGet('');
@@ -189,7 +192,10 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    */
   public function testCaptchaOnLoginBlockOnAdminPagesIssue893810() {
     // Set a CAPTCHA on login block form.
-    captcha_set_form_id_setting('user_login_form', 'captcha/Math');
+    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point->setCaptchaType('captcha/Math');
+    $captcha_point->enable()->save();
 
     // Enable the user login block.
     $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));

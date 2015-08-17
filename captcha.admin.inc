@@ -11,7 +11,7 @@
  * For use as options array for a select form elements.
  *
  * @param bool $add_special_options
- *   If true: also add a 'none' and 'default' option.
+ *   If true: also add the 'default' option.
  *
  * @return array
  *   An associative array mapping "$module/$type" to
@@ -21,7 +21,6 @@
 function _captcha_available_challenge_types($add_special_options = TRUE) {
   $captcha_types = [];
   if ($add_special_options) {
-    $captcha_types['none'] = t('- No challenge -');
     $captcha_types['default'] = t('Default challenge type');
   }
 
