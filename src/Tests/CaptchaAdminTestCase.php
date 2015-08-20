@@ -39,14 +39,14 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
    */
   public function testCaptchaPointSettingGetterAndSetter() {
     $comment_form_id = self::COMMENT_FORM_ID;
-    captcha_set_form_id_setting($comment_form_id, 'none');
+    captcha_set_form_id_setting($comment_form_id, 'test');
     /* @var CaptchaPoint $result */
     $result = captcha_get_form_id_setting($comment_form_id);
     $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
-    $this->assertEqual($result->getCaptchaType(), 'none', 'CAPTCHA type: none', 'CAPTCHA');
+    $this->assertEqual($result->getCaptchaType(), 'test', 'CAPTCHA type: default', 'CAPTCHA');
     $result = captcha_get_form_id_setting($comment_form_id, TRUE);
     $this->assertNotNull($result, 'CAPTCHA exists', 'CAPTCHA');
-    $this->assertEqual($result, 'none', 'Setting and symbolic getting CAPTCHA point: "none"', 'CAPTCHA');
+    $this->assertEqual($result, 'test', 'Setting and symbolic getting CAPTCHA point: "test"', 'CAPTCHA');
 
     // Set to 'default'
     captcha_set_form_id_setting($comment_form_id, 'default');
@@ -94,7 +94,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
    *   The form_id of the form to investigate.
    * @param string $challenge_type
    *   What the challenge type should be:
-   *   NULL, 'none', 'default' or something like 'captcha/Math'.
+   *   NULL, 'default' or something like 'captcha/Math'.
    */
   protected function assertCaptchaSetting($form_id, $challenge_type) {
     $result = captcha_get_form_id_setting(self::COMMENT_FORM_ID, TRUE);

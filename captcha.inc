@@ -16,7 +16,6 @@ use Drupal\Core\Render\Element;
  *   the form ID to configure.
  * @param string $captcha_type
  *   The setting for the given form_id, can be:
- *   - 'none' to disable CAPTCHA,
  *   - 'default' to use the default challenge type
  *   - NULL to remove the entry for the CAPTCHA type
  *   - something of the form 'image_captcha/Image'
@@ -33,6 +32,7 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
   else {
     $captcha_point = new CaptchaPoint(['formId' => $form_id, 'captchaType' => $captcha_type], 'captcha_point');
   }
+  $captcha_point->enable();
 
   $captcha_point->save();
 }
@@ -48,8 +48,8 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
  * @return NULL|CaptchaPoint
  *   NULL if no setting is known
  *   captcha point object with fields 'module' and 'captcha_type'.
- *   If argument $symbolic is true, returns 'none', 'default'
- *   or in the form 'captcha/Math'.
+ *   If argument $symbolic is true, returns 'default' or in the
+ *   form 'captcha/Math'.
  */
 function captcha_get_form_id_setting($form_id, $symbolic = FALSE) {
   /* @var CaptchaPoint $captchaPoint */
@@ -175,15 +175,12 @@ function _captcha_get_description() {
  *
  * @param string $captcha_type
  *   representation of the CAPTCHA type,
- *   e.g. 'default', 'none', 'captcha/Math', 'image_captcha/Image'.
+ *   e.g. 'default', 'captcha/Math', 'image_captcha/Image'.
  *
  * @return array
  *   list($captcha_module, $captcha_type).
  */
 function _captcha_parse_captcha_type($captcha_type) {
-  if ($captcha_type == 'none') {
-    return [NULL, NULL];
-  }
   if ($captcha_type == 'default') {
     $captcha_type = \Drupal::config('captcha.settings')->get('default_challenge', 'captcha/Math');
   }

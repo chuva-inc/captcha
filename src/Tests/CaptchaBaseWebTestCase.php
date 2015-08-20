@@ -101,6 +101,11 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     $comment_field = FieldConfig::loadByName('node', 'page', 'comment');
     $comment_field->setSetting('form_location', CommentItemInterface::FORM_SEPARATE_PAGE);
     $comment_field->save();
+
+    /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
+    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point->enable()->save();
+    $this->config('captcha.settings')->set('default_challenge', 'captcha/test')->save();
   }
 
   /**

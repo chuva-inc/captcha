@@ -128,7 +128,8 @@ function captcha_install() {
   foreach ($form_ids as $form_id) {
     $values = [
       'formId' => $form_id,
-      'captchaType' => 'none',
+      'captchaType' => 'default',
+      'status' => FALSE,
     ];
     $captcha_point = new CaptchaPoint($values, 'captcha_point');
     $captcha_point->trustData()->save();
