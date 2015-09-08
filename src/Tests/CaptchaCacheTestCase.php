@@ -35,6 +35,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
    * Test the cache tags.
    */
   public function testCacheTags() {
+    global $base_path;
     // Check caching without captcha as anonymous user.
     $this->drupalGet('');
     $this->assertEqual($this->drupalGetHeader('x-drupal-cache'), 'MISS');
@@ -67,11 +68,12 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
     // Check that we get a new image when vising the page again.
     $this->drupalGet('');
     $this->assertNotEqual($image_path, (string) $this->xpath('//div[@class="details-wrapper"]/img/@src')[0]);
-    // Check image caching.
-    $this->drupalGet($image_path);
+    // Check image caching, remove the base path since drupalGet() expects the
+    // internal path.
+    $this->drupalGet(substr($image_path, strlen($base_path)));
     $this->assertResponse(200);
     // Request image twice to make sure no errors happen (due to page caching).
-    $this->drupalGet($image_path);
+    $this->drupalGet(substr($image_path, strlen($base_path)));
     $this->assertResponse(200);
   }
 
