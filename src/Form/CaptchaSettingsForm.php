@@ -63,9 +63,6 @@ class CaptchaSettingsForm extends ConfigFormBase {
     module_load_include('inc', 'captcha');
     module_load_include('inc', 'captcha', 'captcha.admin');
 
-    // Use javascript for some added usability on admin form.
-    $form['#attached']['library'][] = 'captcha/base';
-
     // Configuration of which forms to protect, with what challenge.
     $form['form_protection'] = [
       '#type' => 'details',
@@ -124,6 +121,11 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#default_value' => _captcha_get_description(),
       '#maxlength' => 256,
       '#attributes' => ['id' => 'edit-captcha-description-wrapper'],
+      '#states' => [
+        'visible' => [
+          ':input[name="add_captcha_description"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     // Option for case sensitive/insensitive validation of the responses.
