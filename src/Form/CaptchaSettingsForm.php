@@ -148,13 +148,13 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('persistence'),
       '#options' => [
         CAPTCHA_PERSISTENCE_SHOW_ALWAYS =>
-        $this->t('Always add a challenge.'),
+          $this->t('Always add a challenge.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE =>
-        $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
+          $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_TYPE =>
-        $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
+          $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL =>
-        $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
+          $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
       ],
       '#description' => t('Define if challenges should be omitted during the rest of a session once the user successfully responds to a challenge.'),
     ];
@@ -163,7 +163,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $form['enable_stats'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable statistics'),
-      '#description' => $this->t('Keep CAPTCHA related counters in the <a href="!statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', ['!statusreport' => Url::fromRoute('system.status')->toString()]),
+      '#description' => $this->t('Keep CAPTCHA related counters in the <a href=":statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', [':statusreport' => Url::fromRoute('system.status')->toString()]),
       '#default_value' => $config->get('enable_stats'),
     ];
 
@@ -174,9 +174,10 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Report information about wrong responses to the log.'),
       '#default_value' => $config->get('log_wrong_responses'),
     ];
+
     // Replace the description with a link if dblog.module is enabled.
     if (\Drupal::moduleHandler()->moduleExists('dblog')) {
-      $form['#description'] = $this->t('Report information about wrong responses to the <a href="!dblog">log</a>.', ['!dblog' => Url::fromRoute('dblog.overview')->toString()]);
+      $form['log_wrong_responses']['#description'] = $this->t('Report information about wrong responses to the <a href=":dblog">log</a>.', [':dblog' => Url::fromRoute('dblog.overview')->toString()]);
     }
 
     // Submit button.
