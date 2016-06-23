@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Form\CaptchaSettingsForm.
- */
-
 namespace Drupal\captcha\Form;
 
 use Drupal\Core\Cache\CacheBackendInterface;

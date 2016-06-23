@@ -1,12 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaAdminTestCase.
- *
- * @TODO rewrite this test. Move links tests (appearance, access,etc to unit tests), etc.
- */
-
 namespace Drupal\captcha\Tests;
 
 use Drupal\captcha\Entity\CaptchaPoint;

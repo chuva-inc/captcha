@@ -1,14 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaBaseWebTestCase.
- *
- * Some tricks to debug:
- * drupal_debug($data) // from devel module
- * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
- */
-
 // TODO: write test for CAPTCHAs on admin pages
 // TODO: test for default challenge type
 // TODO: test about placement (comment form, node forms, log in form, etc)

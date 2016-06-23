@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaTestCase.
- */
-
 namespace Drupal\captcha\Tests;
 
 /**

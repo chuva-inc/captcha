@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Controller\CaptchaPointListBuilder.
- */
-
 namespace Drupal\captcha\Controller;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\image_captcha\Form\ImageCaptchaSettingsForm.
- */
-
 namespace Drupal\image_captcha\Form;
 
 use Drupal\Core\Form\ConfigFormBase;

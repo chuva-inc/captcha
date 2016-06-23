@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Element\Captcha.
- */
-
 namespace Drupal\captcha\Element;
 
 use Drupal\Core\Form\FormStateInterface;

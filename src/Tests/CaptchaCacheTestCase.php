@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaCacheTestCase.
- */
-
 namespace Drupal\captcha\Tests;
 
 use Drupal\captcha\Entity\CaptchaPoint;

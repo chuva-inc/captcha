@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Form\CaptchaPointForm.
- */
-
 namespace Drupal\captcha\Form;
 
 use Drupal\captcha\Entity\CaptchaPoint;

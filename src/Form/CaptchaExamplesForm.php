@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Form\CaptchaExamplesForm.
- */
-
 namespace Drupal\captcha\Form;
 
 use Drupal\Core\Url;

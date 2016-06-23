@@ -1,14 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaSessionReuseAttackTestCase.
- *
- * Some tricks to debug:
- * drupal_debug($data) // from devel module
- * file_put_contents('tmp.simpletest.html', $this->drupalGetContent());
- */
-
 namespace Drupal\captcha\Tests;
 
 /**

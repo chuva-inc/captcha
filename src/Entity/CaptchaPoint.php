@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\captcha\Entity\CaptchaPoint.
- */
-
 namespace Drupal\captcha\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
