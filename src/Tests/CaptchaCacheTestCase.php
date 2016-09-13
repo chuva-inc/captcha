@@ -17,7 +17,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
   /**
    * {@inheritdoc}
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('user_login_block', ['id' => 'login']);

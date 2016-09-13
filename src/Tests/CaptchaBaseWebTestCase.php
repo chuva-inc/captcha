@@ -24,27 +24,38 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
   use CommentTestTrait;
 
-  // Some constants for better reuse.
+  /**
+   * Wrong response error message.
+   */
   const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE = 'The answer you entered for the CAPTCHA was not correct.';
 
+  /**
+   * Session reuse attack error message.
+   */
   const CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE = 'CAPTCHA session reuse attack detected.';
 
+  /**
+   * Unknown CSID error message
+   */
   const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE = 'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
 
+  /**
+   * Modules to install for this Test class.
+   */
   public static $modules = ['captcha', 'comment'];
 
 
   /**
    * User with various administrative permissions.
    *
-   * @var \Drupal\user\Entity\User $adminUser
+   * @var \Drupal\user\Entity\User
    */
   protected $adminUser;
 
   /**
    * Normal visitor with limited permissions.
    *
-   * @var \Drupal\user\Entity\User $normalUser ;
+   * @var \Drupal\user\Entity\User
    */
   protected $normalUser;
 

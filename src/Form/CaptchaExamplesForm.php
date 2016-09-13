@@ -38,7 +38,7 @@ class CaptchaExamplesForm extends FormBase {
         '#markup' => t('This page gives an overview of all available challenge types, generated with their current settings.'),
       ];
       foreach (\Drupal::moduleHandler()
-                 ->getImplementations('captcha') as $mkey => $module) {
+        ->getImplementations('captcha') as $mkey => $module) {
         $challenges = call_user_func_array($module . '_captcha', ['list']);
 
         if ($challenges) {
