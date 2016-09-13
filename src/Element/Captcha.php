@@ -101,7 +101,7 @@ class Captcha extends FormElement {
 
     // Store CAPTCHA information for further processing in
     // - $form_state->get('captcha_info'), which survives
-    //	 a form rebuild (e.g. node preview), 
+    //   a form rebuild (e.g. node preview),
     //   useful in _captcha_get_posted_captcha_info().
     // - $element['#captcha_info'], for post processing functions that do not
     //   receive a $form_state argument (e.g. the pre_render callback).
@@ -174,7 +174,8 @@ class Captcha extends FormElement {
       $element['#captcha_info']['solution'] = $captcha['solution'];
 
       // Make sure we can use a top level form value
-      // $form_state->getValue('captcha_response'), even if the form has #tree=true.
+      // $form_state->getValue('captcha_response'), 
+      // even if the form has #tree=true.
       $element['#tree'] = FALSE;
     }
 

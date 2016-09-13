@@ -10,7 +10,7 @@ namespace Drupal\captcha\Tests;
 class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * Modules to install for this Test class.
+   * @tag array Modules to install for this Test class.
    */
   public static $modules = ['block', 'image_captcha'];
 
