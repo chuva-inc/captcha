@@ -145,7 +145,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
   if (!$account->hasPermission('skip CAPTCHA')) {
 
     /* @var CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load($form_id);
+    $captcha_point = \Drupal::entityTypeManager()->getStorage('captcha_point')->load($form_id);
 
     if ($captcha_point && $captcha_point->status()) {
       // Build CAPTCHA form element.

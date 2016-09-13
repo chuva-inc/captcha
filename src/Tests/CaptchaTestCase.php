@@ -32,7 +32,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
     // Set a CAPTCHA on login form.
     /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point = \Drupal::entityTypeManager()->getStorage('captcha_point')->load('user_login_form');
     $captcha_point->setCaptchaType('captcha/Math');
     $captcha_point->enable()->save();
 
@@ -192,7 +192,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaOnLoginBlockOnAdminPagesIssue893810() {
     // Set a CAPTCHA on login block form.
     /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point = \Drupal::entityTypeManager()->getStorage('captcha_point')->load('user_login_form');
     $captcha_point->setCaptchaType('captcha/Math');
     $captcha_point->enable()->save();
 

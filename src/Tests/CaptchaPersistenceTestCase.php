@@ -164,7 +164,7 @@ class CaptchaPersistenceTestCase extends CaptchaBaseWebTestCase {
 
     // Check another form.
     /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityManager()->getStorage('captcha_point')->load('user_register_form');
+    $captcha_point = \Drupal::entityTypeManager()->getStorage('captcha_point')->load('user_register_form');
     $captcha_point->enable()->save();
     $this->drupalGet('user/register');
     $this->assertCaptchaPresence(TRUE);
