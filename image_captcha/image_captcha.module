@@ -2,8 +2,10 @@
 
 /**
  * @file
- * Implements image CAPTCHA for use with the CAPTCHA module
+ * Implements image CAPTCHA for use with the CAPTCHA module.
  */
+
+use \Drupal\Core\Routing\RouteMatchInterface;
 
 define('IMAGE_CAPTCHA_ALLOWED_CHARACTERS', 'aAbBCdEeFfGHhijKLMmNPQRrSTtWXYZ23456789');
 
@@ -21,9 +23,9 @@ use Drupal\Core\Url;
 /**
  * Implements hook_help().
  */
-function image_captcha_help($path, $arg) {
-  switch ($path) {
-    case 'admin/config/people/captcha/image_captcha':
+function image_captcha_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'image_captcha.settings':
       $output = '<p>' . t('The image CAPTCHA is a popular challenge where a random textual code is obfuscated in an image. The image is generated on the fly for each request, which is rather CPU intensive for the server. Be careful with the size and computation related settings.') . '</p>';
       return $output;
   }

@@ -117,9 +117,9 @@ For our simple foo CAPTCHA module this would mean:
 /**
  * Implementation of hook_help().
  */
-function foo_captcha_help($path, $arg) {
-  switch ($path) {
-    case 'admin/config/people/captcha/foo_captcha':
+function foo_captcha_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'foo_captcha.settings':
       return '<p>'. t('This is a very simple challenge, which requires users to enter "foo" in a textfield.') .'</p>';
   }
 }
