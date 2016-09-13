@@ -16,6 +16,8 @@ define('IMAGE_CAPTCHA_FILE_FORMAT_JPG', 1);
 define('IMAGE_CAPTCHA_FILE_FORMAT_PNG', 2);
 define('IMAGE_CAPTCHA_FILE_FORMAT_TRANSPARENT_PNG', 3);
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_help().
  */
@@ -225,7 +227,7 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
         list($width, $height) = _image_captcha_image_size($code);
         $result['form']['captcha_image'] = [
           '#theme' => 'image',
-          '#uri' => \Drupal::url('image_captcha.generator', ['session_id' => $captcha_sid, 'timestamp' => REQUEST_TIME]),
+          '#uri' => Url::fromRoute('image_captcha.generator', ['session_id' => $captcha_sid, 'timestamp' => REQUEST_TIME]),
           '#width' => $width,
           '#height' => $height,
           '#alt' => t('Image CAPTCHA'),
