@@ -14,6 +14,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Link;
 
 /**
  * Constants for CAPTCHA persistence.
@@ -220,12 +221,12 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     else {
       $captcha_element['#title'] = t('CAPTCHA: no challenge enabled');
       $captcha_element['add_captcha'] = [
-        '#markup' => \Drupal::l(
+        '#markup' => Link::fromTextAndUrl(
           t('Place a CAPTCHA here for untrusted users.'),
           Url::fromRoute('captcha_point.add', [], [
             'query' => Drupal::destination()->getAsArray() + ['form_id' => $form_id],
           ])
-        ),
+        )->toString(),
       ];
     }
 

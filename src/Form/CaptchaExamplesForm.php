@@ -5,6 +5,7 @@ namespace Drupal\captcha\Form;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 
 /**
  * Displays the captcha settings form.
@@ -46,7 +47,7 @@ class CaptchaExamplesForm extends FormBase {
               '#title' => t('Challenge %challenge by module %module', ['%challenge' => $challenge, '%module' => $module]),
               'challenge' => _captcha_generate_example_challenge($module, $challenge),
               'more_examples' => [
-                '#markup' => \Drupal::l(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples', array('module' => $module, 'challenge' => $challenge))),
+                '#markup' => Link::fromTextAndUrl(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples', array('module' => $module, 'challenge' => $challenge)))->toString(),
               ],
             ];
           }
