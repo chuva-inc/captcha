@@ -2,10 +2,10 @@
 
 namespace Drupal\captcha\Form;
 
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * Displays the captcha settings form.
@@ -37,17 +37,24 @@ class CaptchaExamplesForm extends FormBase {
       $form['info'] = [
         '#markup' => t('This page gives an overview of all available challenge types, generated with their current settings.'),
       ];
-      foreach (\Drupal::moduleHandler()->getImplementations('captcha') as $mkey => $module) {
+      foreach (\Drupal::moduleHandler()
+                 ->getImplementations('captcha') as $mkey => $module) {
         $challenges = call_user_func_array($module . '_captcha', ['list']);
 
         if ($challenges) {
           foreach ($challenges as $ckey => $challenge) {
             $form["captcha_{$mkey}_{$ckey}"] = [
               '#type' => 'details',
-              '#title' => t('Challenge %challenge by module %module', ['%challenge' => $challenge, '%module' => $module]),
+              '#title' => t('Challenge %challenge by module %module', [
+                '%challenge' => $challenge,
+                '%module' => $module,
+              ]),
               'challenge' => _captcha_generate_example_challenge($module, $challenge),
               'more_examples' => [
-                '#markup' => Link::fromTextAndUrl(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples', array('module' => $module, 'challenge' => $challenge)))->toString(),
+                '#markup' => Link::fromTextAndUrl(t('10 more examples of this challenge.'), Url::fromRoute('captcha_examples', [
+                  'module' => $module,
+                  'challenge' => $challenge,
+                ]))->toString(),
               ],
             ];
           }

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\captcha\Tests\CaptchaCronTestCase.
- */
 
 namespace Drupal\captcha\Tests;
 
@@ -23,9 +19,9 @@ class CaptchaCronTestCase extends CaptchaBaseWebTestCase {
   public function setUp() {
     parent::setUp();
 
-    // add removed session.
+    // Add removed session.
     $this->captcha_sessions['remove_sid'] = $this->addCaptchaSession(REQUEST_TIME - 1 - 60 * 60 * 24);
-    // add remain session.
+    // Add remain session.
     $this->captcha_sessions['remain_sid'] = $this->addCaptchaSession(REQUEST_TIME);
   }
 
@@ -33,7 +29,7 @@ class CaptchaCronTestCase extends CaptchaBaseWebTestCase {
    * Add test Captcha session data.
    */
   public function addCaptchaSession($request_time) {
-    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
+    $admin_user = $this->drupalCreateUser(['administer site configuration']);
     $this->drupalLogin($admin_user);
 
     // Initialize solution with random data.
@@ -67,7 +63,7 @@ class CaptchaCronTestCase extends CaptchaBaseWebTestCase {
 
     $connection = Database::getConnection();
     $sids = $connection->select('captcha_sessions')
-      ->fields('captcha_sessions', array('csid'))
+      ->fields('captcha_sessions', ['csid'])
       ->condition('csid', array_values($this->captcha_sessions), 'IN')
       ->execute()
       ->fetchCol('csid');
@@ -78,4 +74,5 @@ class CaptchaCronTestCase extends CaptchaBaseWebTestCase {
     // Test if Captcha cron appropriately keeps sessions younger than a day.
     $this->assertTrue(in_array($this->captcha_sessions['remain_sid'], $sids), 'Captcha cron does not remove captcha session data younger than 1 day.');
   }
+
 }

@@ -320,7 +320,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         '#options' => $available_fonts,
         '#attributes' => ['class' => ['image_captcha_admin_fonts_selection']],
         '#process' => ['form_process_checkboxes'],
-        ];
+      ];
 
       $form['image_captcha_font_size'] = [
         '#type' => 'select',
@@ -361,7 +361,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
   /**
    * Helper function to get fonts from the given directories.
    *
-   * @param array|NULL $directories
+   * @param array|null $directories
    *   (Optional) an array of directories
    *   to recursively search through, if not given, the default
    *   directories will be used.

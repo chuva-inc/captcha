@@ -158,7 +158,10 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $form['enable_stats'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable statistics'),
-      '#description' => $this->t('Keep CAPTCHA related counters in the <a href=":statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', [':statusreport' => Url::fromRoute('system.status')->toString()]),
+      '#description' => $this->t('Keep CAPTCHA related counters in the <a href=":statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', [
+        ':statusreport' => Url::fromRoute('system.status')
+          ->toString(),
+      ]),
       '#default_value' => $config->get('enable_stats'),
     ];
 
@@ -172,7 +175,10 @@ class CaptchaSettingsForm extends ConfigFormBase {
 
     // Replace the description with a link if dblog.module is enabled.
     if (\Drupal::moduleHandler()->moduleExists('dblog')) {
-      $form['log_wrong_responses']['#description'] = $this->t('Report information about wrong responses to the <a href=":dblog">log</a>.', [':dblog' => Url::fromRoute('dblog.overview')->toString()]);
+      $form['log_wrong_responses']['#description'] = $this->t('Report information about wrong responses to the <a href=":dblog">log</a>.', [
+        ':dblog' => Url::fromRoute('dblog.overview')
+          ->toString(),
+      ]);
     }
 
     // Submit button.

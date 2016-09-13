@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains CAPTCHA image response class.
- */
-
 namespace Drupal\image_captcha\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;

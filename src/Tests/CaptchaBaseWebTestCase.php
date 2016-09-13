@@ -31,7 +31,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
 
   const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE = 'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
 
-  public static $modules = array('captcha', 'comment');
+  public static $modules = ['captcha', 'comment'];
 
 
   /**
@@ -44,7 +44,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   /**
    * Normal visitor with limited permissions.
    *
-   * @var \Drupal\user\Entity\User $normalUser;
+   * @var \Drupal\user\Entity\User $normalUser ;
    */
   protected $normalUser;
 
@@ -69,13 +69,17 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     parent::setUp();
     module_load_include('inc', 'captcha');
 
-    $this->drupalCreateContentType(array('type' => 'page'));
+    $this->drupalCreateContentType(['type' => 'page']);
 
     // Create a normal user.
-    $permissions = array(
-      'access comments', 'post comments', 'skip comment approval',
-      'access content', 'create page content', 'edit own page content',
-    );
+    $permissions = [
+      'access comments',
+      'post comments',
+      'skip comment approval',
+      'access content',
+      'create page content',
+      'edit own page content',
+    ];
     $this->normalUser = $this->drupalCreateUser($permissions);
 
     // Create an admin user.
@@ -94,9 +98,13 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     $comment_field->save();
 
     /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityTypeManager()->getStorage('captcha_point')->load('user_login_form');
+    $captcha_point = \Drupal::entityTypeManager()
+      ->getStorage('captcha_point')
+      ->load('user_login_form');
     $captcha_point->enable()->save();
-    $this->config('captcha.settings')->set('default_challenge', 'captcha/test')->save();
+    $this->config('captcha.settings')
+      ->set('default_challenge', 'captcha/test')
+      ->save();
   }
 
   /**
@@ -146,10 +154,10 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    * Helper function to generate a form values array for comment forms.
    */
   protected function getCommentFormValues() {
-    $edit = array(
+    $edit = [
       'subject[0][value]' => 'comment_subject ' . $this->randomMachineName(32),
       'comment_body[0][value]' => 'comment_body ' . $this->randomMachineName(256),
-    );
+    ];
 
     return $edit;
   }
@@ -158,10 +166,10 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    * Helper function to generate a form values array for node forms.
    */
   protected function getNodeFormValues() {
-    $edit = array(
+    $edit = [
       'title[0][value]' => 'node_title ' . $this->randomMachineName(32),
       'body[0][value]' => 'node_body ' . $this->randomMachineName(256),
-    );
+    ];
 
     return $edit;
   }
@@ -229,7 +237,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     $challenge = (string) $elements[0];
     $this->assert('pass', $challenge);
     // Extract terms and operator from challenge.
-    $matches = array();
+    $matches = [];
     preg_match('/\\s*(\\d+)\\s*(-|\\+)\\s*(\\d+)\\s*=\\s*/', $challenge, $matches);
     // Solve the challenge.
     $a = (int) $matches[1];
@@ -244,11 +252,11 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function allowCommentPostingForAnonymousVisitors() {
     // Enable anonymous comments.
-    user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array(
-        'access comments',
-        'post comments',
-        'skip comment approval',
-      ));
+    user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, [
+      'access comments',
+      'post comments',
+      'skip comment approval',
+    ]);
   }
 
 }

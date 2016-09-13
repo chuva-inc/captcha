@@ -2,9 +2,7 @@
 
 namespace Drupal\captcha\Form;
 
-use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Entity\EntityForm;
-use Drupal\captcha\CaptchaPointInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -52,7 +50,8 @@ class CaptchaPointForm extends EntityForm {
       '#type' => 'select',
       '#title' => t('Challenge type'),
       '#description' => t('The CAPTCHA type to use for this form.'),
-      '#default_value' => ($captcha_point->getCaptchaType() ?: $this->config('captcha.settings')->get('default_challenge')),
+      '#default_value' => ($captcha_point->getCaptchaType() ?: $this->config('captcha.settings')
+        ->get('default_challenge')),
       '#options' => _captcha_available_challenge_types(),
     ];
 

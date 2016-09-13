@@ -32,7 +32,9 @@ class Captcha extends FormElement {
     // Override the default CAPTCHA validation function for case
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
-    if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')->get('default_validation')) {
+    if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
+        ->get('default_validation')
+    ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
     }
     return $captcha_element;
@@ -42,7 +44,7 @@ class Captcha extends FormElement {
    * Process callback for CAPTCHA form element.
    */
   public static function processCaptchaElement(&$element, FormStateInterface $form_state, &$complete_form) {
-    // Add captcha.inc file
+    // Add captcha.inc file.
     module_load_include('inc', 'captcha');
 
     // Add Javascript for general CAPTCHA functionality.
@@ -116,10 +118,15 @@ class Captcha extends FormElement {
     if (_captcha_required_for_user($captcha_sid, $this_form_id) || $element['#captcha_admin_mode']) {
       // Generate a CAPTCHA and its solution
       // (note that the CAPTCHA session ID is given as third argument).
-      $captcha = \Drupal::moduleHandler()->invoke($captcha_type_module, 'captcha', ['generate', $captcha_type_challenge, $captcha_sid]);
+      $captcha = \Drupal::moduleHandler()
+        ->invoke($captcha_type_module, 'captcha', [
+          'generate',
+          $captcha_type_challenge,
+          $captcha_sid,
+        ]);
 
       // @todo Isn't this moment a bit late to figure out that we don't need CAPTCHA?
-      if(!isset($captcha)) {
+      if (!isset($captcha)) {
         return $element;
       }
 
@@ -127,7 +134,11 @@ class Captcha extends FormElement {
         // The selected module did not return what we expected: log about it and quit.
         \Drupal::logger('CAPTCHA')->error(
           'CAPTCHA problem: unexpected result from hook_captcha() of module %module when trying to retrieve challenge type %type for form %form_id.',
-          ['%type' => $captcha_type_challenge, '%module' => $captcha_type_module, '%form_id' => $this_form_id]
+          [
+            '%type' => $captcha_type_challenge,
+            '%module' => $captcha_type_module,
+            '%form_id' => $this_form_id,
+          ]
         );
 
         return $element;

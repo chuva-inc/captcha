@@ -2,9 +2,8 @@
 
 namespace Drupal\captcha\Entity;
 
-use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\captcha\CaptchaPointInterface;
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 /**
  * Defines the CaptchaPoint entity.

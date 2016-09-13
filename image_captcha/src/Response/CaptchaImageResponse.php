@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains CAPTCHA image response class.
- */
-
 namespace Drupal\image_captcha\Response;
 
 use Drupal\Core\Logger\LoggerChannelInterface;

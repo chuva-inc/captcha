@@ -2,9 +2,6 @@
 
 namespace Drupal\captcha\Tests;
 
-use Drupal\captcha\Entity\CaptchaPoint;
-use Drupal\Core\Url;
-
 /**
  * Tests CAPTCHA caching on various pages.
  *
@@ -23,7 +20,7 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
   function setUp() {
     parent::setUp();
 
-    $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));
+    $this->drupalPlaceBlock('user_login_block', ['id' => 'login']);
   }
 
   /**

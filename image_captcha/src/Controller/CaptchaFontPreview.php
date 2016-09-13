@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains CAPTCHA font previews controller class.
- */
-
 namespace Drupal\image_captcha\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +9,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * A Controller to preview the captcha font on the settings page.
  */
 class CaptchaFontPreview extends StreamedResponse {
+
   /**
    * {@inheritdoc}
    */
