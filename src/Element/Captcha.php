@@ -85,7 +85,7 @@ class Captcha extends FormElement {
     ];
 
     // Additional one time CAPTCHA token: store in database and send with form.
-    $captcha_token = md5(mt_rand());
+    $captcha_token = hash('sha256', mt_rand());
     db_update('captcha_sessions')
       ->fields(['token' => $captcha_token])
       ->condition('csid', $captcha_sid)

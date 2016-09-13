@@ -368,7 +368,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
    *
    * @return array
    *   Fonts file objects (with fields 'name',
-   *   'basename' and 'filename'), keyed on the md5 hash of the font
+   *   'basename' and 'filename'), keyed on the sha256 hash of the font
    *   path (to have an easy token that can be used in an url
    *   without en/decoding issues).
    */
@@ -385,7 +385,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
     $fonts = [];
     foreach ($directories as $directory) {
       foreach (file_scan_directory($directory, '/\.[tT][tT][fF]$/') as $filename => $font) {
-        $fonts[md5($filename)] = $font;
+        $fonts[hash('sha256', $filename)] = $font;
       }
     }
 

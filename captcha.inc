@@ -80,7 +80,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
   $user = \Drupal::currentUser();
 
   // Initialize solution with random data.
-  $solution = md5(mt_rand());
+  $solution = hash('sha256', mt_rand());
 
   // Insert an entry and thankfully receive the value
   // of the autoincrement field 'csid'.
