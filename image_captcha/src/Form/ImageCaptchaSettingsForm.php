@@ -2,14 +2,50 @@
 
 namespace Drupal\image_captcha\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\DrupalKernel;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\Language;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Displays the pants settings form.
  */
 class ImageCaptchaSettingsForm extends ConfigFormBase {
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Constructs a \Drupal\image_captcha\Form\ImageCaptchaSettingsForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager) {
+    parent::__construct($config_factory);
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('language_manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -75,8 +111,8 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
       '#description' => t('The code length influences the size of the image. Note that larger values make the image generation more CPU intensive.'),
     ];
     // RTL support option (only show this option when there are RTL languages).
-    $languages = language_list('direction');
-    if (isset($languages[Language::DIRECTION_RTL])) {
+    $language = $this->languageManager->getCurrentLanguage();
+    if ($language->getDirection() == Language::DIRECTION_RTL) {
       $form['image_captcha_code_settings']['image_captcha_rtl_support'] = [
         '#title' => t('RTL support'),
         '#type' => 'checkbox',
@@ -248,7 +284,9 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
     if (!isset($form['image_captcha_font_settings']['no_ttf_support'])) {
       // Filter the image_captcha fonts array to pick out the selected ones.
       $fonts = array_filter($form_state->getValue('image_captcha_fonts'));
-      $this->config('image_captcha.settings')->set('image_captcha_fonts', $fonts)->save();
+      $this->config('image_captcha.settings')
+        ->set('image_captcha_fonts', $fonts)
+        ->save();
     }
 
     parent::SubmitForm($form, $form_state);
@@ -291,22 +329,39 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
       // Cache the list of previewable fonts. All the previews are done
       // in separate requests, and we don't want to rescan the filesystem
       // every time, so we cache the result.
-      $config->get('image_captcha_fonts_preview_map_cache', $fonts);
+      $config->set('image_captcha_fonts_preview_map_cache', $fonts);
+      $config->save();
       // Put these fonts with preview image in the list.
       foreach ($fonts as $token => $font) {
-        $img_src = check_url(url('admin/config/people/captcha/image_captcha/font_preview/' . $token));
-        $title = t('Font preview of @font (@file)', ['@font' => $font->name, '@file' => $font->uri]);
-        $available_fonts[$font->uri] = '<img src="' . $img_src . '" alt="' . $title . '" title="' . $title . '" />';
+
+        $title = t('Font preview of @font (@file)', [
+          '@font' => $font['name'],
+          '@file' => $font['uri'],
+        ]);
+        $attributes = [
+          'src' => Url::fromRoute('image_captcha.font_preview', ['token' => $token])
+            ->toString(),
+          'title' => $title,
+          'alt' => $title,
+        ];
+        $available_fonts[$font['uri']] = '<img' . new Attribute($attributes) . ' />';
       }
 
       // Append the PHP built-in font at the end.
-      $img_src = check_url(url('admin/config/people/captcha/image_captcha/font_preview/BUILTIN'));
       $title = t('Preview of built-in font');
-      $available_fonts['BUILTIN'] = t('PHP built-in font: !font_preview',
-        ['!font_preview' => '<img src="' . $img_src . '" alt="' . $title . '" title="' . $title . '" />']
-      );
+      $attributes = [
+        'src' => Url::fromRoute('image_captcha.font_preview', ['token' => 'BUILTIN'])
+          ->toString(),
+        'alt' => $title,
+        'title' => $title,
+      ];
+      $available_fonts['BUILTIN'] = (string) t('PHP built-in font: font_preview', [
+        'font_preview' => '<img' . new Attribute($attributes) . ' />',
+      ]);
 
       $default_fonts = _image_captcha_get_enabled_fonts();
+      $conf_path = DrupalKernel::findSitePath($this->getRequest());
+
       $form['image_captcha_fonts'] = [
         '#type' => 'checkboxes',
         '#title' => t('Fonts'),
@@ -314,12 +369,11 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         '#description' => t('Select the fonts to use for the text in the image CAPTCHA. Apart from the provided defaults, you can also use your own TrueType fonts (filename extension .ttf) by putting them in %fonts_library_general or %fonts_library_specific.',
           [
             '%fonts_library_general' => 'sites/all/libraries/fonts',
-            '%fonts_library_specific' => conf_path() . '/libraries/fonts',
+            '%fonts_library_specific' => $conf_path . '/libraries/fonts',
           ]
         ),
         '#options' => $available_fonts,
         '#attributes' => ['class' => ['image_captcha_admin_fonts_selection']],
-        '#process' => ['form_process_checkboxes'],
       ];
 
       $form['image_captcha_font_size'] = [
@@ -378,7 +432,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
       $directories = [
         drupal_get_path('module', 'image_captcha') . '/fonts',
         'sites/all/libraries/fonts',
-        conf_path() . '/libraries/fonts',
+        DrupalKernel::findSitePath($this->getRequest()) . '/libraries/fonts',
       ];
     }
     // Collect the font information.
