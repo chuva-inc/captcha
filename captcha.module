@@ -13,6 +13,7 @@ use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Database\Database;
 
 /**
  * Constants for CAPTCHA persistence.
@@ -97,7 +98,8 @@ function captcha_theme() {
  */
 function captcha_cron() {
   // Remove challenges older than 1 day.
-  db_delete('captcha_sessions')
+  $connection = Database::getConnection();
+  $connection->delete('captcha_sessions')
     ->condition('timestamp', REQUEST_TIME - 60 * 60 * 24, '<')
     ->execute();
 }
