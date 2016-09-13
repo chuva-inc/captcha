@@ -143,13 +143,13 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('persistence'),
       '#options' => [
         CAPTCHA_PERSISTENCE_SHOW_ALWAYS =>
-          $this->t('Always add a challenge.'),
+        $this->t('Always add a challenge.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE =>
-          $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
+        $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_TYPE =>
-          $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
+        $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
         CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL =>
-          $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
+        $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
       ],
       '#description' => t('Define if challenges should be omitted during the rest of a session once the user successfully responds to a challenge.'),
     ];

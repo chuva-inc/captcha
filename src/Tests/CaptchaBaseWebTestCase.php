@@ -35,12 +35,12 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   const CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE = 'CAPTCHA session reuse attack detected.';
 
   /**
-   * Unknown CSID error message
+   * Unknown CSID error message.
    */
   const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE = 'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
 
   /**
-   * Modules to install for this Test class.
+   * @var [string] Modules to install for this Test class.
    */
   public static $modules = ['captcha', 'comment'];
 

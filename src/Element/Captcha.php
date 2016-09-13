@@ -33,7 +33,7 @@ class Captcha extends FormElement {
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
     if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-        ->get('default_validation')
+      ->get('default_validation')
     ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
     }
@@ -70,7 +70,8 @@ class Captcha extends FormElement {
       $captcha_sid = $posted_captcha_sid;
     }
     else {
-      // Generate a new CAPTCHA session if we could not reuse one from a posted form.
+      // Generate a new CAPTCHA session if we could
+      // not reuse one from a posted form.
       $captcha_sid = _captcha_generate_captcha_session($this_form_id, CAPTCHA_STATUS_UNSOLVED);
     }
 
@@ -99,8 +100,9 @@ class Captcha extends FormElement {
     list($captcha_type_module, $captcha_type_challenge) = _captcha_parse_captcha_type($element['#captcha_type']);
 
     // Store CAPTCHA information for further processing in
-    // - $form_state->get('captcha_info'), which survives a form rebuild (e.g. node
-    //   preview), useful in _captcha_get_posted_captcha_info().
+    // - $form_state->get('captcha_info'), which survives
+    //	 a form rebuild (e.g. node preview), 
+    //   useful in _captcha_get_posted_captcha_info().
     // - $element['#captcha_info'], for post processing functions that do not
     //   receive a $form_state argument (e.g. the pre_render callback).
     $form_state->set('captcha_info', [
@@ -125,13 +127,15 @@ class Captcha extends FormElement {
           $captcha_sid,
         ]);
 
-      // @todo Isn't this moment a bit late to figure out that we don't need CAPTCHA?
+      // @todo Isn't this moment a bit late to figure out
+      // that we don't need CAPTCHA?
       if (!isset($captcha)) {
         return $element;
       }
 
       if (!isset($captcha['form']) || !isset($captcha['solution'])) {
-        // The selected module did not return what we expected: log about it and quit.
+        // The selected module did not return what we expected:
+        // log about it and quit.
         \Drupal::logger('CAPTCHA')->error(
           'CAPTCHA problem: unexpected result from hook_captcha() of module %module when trying to retrieve challenge type %type for form %form_id.',
           [

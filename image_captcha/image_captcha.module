@@ -87,7 +87,7 @@ function _image_captcha_utf8_split($str) {
   $characters = [];
   $len = strlen($str);
 
-  for ($i=0; $i < $len; ) {
+  for ($i = 0; $i < $len;) {
     $chr = ord($str[$i]);
     // One byte character (0zzzzzzz).
     if (($chr & 0x80) == 0x00) {
@@ -135,7 +135,7 @@ function _image_captcha_utf8_split($str) {
  *   IMAGE_CAPTCHA_ERROR_NO_GDLIB, IMAGE_CAPTCHA_ERROR_NO_TTF_SUPPORT,
  *   IMAGE_CAPTCHA_ERROR_TTF_FILE_READ_PROBLEM.
  */
-function _image_captcha_check_setup($check_fonts=TRUE) {
+function _image_captcha_check_setup($check_fonts = TRUE) {
   $status = 0;
   // Check if we can use the GD library.
   // We need at least the imagepng function.
@@ -184,7 +184,6 @@ function _image_captcha_image_size($code) {
   return [$width, $height];
 }
 
-
 /**
  * Implements hook_captcha().
  */
@@ -193,7 +192,8 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
 
   switch ($op) {
     case 'list':
-      // Only offer the image CAPTCHA if it is possible to generate an image on this setup.
+      // Only offer the image CAPTCHA if it is possible to generate an image
+      // on this setup.
       if (!(_image_captcha_check_setup() & IMAGE_CAPTCHA_ERROR_NO_GDLIB)) {
         return ['Image'];
       }
@@ -204,13 +204,14 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
 
     case 'generate':
       if ($captcha_type == 'Image') {
-        // In maintenance mode, the image CAPTCHA does not work because the request
-        // for the image itself won't succeed (only ?q=user is permitted for
-        // unauthenticated users). We fall back to the Math CAPTCHA in that case.
+        // In maintenance mode, the image CAPTCHA does not work because
+        // the request for the image itself won't succeed (only ?q=user
+        // is permitted for unauthenticated users). We fall back to the
+        // Math CAPTCHA in that case.
         if (defined('MAINTENANCE_MODE') && \Drupal::currentUser()->isAnonymous()) {
           return captcha_captcha('generate', 'Math');
         }
-        // generate a CAPTCHA code
+        // Generate a CAPTCHA code.
         $allowed_chars = _image_captcha_utf8_split($config->get('image_captcha_image_allowed_chars'));
         $code_length = (int) $config->get('image_captcha_code_length');
         $code = '';
@@ -248,7 +249,8 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
           '#cache' => ['max-age' => 0],
         ];
 
-        // Handle the case insensitive validation option combined with ignoring spaces.
+        // Handle the case insensitive validation option combined with
+        // ignoring spaces.
         switch (\Drupal::config('captcha.settings')->get('default_validation')) {
           case CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE:
             $result['captcha_validate'] = 'captcha_validate_ignore_spaces';

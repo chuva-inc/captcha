@@ -19,9 +19,9 @@ function image_captcha_requirements($phase) {
       $requirements['image_captcha_requires_gd'] = [
         'title' => \Drupal::translation()->translate('Image CAPTCHA requires GD library'),
         'description' =>
-          \Drupal::translation()->translate('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
-            ['!gddoc' => 'http://www.php.net/manual/en/book.image.php',]
-          ),
+        \Drupal::translation()->translate('The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href="!gddoc">GD library</a>, which is required to generate images.',
+            ['!gddoc' => 'http://www.php.net/manual/en/book.image.php']
+        ),
         'severity' => REQUIREMENT_ERROR,
       ];
     }
