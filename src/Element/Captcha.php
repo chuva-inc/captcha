@@ -48,6 +48,14 @@ class Captcha extends FormElement {
     // Add Javascript for general CAPTCHA functionality.
     $element['#attached']['library'][] = 'captcha/base';
 
+    if ($form_state->getTriggeringElement() && !empty($form_state->getTriggeringElement()['#limit_validation_errors'])) {
+      // This is a partial (ajax) submission with limited validation. Do not
+      // change anything about the captcha element, assume that it will not
+      // update the captcha element, do not generate anything, which keeps the
+      // current token intact for the real submission.
+      return $element;
+    }
+
     // Get the form ID of the form we are currently processing (which is not
     // necessary the same form that is submitted (if any).
     $this_form_id = $complete_form['form_id']['#value'];

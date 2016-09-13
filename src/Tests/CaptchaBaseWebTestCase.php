@@ -220,10 +220,10 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   protected function getMathCaptchaSolutionFromForm($form_html_id = NULL) {
     // Get the math challenge.
     if (!$form_html_id) {
-      $elements = $this->xpath('//div[@class="form-item form-type-textfield form-item-captcha-response"]/span[@class="field-prefix"]');
+      $elements = $this->xpath('//div[contains(@class, "form-item-captcha-response")]/span[@class="field-prefix"]');
     }
     else {
-      $elements = $this->xpath('//form[@id="' . $form_html_id . '"]//div[@class="form-item form-type-textfield form-item-captcha-response"]/span[@class="field-prefix"]');
+      $elements = $this->xpath('//form[@id="' . $form_html_id . '"]//div[contains(@class, "form-item-captcha-response")]/span[@class="field-prefix"]');
     }
     $this->assert('pass', json_encode($elements));
     $challenge = (string) $elements[0];
