@@ -69,7 +69,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $form['form_protection']['default_challenge'] = [
       '#type' => 'select',
       '#title' => $this->t('Default challenge type'),
-      '#description' => $this->t('Select the default challenge type for CAPTCHAs. This can be overriden for each form if desired.'),
+      '#description' => $this->t('Select the default challenge type for CAPTCHAs. This can be overridden for each form if desired.'),
       '#options' => _captcha_available_challenge_types(FALSE),
       '#default_value' => $config->get('default_challenge'),
     ];

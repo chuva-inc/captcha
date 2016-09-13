@@ -48,7 +48,7 @@ function captcha_set_form_id_setting($form_id, $captcha_type) {
  * @param bool $symbolic
  *   Flag to return as (symbolic) strings instead of object.
  *
- * @return NULL|CaptchaPoint
+ * @return null|CaptchaPoint
  *   NULL if no setting is known
  *   captcha point object with fields 'module' and 'captcha_type'.
  *   If argument $symbolic is true, returns 'default' or in the
