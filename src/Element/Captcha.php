@@ -174,7 +174,7 @@ class Captcha extends FormElement {
       $element['#captcha_info']['solution'] = $captcha['solution'];
 
       // Make sure we can use a top level form value
-      // $form_state->getValue('captcha_response'), 
+      // $form_state->getValue('captcha_response'),
       // even if the form has #tree=true.
       $element['#tree'] = FALSE;
     }

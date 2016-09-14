@@ -22,7 +22,12 @@ class CaptchaSettingsForm extends ConfigFormBase {
   protected $cacheBackend;
 
   /**
-   * {@inheritdoc}
+   * Constructs a \Drupal\captcha\Form\CaptchaSettingsForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
+   *   Cache backend instance to use.
    */
   public function __construct(ConfigFactoryInterface $config_factory, CacheBackendInterface $cache_backend) {
     parent::__construct($config_factory);
@@ -33,7 +38,10 @@ class CaptchaSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('config.factory'), $container->get('cache.default'));
+    return new static(
+      $container->get('config.factory'),
+      $container->get('cache.default')
+    );
   }
 
   /**
@@ -118,7 +126,9 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#attributes' => ['id' => 'edit-captcha-description-wrapper'],
       '#states' => [
         'visible' => [
-          ':input[name="add_captcha_description"]' => ['checked' => TRUE],
+          ':input[name="add_captcha_description"]' => [
+            'checked' => TRUE,
+          ],
         ],
       ],
     ];
@@ -142,14 +152,10 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#title' => t('Persistence'),
       '#default_value' => $config->get('persistence'),
       '#options' => [
-        CAPTCHA_PERSISTENCE_SHOW_ALWAYS =>
-        $this->t('Always add a challenge.'),
-        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE =>
-        $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
-        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_TYPE =>
-        $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
-        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL =>
-        $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
+        CAPTCHA_PERSISTENCE_SHOW_ALWAYS => $this->t('Always add a challenge.'),
+        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE => $this->t('Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge.'),
+        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_TYPE => $this->t('Omit challenges on a form type once the user successfully responds to a challenge on a form of that type.'),
+        CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL => $this->t('Omit challenges on all forms once the user successfully responds to any challenge on the site.'),
       ],
       '#description' => t('Define if challenges should be omitted during the rest of a session once the user successfully responds to a challenge.'),
     ];
@@ -159,8 +165,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Enable statistics'),
       '#description' => $this->t('Keep CAPTCHA related counters in the <a href=":statusreport">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache.', [
-        ':statusreport' => Url::fromRoute('system.status')
-          ->toString(),
+        ':statusreport' => Url::fromRoute('system.status')->toString(),
       ]),
       '#default_value' => $config->get('enable_stats'),
     ];
@@ -176,8 +181,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     // Replace the description with a link if dblog.module is enabled.
     if (\Drupal::moduleHandler()->moduleExists('dblog')) {
       $form['log_wrong_responses']['#description'] = $this->t('Report information about wrong responses to the <a href=":dblog">log</a>.', [
-        ':dblog' => Url::fromRoute('dblog.overview')
-          ->toString(),
+        ':dblog' => Url::fromRoute('dblog.overview')->toString(),
       ]);
     }
 
@@ -212,7 +216,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $config->save();
     drupal_set_message(t('The CAPTCHA settings have been saved.'), 'status');
 
-    parent::SubmitForm($form, $form_state);
+    parent::submitForm($form, $form_state);
   }
 
   /**
