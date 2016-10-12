@@ -5,6 +5,7 @@
  * Install, update and uninstall functions for the CAPTCHA module.
  */
 
+use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Url;
 
 /**
@@ -130,8 +131,8 @@ function captcha_install() {
       'captchaType' => 'default',
       'status' => FALSE,
     ];
-    $captcha_storage = \Drupal::entityTypeManager()->getStorage('captcha_point');
-    $captcha_storage->create($values)->save();
+    $captcha_point = new CaptchaPoint($values, 'captcha_point');
+    $captcha_point->trustData()->save();
   }
 
   // Explain to users that page caching may be disabled.
