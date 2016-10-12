@@ -74,6 +74,7 @@ function captcha_help($route_name, RouteMatchInterface $route_match) {
  *   Form id string.
  *
  * @return \Drupal\Core\Entity\EntityInterface
+ *   An instance of an captcha_point entity.
  */
 function captcha_point_load($id) {
   return CaptchaPoint::load($id);
@@ -203,8 +204,6 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
             'query' => Drupal::destination()
               ->getAsArray(),
           ]),
-          // '@disable' => $captcha_point->url('disable', ['query' => Drupal::destination()->getAsArray()]),
-          // '@enable' => $captcha_point->url('enable', ['query' => Drupal::destination()->getAsArray()]),
         ]),
       ];
     }
@@ -215,7 +214,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
           t('Place a CAPTCHA here for untrusted users.'),
           Url::fromRoute('captcha_point.add', [], [
             'query' => Drupal::destination()
-                ->getAsArray() + ['form_id' => $form_id],
+              ->getAsArray() + ['form_id' => $form_id],
           ])
         )->toString(),
       ];
@@ -313,7 +312,7 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *
  * @param array $element
  *   The CAPTCHA element.
- * @param array $form_state
+ * @param FormStateInterface $form_state
  *   The form state structure to extract the info from.
  * @param string $this_form_id
  *   The form ID of the form we are currently processing

@@ -1,19 +1,22 @@
 <?php
 
-// TODO: write test for CAPTCHAs on admin pages
-// TODO: test for default challenge type
-// TODO: test about placement (comment form, node forms, log in form, etc)
-// TODO: test if captcha_cron does it work right
-// TODO: test custom CAPTCHA validation stuff
-// TODO: test if entry on status report (Already X blocked form submissions)
-// TODO: test space ignoring validation of image CAPTCHA
-// TODO: refactor the 'comment_body[0][value]' stuff.
 namespace Drupal\captcha\Tests;
 
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
+
+/**
+ * TODO: write test for CAPTCHAs on admin pages
+ * TODO: test for default challenge type
+ * TODO: test about placement (comment form, node forms, log in form, etc)
+ * TODO: test if captcha_cron does it work right
+ * TODO: test custom CAPTCHA validation stuff
+ * TODO: test if entry on status report (Already X blocked form submissions)
+ * TODO: test space ignoring validation of image CAPTCHA
+ * TODO: refactor the 'comment_body[0][value]' stuff.
+ */
 
 /**
  * Base class for CAPTCHA tests.

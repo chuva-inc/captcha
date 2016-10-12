@@ -166,6 +166,7 @@ function _image_captcha_check_setup($check_fonts = TRUE) {
  * They are based on given code and current font/spacing settings.
  *
  * @param string $code
+ *   The utf8 string which will be used to split in characters.
  *
  * @return array
  *   Array($width, $heigh).
@@ -177,7 +178,7 @@ function _image_captcha_image_size($code) {
   $characters = _image_captcha_utf8_split($code);
   $character_quantity = count($characters);
 
-  // Calculate height and width
+  // Calculate height and width.
   $width = $character_spacing * $font_size * $character_quantity;
   $height = 2 * $font_size;
 
