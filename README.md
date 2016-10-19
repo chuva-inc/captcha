@@ -1,7 +1,12 @@
 CAPTCHA module for Drupal
 ---------------------------
-[![Build Status](https://travis-ci.org/chuva-inc/captcha.svg?branch=8.x-1.x)](https://travis-ci.org/chuva-inc/captcha)
-[![Code Climate](https://codeclimate.com/github/chuva-inc/captcha/badges/gpa.svg)](https://codeclimate.com/github/chuva-inc/captcha)
+[![Build Status]
+(https://travis-ci.org/chuva-inc/captcha.svg?branch=8.x-1.x)]
+(https://travis-ci.org/chuva-inc/captcha)
+
+[![Code Climate]
+(https://codeclimate.com/github/chuva-inc/captcha/badges/gpa.svg)]
+(https://codeclimate.com/github/chuva-inc/captcha)
 
 DESCRIPTION
 -----------
@@ -14,7 +19,8 @@ SUB MODULE
 
 INSTALLATION:
 -------------
-  1. Extract the tar.gz into your 'modules' or directory and copy to modules folder.
+  1. Extract the tar.gz into your 'modules' or directory and copy to modules
+     folder.
   2. Go to "Extend" after successfully login into admin.
   3. Enable the module at 'administer >> modules'.
 

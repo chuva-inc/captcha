@@ -1,4 +1,3 @@
-
 This documentation is for developers that want to implement their own
 challenge type and integrate it with the base CAPTCHA module.
 
@@ -79,7 +78,8 @@ core = 6.x
 
 More advanced CAPTCHA modules probably want some configuration page.
 To integrate nicely with the base CAPTCHA module you should offer your
-configuration page as a MENU_LOCAL_TASK menu entry under 'admin/config/people/captcha/'.
+configuration page as a MENU_LOCAL_TASK menu entry under
+'admin/config/people/captcha/'.
 
 For our simple foo CAPTCHA module this would mean:
 
@@ -120,7 +120,8 @@ For our simple foo CAPTCHA module this would mean:
 function foo_captcha_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'foo_captcha.settings':
-      return '<p>'. t('This is a very simple challenge, which requires users to enter "foo" in a textfield.') .'</p>';
+      return '<p>'. t('This is a very simple challenge, which requires users to
+      enter "foo" in a textfield.') .'</p>';
   }
 }
 """
@@ -155,7 +156,8 @@ function foo_captcha_captcha($op, $captcha_type='') {
 /**
  * Custom CAPTCHA validation function.
  *
- * @param solution the solution for the challenge as reported by hook_captcha('generate', ...).
+ * @param solution the solution for the challenge as reported by
+    hook_captcha('generate', ...).
  * @param response the answer given by the user.
  * @return TRUE on succes and FALSE on failure.
  */
@@ -164,35 +166,37 @@ function foo_captcha_custom_validation($solution, $response) {
 }
 """
 
-Previous example shows the basic usage for custom validation with only a $solution
-and $response argument, which should be sufficient for most CAPTCHA modules.
-More advanced CAPTCHA modules can also use extra provided arguments $element
-and $form_state:
+Previous example shows the basic usage for custom validation with only a
+$solution and $response argument, which should be sufficient for most CAPTCHA
+modules. More advanced CAPTCHA modules can also use extra provided arguments
+$element and $form_state:
 """
-function foo_captcha_custom_validation($solution, $response, $element, $form_state) {
+function foo_captcha_custom_validation($solution, $response, $element,
+  $form_state) {
   return $form_state['foo']['#bar'] = 'baz';
 }
 """
-These extra arguments are the $element and $form_state arguments of the validation function
-of the #captcha element. See captcha_validate() in captcha.module for more info about this.
+These extra arguments are the $element and $form_state arguments of the
+validation function of the #captcha element. See captcha_validate() in
+captcha.module for more info about this.
 
 
 
 === Hook into CAPTCHA placement ===
 The CAPTCHA module attempts to place the CAPTCHA element in an appropriate spot
-at the bottom of the targeted form, but this automatic detection may be insufficient
-for complex forms.
-The hook_captcha_placement_map hook allows to define the placement of the CAPTCHA element
-as desired. The hook should return an array, mapping form IDs to placement arrays, which are
-associative arrays with the following fields:
-  - 'path': path (array of path items) of the form's container element in which the
-    CAPTCHA element should be inserted.
+at the bottom of the targeted form, but this automatic detection may be
+insufficient for complex forms.
+The hook_captcha_placement_map hook allows to define the placement of the
+CAPTCHA element as desired. The hook should return an array, mapping form IDs
+to placement arrays, which are associative arrays with the following fields:
+  - 'path': path (array of path items) of the form's container element in which
+    the CAPTCHA element should be inserted.
   - 'key': the key of the element before which the CAPTCHA element
-    should be inserted. If the field 'key' is undefined or NULL, the CAPTCHA will
-    just be appended in the container.
-  - 'weight': if 'key' is not NULL: should be the weight of the element defined by 'key'.
-    If 'key' is NULL and weight is not NULL/unset: set the weight property of the CAPTCHA element
-    to this value.
+    should be inserted. If the field 'key' is undefined or NULL, the CAPTCHA
+    will just be appended in the container.
+  - 'weight': if 'key' is not NULL: should be the weight of the element defined
+    by 'key'. If 'key' is NULL and weight is not NULL/unset: set the weight
+    property of the CAPTCHA element to this value.
 
 For example:
 """
