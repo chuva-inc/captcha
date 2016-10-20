@@ -299,7 +299,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
    * general form function image_captcha_settings_form with some
    * specific logic.
    *
-   * @return array $form
+   * @return array
    *   The font settings specific form elements.
    */
   protected function settingsDotSection() {

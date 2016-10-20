@@ -13,7 +13,9 @@ use Drupal\simpletest\WebTestBase;
 class CaptchaCronTestCase extends WebTestBase {
 
   /**
-   * @var [string] Modules to install for this Test class.
+   * Modules to install for this Test class.
+   *
+   * @var array
    */
   public static $modules = ['captcha'];
 

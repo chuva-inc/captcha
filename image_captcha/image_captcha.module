@@ -256,6 +256,7 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
           case CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE:
             $result['captcha_validate'] = 'captcha_validate_ignore_spaces';
             break;
+
           case CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE:
             $result['captcha_validate'] = 'captcha_validate_case_insensitive_ignore_spaces';
             break;

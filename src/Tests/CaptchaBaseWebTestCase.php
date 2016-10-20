@@ -8,14 +8,16 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
 
 /**
- * TODO: write test for CAPTCHAs on admin pages
- * TODO: test for default challenge type
- * TODO: test about placement (comment form, node forms, log in form, etc)
- * TODO: test if captcha_cron does it work right
- * TODO: test custom CAPTCHA validation stuff
- * TODO: test if entry on status report (Already X blocked form submissions)
- * TODO: test space ignoring validation of image CAPTCHA
- * TODO: refactor the 'comment_body[0][value]' stuff.
+ * The TODO list.
+ *
+ * @todo write test for CAPTCHAs on admin pages.
+ * @todo test for default challenge type.
+ * @todo test about placement (comment form, node forms, log in form, etc).
+ * @todo test if captcha_cron does it work right.
+ * @todo test custom CAPTCHA validation stuff.
+ * @todo test if entry on status report (Already X blocked form submissions).
+ * @todo test space ignoring validation of image CAPTCHA.
+ * @todo refactor the 'comment_body[0][value]' stuff.
  */
 
 /**
@@ -43,7 +45,9 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE = 'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
 
   /**
-   * @var [string] Modules to install for this Test class.
+   * Modules to install for this Test class.
+   *
+   * @var array
    */
   public static $modules = ['captcha', 'comment'];
 
