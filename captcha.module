@@ -447,7 +447,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
       // Update wrong response counter.
       if (\Drupal::config('captcha.settings')->get('enable_stats', FALSE)) {
         Drupal::state()->set('captcha.wrong_response_counter', Drupal::state()
-            ->get('captcha.wrong_response_counter', 0) + 1);
+          ->get('captcha.wrong_response_counter', 0) + 1);
       }
 
       if (\Drupal::config('captcha.settings')

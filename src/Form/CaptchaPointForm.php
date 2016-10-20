@@ -48,8 +48,8 @@ class CaptchaPointForm extends EntityForm {
     // Select widget for CAPTCHA type.
     $form['captchaType'] = [
       '#type' => 'select',
-      '#title' => t('Challenge type'),
-      '#description' => t('The CAPTCHA type to use for this form.'),
+      '#title' => $this->t('Challenge type'),
+      '#description' => $this->t('The CAPTCHA type to use for this form.'),
       '#default_value' => ($captcha_point->getCaptchaType() ?: $this->config('captcha.settings')
         ->get('default_challenge')),
       '#options' => _captcha_available_challenge_types(),
