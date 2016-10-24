@@ -132,9 +132,8 @@ function captcha_install() {
   }
 
   // Explain to users that page caching may be disabled.
-  if ($config = \Drupal::config('system.performance')
-    ->get('cache.page.use_internal') != 0
-  ) {
+  $config = \Drupal::config('system.performance')->get('cache.page.use_internal');
+  if ($config != 0) {
     drupal_set_message(\Drupal::translation()
       ->translate('Note that the CAPTCHA module disables <a href="@performance_admin">page caching</a> of pages that include a CAPTCHA challenge.',
         [

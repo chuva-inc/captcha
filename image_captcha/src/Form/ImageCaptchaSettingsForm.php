@@ -260,6 +260,8 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
           $form_state->setErrorByName('image_captcha_image_allowed_chars', t('The built-in font only supports Latin2 characters. Only use "a" to "z" and numbers.'));
         }
       }
+
+      $readable_fonts = array();
       list($readable_fonts, $problem_fonts) = _image_captcha_check_fonts($fonts);
       if (count($problem_fonts) > 0) {
         $form_state->setErrorByName('image_captcha_fonts', t('The following fonts are not readable: %fonts.', ['%fonts' => implode(', ', $problem_fonts)]));
