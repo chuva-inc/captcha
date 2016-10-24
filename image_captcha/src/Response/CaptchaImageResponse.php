@@ -155,7 +155,7 @@ class CaptchaImageResponse extends Response {
 
     // Do we need to draw in RTL mode?
     global $language;
-    
+
     $result = $this->printString($image, $width, $height, $fonts, $font_size, $code);
     if (!$result) {
       return FALSE;
