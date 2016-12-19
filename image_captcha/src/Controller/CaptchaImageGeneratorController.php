@@ -2,12 +2,12 @@
 
 namespace Drupal\image_captcha\Controller;
 
+use Drupal\Core\Config\Config;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\image_captcha\Response\CaptchaImageResponse;
-use Drupal\Core\Config\Config;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller which generates the image from defined settings.

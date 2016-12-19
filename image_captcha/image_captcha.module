@@ -5,7 +5,8 @@
  * Implements image CAPTCHA for use with the CAPTCHA module.
  */
 
-use \Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 
 define('IMAGE_CAPTCHA_ALLOWED_CHARACTERS', 'aAbBCdEeFfGHhijKLMmNPQRrSTtWXYZ23456789');
 
@@ -17,8 +18,6 @@ define('IMAGE_CAPTCHA_ERROR_TTF_FILE_READ_PROBLEM', 4);
 define('IMAGE_CAPTCHA_FILE_FORMAT_JPG', 1);
 define('IMAGE_CAPTCHA_FILE_FORMAT_PNG', 2);
 define('IMAGE_CAPTCHA_FILE_FORMAT_TRANSPARENT_PNG', 3);
-
-use Drupal\Core\Url;
 
 /**
  * Implements hook_help().
@@ -42,7 +41,8 @@ function _image_captcha_get_enabled_fonts() {
     return ['BUILTIN'];
   }
   else {
-    return \Drupal::config('image_captcha.settings')->get('image_captcha_fonts');
+    return \Drupal::config('image_captcha.settings')
+      ->get('image_captcha_fonts');
   }
 }
 
@@ -107,7 +107,8 @@ function _image_captcha_utf8_split($str) {
         $width = 4;
       }
       else {
-        \Drupal::logger('CAPTCHA')->error('Encountered an illegal byte while splitting an utf8 string in characters.');
+        \Drupal::logger('CAPTCHA')
+          ->error('Encountered an illegal byte while splitting an utf8 string in characters.');
         return $characters;
       }
     }
@@ -151,7 +152,7 @@ function _image_captcha_check_setup($check_fonts = TRUE) {
   if ($check_fonts) {
     // Check availability of enabled fonts.
     $fonts = _image_captcha_get_enabled_fonts();
-    $readable_fonts = array();
+    $readable_fonts = [];
     list($readable_fonts, $problem_fonts) = _image_captcha_check_fonts($fonts);
     if (count($problem_fonts) != 0) {
       $status = $status | IMAGE_CAPTCHA_ERROR_TTF_FILE_READ_PROBLEM;
@@ -210,7 +211,9 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
         // the request for the image itself won't succeed (only ?q=user
         // is permitted for unauthenticated users). We fall back to the
         // Math CAPTCHA in that case.
-        if (defined('MAINTENANCE_MODE') && \Drupal::currentUser()->isAnonymous()) {
+        if (defined('MAINTENANCE_MODE') && \Drupal::currentUser()
+            ->isAnonymous()
+        ) {
           return captcha_captcha('generate', 'Math');
         }
         // Generate a CAPTCHA code.
@@ -232,7 +235,10 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
         list($width, $height) = _image_captcha_image_size($code);
         $result['form']['captcha_image'] = [
           '#theme' => 'image',
-          '#uri' => Url::fromRoute('image_captcha.generator', ['session_id' => $captcha_sid, 'timestamp' => REQUEST_TIME])->toString(),
+          '#uri' => Url::fromRoute('image_captcha.generator', [
+            'session_id' => $captcha_sid,
+            'timestamp' => REQUEST_TIME,
+          ])->toString(),
           '#width' => $width,
           '#height' => $height,
           '#alt' => t('Image CAPTCHA'),
@@ -253,7 +259,8 @@ function image_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
 
         // Handle the case insensitive validation option combined with
         // ignoring spaces.
-        switch (\Drupal::config('captcha.settings')->get('default_validation')) {
+        switch (\Drupal::config('captcha.settings')
+          ->get('default_validation')) {
           case CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE:
             $result['captcha_validate'] = 'captcha_validate_ignore_spaces';
             break;

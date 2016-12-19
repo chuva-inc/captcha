@@ -2,10 +2,10 @@
 
 namespace Drupal\image_captcha\Response;
 
+use Drupal\Core\Config\Config;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Drupal\Core\Config\Config;
 
 /**
  * Response which is returned as the captcha for image_captcha.
@@ -230,8 +230,8 @@ class CaptchaImageResponse extends Response {
               $color_11_g = ($color_11 >> 8) & 0xFF;
               $color_11_b = $color_11 & 0xFF;
               // Interpolation factors.
-              $u  = $sx - $sxf;
-              $v  = $sy - $syf;
+              $u = $sx - $sxf;
+              $v = $sy - $syf;
               $r = (int) ((1 - $v) * ((1 - $u) * $color_00_r + $u * $color_10_r) + $v * ((1 - $u) * $color_01_r + $u * $color_11_r));
               $g = (int) ((1 - $v) * ((1 - $u) * $color_00_g + $u * $color_10_g) + $v * ((1 - $u) * $color_01_g + $u * $color_11_g));
               $b = (int) ((1 - $v) * ((1 - $u) * $color_00_b + $u * $color_10_b) + $v * ((1 - $u) * $color_01_b + $u * $color_11_b));

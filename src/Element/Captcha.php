@@ -33,7 +33,7 @@ class Captcha extends FormElement {
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
     if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-      ->get('default_validation')
+        ->get('default_validation')
     ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
     }

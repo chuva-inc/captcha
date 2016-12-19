@@ -261,7 +261,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
         }
       }
 
-      $readable_fonts = array();
+      $readable_fonts = [];
       list($readable_fonts, $problem_fonts) = _image_captcha_check_fonts($fonts);
       if (count($problem_fonts) > 0) {
         $form_state->setErrorByName('image_captcha_fonts', $this->t('The following fonts are not readable: %fonts.', ['%fonts' => implode(', ', $problem_fonts)]));
