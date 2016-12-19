@@ -56,14 +56,17 @@ function captcha_help($route_name, RouteMatchInterface $route_match) {
         ':contenttypes' => \Drupal::url('entity.node_type.collection'),
       ]) . '</p>';
       $output .= '<p>' . t('CAPTCHA is a trademark of Carnegie Mellon University.') . '</p>';
-      return $output;
+      return ['#markup' => $output];
 
     case 'captcha_settings':
       $output = '<p>' . t('A CAPTCHA can be added to virtually each Drupal form. Some default forms are already provided in the form list, but arbitrary forms can be easily added and managed when the option <em>Add CAPTCHA administration links to forms</em> is enabled.') . '</p>';
       $output .= '<p>' . t('Users with the <em>Skip CAPTCHA</em> <a href=":perm">permission</a> won\'t be offered a challenge. Be sure to grant this permission to the trusted users (e.g. site administrators). If you want to test a protected form, be sure to do it as a user without the <em>Skip CAPTCHA</em> permission (e.g. as anonymous user).', [
         ':perm' => \Drupal::url('user.admin_permissions'),
       ]) . '</p>';
-      return $output;
+      $output .= '<p><b>' . t('Note that the CAPTCHA module disables <a href=":performancesettings">page caching</a> of pages that include a CAPTCHA challenge.', [
+        ':performancesettings' => \Drupal::url('system.performance_settings'),
+      ]) . '</b></p>';
+      return ['#markup' => $output];
   }
 }
 
