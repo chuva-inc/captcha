@@ -218,13 +218,13 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Set CAPTCHA on user register form.
     captcha_set_form_id_setting('user_register', 'captcha/Math');
 
-    // Put Javascript snippet in CAPTCHA description.
+    // Put JavaScript snippet in CAPTCHA description.
     $this->drupalLogin($this->adminUser);
     $xss = '<script type="text/javascript">alert("xss")</script>';
     $edit = ['description' => $xss];
     $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH, $edit, 'Save configuration');
 
-    // Visit user register form and check if Javascript snippet is there.
+    // Visit user register form and check if JavaScript snippet is there.
     $this->drupalLogout();
     $this->drupalGet('user/register');
     $this->assertNoRaw($xss, 'Javascript should not be allowed in CAPTCHA description.', 'CAPTCHA');

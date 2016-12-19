@@ -47,7 +47,7 @@ class Captcha extends FormElement {
     // Add captcha.inc file.
     module_load_include('inc', 'captcha');
 
-    // Add Javascript for general CAPTCHA functionality.
+    // Add JavaScript for general CAPTCHA functionality.
     $element['#attached']['library'][] = 'captcha/base';
 
     if ($form_state->getTriggeringElement() && !empty($form_state->getTriggeringElement()['#limit_validation_errors'])) {
