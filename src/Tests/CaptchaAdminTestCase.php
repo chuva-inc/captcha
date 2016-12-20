@@ -227,7 +227,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
     // Visit user register form and check if JavaScript snippet is there.
     $this->drupalLogout();
     $this->drupalGet('user/register');
-    $this->assertNoRaw($xss, 'Javascript should not be allowed in CAPTCHA description.', 'CAPTCHA');
+    $this->assertNoRaw($xss, 'JavaScript should not be allowed in CAPTCHA description.', 'CAPTCHA');
   }
 
   /**
