@@ -50,7 +50,7 @@ class Captcha extends FormElement {
     // Add JavaScript for general CAPTCHA functionality.
     $element['#attached']['library'][] = 'captcha/base';
 
-    if ($form_state->getTriggeringElement() && !empty($form_state->getTriggeringElement()['#limit_validation_errors'])) {
+    if ($form_state->getTriggeringElement() && is_array($form_state->getTriggeringElement()['#limit_validation_errors'])) {
       // This is a partial (ajax) submission with limited validation. Do not
       // change anything about the captcha element, assume that it will not
       // update the captcha element, do not generate anything, which keeps the
