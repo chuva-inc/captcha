@@ -33,7 +33,7 @@ class Captcha extends FormElement {
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
     if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-        ->get('default_validation')
+      ->get('default_validation')
     ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
     }
@@ -73,6 +73,11 @@ class Captcha extends FormElement {
       // Generate a new CAPTCHA session if we could
       // not reuse one from a posted form.
       $captcha_sid = _captcha_generate_captcha_session($this_form_id, CAPTCHA_STATUS_UNSOLVED);
+      $captcha_token = md5(mt_rand());
+      db_update('captcha_sessions')
+        ->fields(['token' => $captcha_token])
+        ->condition('csid', $captcha_sid)
+        ->execute();
     }
 
     // Store CAPTCHA session ID as hidden field.
@@ -86,11 +91,12 @@ class Captcha extends FormElement {
     ];
 
     // Additional one time CAPTCHA token: store in database and send with form.
-    $captcha_token = hash('sha256', mt_rand());
-    db_update('captcha_sessions')
-      ->fields(['token' => $captcha_token])
-      ->condition('csid', $captcha_sid)
-      ->execute();
+    // $captcha_token = hash('sha256', mt_rand());
+    // db_update('captcha_sessions')
+    //   ->fields(['token' => $captcha_token])
+    //   ->condition('csid', $captcha_sid)
+    //   ->execute();
+    $captcha_token = db_query("SELECT token FROM {captcha_sessions} WHERE csid = :csid", [':csid' => $captcha_sid])->fetchField();
     $element['captcha_token'] = [
       '#type' => 'hidden',
       '#value' => $captcha_token,
