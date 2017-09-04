@@ -2,15 +2,52 @@
 
 namespace Drupal\captcha\Element;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the CAPTCHA form element with default properties.
  *
  * @FormElement("captcha")
  */
-class Captcha extends FormElement {
+class Captcha extends FormElement implements ContainerFactoryPluginInterface {
+
+  /**
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Captcha constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The configuration factory.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $configFactory) {
+    $this->configFactory = $configFactory;
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -32,7 +69,7 @@ class Captcha extends FormElement {
     // Override the default CAPTCHA validation function for case
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
-    if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
+    if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == $this->configFactory->get('captcha.settings')
       ->get('default_validation')
     ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
@@ -74,7 +111,7 @@ class Captcha extends FormElement {
       // not reuse one from a posted form.
       $captcha_sid = _captcha_generate_captcha_session($this_form_id, CAPTCHA_STATUS_UNSOLVED);
       $captcha_token = md5(mt_rand());
-      db_update('captcha_sessions')
+      \Drupal::database()->update('captcha_sessions')
         ->fields(['token' => $captcha_token])
         ->condition('csid', $captcha_sid)
         ->execute();
@@ -96,7 +133,14 @@ class Captcha extends FormElement {
     //   ->fields(['token' => $captcha_token])
     //   ->condition('csid', $captcha_sid)
     //   ->execute();
-    $captcha_token = db_query("SELECT token FROM {captcha_sessions} WHERE csid = :csid", [':csid' => $captcha_sid])->fetchField();
+
+    $captcha_token = \Drupal::database()
+      ->select('captcha_sessions', 'cs')
+      ->fields('cs', ['token'])
+      ->condition('csid', $captcha_sid)
+      ->execute()
+      ->fetchField();
+
     $element['captcha_token'] = [
       '#type' => 'hidden',
       '#value' => $captcha_token,

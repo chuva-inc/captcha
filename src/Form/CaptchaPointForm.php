@@ -4,11 +4,38 @@ namespace Drupal\captcha\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Entity Form to edit CAPTCHA points.
  */
 class CaptchaPointForm extends EntityForm {
+
+  /**
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * CaptchaPointForm constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   */
+  public function __construct(RequestStack $request_stack) {
+    $this->requestStack = $request_stack;
+  }
+
+  /**
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *
+   * @return static
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('request_stack')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -22,7 +49,7 @@ class CaptchaPointForm extends EntityForm {
     $captcha_point = $this->entity;
 
     // Support to set a default form_id through a query argument.
-    $request = \Drupal::request();
+    $request = $this->requestStack->getCurrentRequest();
     if ($captcha_point->isNew() && !$captcha_point->id() && $request->query->has('form_id')) {
       $captcha_point->set('formId', $request->query->get('form_id'));
       $captcha_point->set('label', $request->query->get('form_id'));

@@ -4,12 +4,27 @@ namespace Drupal\captcha\EventSubscriber;
 
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
+use Drupal\Core\Render\ElementInfoManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * A subscriber clearing the cached definitions when saving captcha settings.
  */
 class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
+
+  /**
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface
+   */
+  protected $elementInfo;
+
+  /**
+   * CaptchaCachedSettingsSubscriber constructor.
+   *
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $elementInfo
+   */
+  public function __construct(ElementInfoManagerInterface $elementInfo) {
+    $this->elementInfo = $elementInfo;
+  }
 
   /**
    * Clearing the cached definitions whenever the settings are modified.
@@ -21,7 +36,7 @@ class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
     // Changing the Captcha settings means that any page might result in other
     // settings for captcha so the cached definitions need to be cleared.
     if ($event->getConfig()->getName() === 'captcha.settings') {
-      \Drupal::service('element_info')->clearCachedDefinitions();
+      $this->elementInfo->clearCachedDefinitions();
     }
   }
 

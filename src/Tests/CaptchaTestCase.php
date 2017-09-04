@@ -2,6 +2,7 @@
 
 namespace Drupal\captcha\Tests;
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -39,7 +40,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
     $captcha_point->enable()->save();
 
     // Check if there is a CAPTCHA on the login form (look for the title).
-    $this->drupalGet('');
+    $this->drupalGet('user');
     $this->assertCaptchaPresence(TRUE);
 
     // Try to log in, which should fail.
@@ -218,7 +219,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    */
   public function testAjaxFormRebuild() {
     // Setup captcha point for user edit form.
-    \Drupal::entityManager()->getStorage('captcha_point')->create([
+    \Drupal::entityTypeManager()->getStorage('captcha_point')->create([
       'id' => 'user_form',
       'formId' => 'user_form',
       'status' => TRUE,
@@ -237,7 +238,18 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
       'field_storage' => $field_storage_config,
       'bundle' => 'user',
     ])->save();
-    entity_get_form_display('user', 'user', 'default')
+
+    $entity_form_display = EntityFormDisplay::load('user.user.default');
+    if (!$entity_form_display) {
+      $entity_form_display = EntityFormDisplay::create(array(
+        'targetEntityType' => 'user',
+        'bundle' => 'user',
+        'mode' => 'default',
+        'status' => TRUE,
+      ));
+    }
+
+    $entity_form_display
       ->setComponent('field_texts', [
         'type' => 'string_textfield',
         'weight' => 10,

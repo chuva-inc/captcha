@@ -84,7 +84,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
 
   // Insert an entry and thankfully receive the value
   // of the autoincrement field 'csid'.
-  $captcha_sid = db_insert('captcha_sessions')
+  $captcha_sid = \Drupal::database()->insert('captcha_sessions')
     ->fields([
       'uid' => $user->id(),
       'sid' => session_id(),
@@ -108,7 +108,7 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
  *   The new solution to associate with the given CAPTCHA session.
  */
 function _captcha_update_captcha_session($captcha_sid, $solution) {
-  db_update('captcha_sessions')
+  \Drupal::database()->update('captcha_sessions')
     ->condition('csid', $captcha_sid)
     ->fields([
       'timestamp' => REQUEST_TIME,
@@ -134,7 +134,13 @@ function _captcha_required_for_user($captcha_sid, $form_id) {
   }
 
   // Get the status of the current CAPTCHA session.
-  $captcha_session_status = db_query('SELECT status FROM {captcha_sessions} WHERE csid = :csid', [':csid' => $captcha_sid])->fetchField();
+  $captcha_session_status = \Drupal::database()
+    ->select('captcha_sessions', 'cs')
+    ->fields('cs', ['status'])
+    ->condition('csid', $captcha_sid)
+    ->execute()
+    ->fetchField();
+
   // Second check: if the current session is already
   // solved: omit further CAPTCHAs.
   if ($captcha_session_status == CAPTCHA_STATUS_SOLVED) {

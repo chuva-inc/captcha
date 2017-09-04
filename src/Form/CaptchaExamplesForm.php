@@ -2,15 +2,40 @@
 
 namespace Drupal\captcha\Form;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Displays the captcha settings form.
  */
 class CaptchaExamplesForm extends FormBase {
+
+  /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   */
+  protected $moduleHandler;
+
+  /**
+   * CaptchaExamplesForm constructor.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   */
+  public function __construct(ModuleHandlerInterface $moduleHandler) {
+    $this->moduleHandler = $moduleHandler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -38,7 +63,7 @@ class CaptchaExamplesForm extends FormBase {
         '#markup' => $this->t('This page gives an overview of all available challenge types, generated with their current settings.'),
       ];
 
-      $modules_list = \Drupal::moduleHandler()->getImplementations('captcha');
+      $modules_list = $this->moduleHandler->getImplementations('captcha');
       foreach ($modules_list as $mkey => $module) {
         $challenges = call_user_func_array($module . '_captcha', ['list']);
 

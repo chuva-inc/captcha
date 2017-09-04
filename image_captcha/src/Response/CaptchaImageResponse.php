@@ -51,9 +51,12 @@ class CaptchaImageResponse extends Response {
   public function prepare(Request $request) {
     $session_id = $request->get('session_id');
 
-    $code = db_query("SELECT solution FROM {captcha_sessions} WHERE csid = :csid",
-      [':csid' => $session_id]
-    )->fetchField();
+    $code = \Drupal::database()
+      ->select('captcha_sessions', 'cs')
+      ->fields('cs', ['solution'])
+      ->condition('csid', $session_id)
+      ->execute()
+      ->fetchField();
 
     if ($code !== FALSE) {
       $this->image = @$this->generateImage($code);
@@ -374,7 +377,7 @@ class CaptchaImageResponse extends Response {
       // Get character dimensions for TrueType fonts.
       if ($font != 'BUILTIN') {
         putenv('GDFONTPATH=' . realpath('.'));
-        $bbox = imagettfbbox($font_size, 0, drupal_realpath($font), $character);
+        $bbox = imagettfbbox($font_size, 0, \Drupal::service('file_system')->realpath($font), $character);
         // In very rare cases with some versions of the GD library, the x-value
         // of the left side of the bounding box as returned by the first call of
         // imagettfbbox is corrupt (value -2147483648 = 0x80000000).
@@ -382,7 +385,7 @@ class CaptchaImageResponse extends Response {
         // can be used as workaround.
         // This issue is discussed at http://drupal.org/node/349218.
         if ($bbox[2] < 0) {
-          $bbox = imagettfbbox($font_size, 0, drupal_realpath($font), $character);
+          $bbox = imagettfbbox($font_size, 0, \Drupal::service('file_system')->realpath($font), $character);
         }
       }
       else {
@@ -438,7 +441,7 @@ class CaptchaImageResponse extends Response {
         imagestring($image, 5, $pos_x, $pos_y, $character, $color);
       }
       else {
-        imagettftext($image, $font_size, $angle, $pos_x, $pos_y, $color, drupal_realpath($font), $character);
+        imagettftext($image, $font_size, $angle, $pos_x, $pos_y, $color, \Drupal::service('file_system')->realpath($font), $character);
       }
     }
 

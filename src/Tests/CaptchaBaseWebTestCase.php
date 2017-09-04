@@ -6,6 +6,7 @@ use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * The TODO list.
@@ -270,7 +271,7 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function allowCommentPostingForAnonymousVisitors() {
     // Enable anonymous comments.
-    user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, [
+    user_role_grant_permissions(AccountInterface::ANONYMOUS_ROLE, [
       'access comments',
       'post comments',
       'skip comment approval',

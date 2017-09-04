@@ -4,6 +4,7 @@ namespace Drupal\captcha\Form;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -22,16 +23,24 @@ class CaptchaSettingsForm extends ConfigFormBase {
   protected $cacheBackend;
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a \Drupal\captcha\Form\CaptchaSettingsForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
    *   Cache backend instance to use.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module handler.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, CacheBackendInterface $cache_backend) {
+  public function __construct(ConfigFactoryInterface $config_factory, CacheBackendInterface $cache_backend, ModuleHandlerInterface $moduleHandler) {
     parent::__construct($config_factory);
     $this->cacheBackend = $cache_backend;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -40,7 +49,8 @@ class CaptchaSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('cache.default')
+      $container->get('cache.default'),
+      $container->get('module_handler')
     );
   }
 
@@ -179,7 +189,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     ];
 
     // Replace the description with a link if dblog.module is enabled.
-    if (\Drupal::moduleHandler()->moduleExists('dblog')) {
+    if ($this->moduleHandler->moduleExists('dblog')) {
       $form['log_wrong_responses']['#description'] = $this->t('Report information about wrong responses to the <a href=":dblog">log</a>.', [
         ':dblog' => Url::fromRoute('dblog.overview')->toString(),
       ]);
