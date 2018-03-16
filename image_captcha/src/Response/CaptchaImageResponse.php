@@ -17,14 +17,14 @@ class CaptchaImageResponse extends Response {
   /**
    * Image Captcha config storage.
    *
-   * @var Config
+   * @var \Drupal\Core\Config\Config
    */
   protected $config;
 
   /**
    * Watchdog logger channel for captcha.
    *
-   * @var LoggerChannelInterface
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 

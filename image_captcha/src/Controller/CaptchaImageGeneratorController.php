@@ -17,14 +17,14 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
   /**
    * Image Captcha config storage.
    *
-   * @var Config
+   * @var \Drupal\Core\Config\Config
    */
   protected $config;
 
   /**
    * Watchdog logger channel for captcha.
    *
-   * @var LoggerChannelInterface
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 
@@ -58,7 +58,7 @@ class CaptchaImageGeneratorController implements ContainerInjectionInterface {
   /**
    * Main method that throw ImageResponse object to generate image.
    *
-   * @return CaptchaImageResponse
+   * @return \Drupal\image_captcha\Response\CaptchaImageResponse
    *   Make a CaptchaImageResponse with the correct configuration and return it.
    */
   public function image() {
