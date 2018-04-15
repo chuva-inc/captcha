@@ -88,8 +88,8 @@ function _captcha_generate_captcha_session($form_id = NULL, $status = CAPTCHA_ST
     ->fields([
       'uid' => $user->id(),
       'sid' => session_id(),
-      'ip_address' => Drupal::request()->getClientIp(),
-      'timestamp' => REQUEST_TIME,
+      'ip_address' => \Drupal::request()->getClientIp(),
+      'timestamp' => \Drupal::time()->getRequestTime(),
       'form_id' => $form_id,
       'solution' => $solution,
       'status' => $status,
@@ -111,7 +111,7 @@ function _captcha_update_captcha_session($captcha_sid, $solution) {
   \Drupal::database()->update('captcha_sessions')
     ->condition('csid', $captcha_sid)
     ->fields([
-      'timestamp' => REQUEST_TIME,
+      'timestamp' => \Drupal::time()->getRequestTime(),
       'solution' => $solution,
     ])
     ->execute();

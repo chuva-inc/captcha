@@ -32,11 +32,14 @@ class CaptchaCronTestCase extends WebTestBase {
   public function setUp() {
     parent::setUp();
 
+    // Get request time.
+    $request_time = \Drupal::time()->getRequestTime();
+
     // Add removed session.
-    $time = REQUEST_TIME - 1 - 60 * 60 * 24;
+    $time = $request_time - 1 - 60 * 60 * 24;
     $this->captchaSessions['remove_sid'] = $this->addCaptchaSession('captcha_cron_test_remove', $time);
     // Add remain session.
-    $this->captchaSessions['remain_sid'] = $this->addCaptchaSession('captcha_cron_test_remain', REQUEST_TIME);
+    $this->captchaSessions['remain_sid'] = $this->addCaptchaSession('captcha_cron_test_remain', $request_time);
   }
 
   /**

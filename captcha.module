@@ -104,10 +104,13 @@ function captcha_theme() {
  * Remove old entries from captcha_sessions table.
  */
 function captcha_cron() {
+  // Get request time.
+  $request_time = \Drupal::time()->getRequestTime();
+
   // Remove challenges older than 1 day.
   $connection = Database::getConnection();
   $connection->delete('captcha_sessions')
-    ->condition('timestamp', REQUEST_TIME - 60 * 60 * 24, '<')
+    ->condition('timestamp', $request_time - 60 * 60 * 24, '<')
     ->execute();
 }
 
