@@ -45,6 +45,8 @@ define('CAPTCHA_STATUS_EXAMPLE', 2);
 define('CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE', 0);
 define('CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE', 1);
 
+// Default captcha field access.
+define('CAPTCHA_FIELD_DEFAULT_ACCESS', 1);
 /**
  * Implements hook_help().
  */
@@ -431,6 +433,11 @@ function captcha_validate($element, FormStateInterface &$form_state) {
     ->condition('csid', $csid)
     ->execute()
     ->fetchField();
+
+  // Bypass captcha validation if access attribute value is false.
+  if (empty($captcha_info['access'])) {
+    return false;
+  }
 
   // @todo: what is the result when there is no entry for
   // the captcha_session? in D6 it was FALSE, what in D7?
