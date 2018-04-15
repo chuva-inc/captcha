@@ -15,7 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CaptchaExamplesForm extends FormBase {
 
   /**
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -23,6 +25,7 @@ class CaptchaExamplesForm extends FormBase {
    * CaptchaExamplesForm constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *    Constructor.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler) {
     $this->moduleHandler = $moduleHandler;

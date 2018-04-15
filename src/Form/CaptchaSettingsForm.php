@@ -23,7 +23,9 @@ class CaptchaSettingsForm extends ConfigFormBase {
   protected $cacheBackend;
 
   /**
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 

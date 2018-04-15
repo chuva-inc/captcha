@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class CaptchaPointForm extends EntityForm {
 
   /**
+   * The request stack.
+   *
    * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   protected $requestStack;
@@ -21,13 +23,17 @@ class CaptchaPointForm extends EntityForm {
    * CaptchaPointForm constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Constructor.
    */
   public function __construct(RequestStack $request_stack) {
     $this->requestStack = $request_stack;
   }
 
   /**
+   * Create Captcha Points.
+   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   Event to create Captcha points.
    *
    * @return static
    */

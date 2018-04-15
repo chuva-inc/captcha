@@ -13,6 +13,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
 
   /**
+   * The Element info.
+   *
    * @var \Drupal\Core\Render\ElementInfoManagerInterface
    */
   protected $elementInfo;
@@ -21,6 +23,7 @@ class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
    * CaptchaCachedSettingsSubscriber constructor.
    *
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $elementInfo
+   *    Constructor.
    */
   public function __construct(ElementInfoManagerInterface $elementInfo) {
     $this->elementInfo = $elementInfo;

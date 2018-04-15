@@ -336,7 +336,7 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
       // Put these fonts with preview image in the list.
       foreach ($fonts as $token => $font) {
 
-        $title = t('Font preview of @font (@file)', [
+        $title = $this->t('Font preview of @font (@file)', [
           '@font' => $font['name'],
           '@file' => $font['uri'],
         ]);
@@ -350,14 +350,14 @@ class ImageCaptchaSettingsForm extends ConfigFormBase {
       }
 
       // Append the PHP built-in font at the end.
-      $title = t('Preview of built-in font');
+      $title = $this->t('Preview of built-in font');
       $attributes = [
         'src' => Url::fromRoute('image_captcha.font_preview', ['token' => 'BUILTIN'])
           ->toString(),
         'alt' => $title,
         'title' => $title,
       ];
-      $available_fonts['BUILTIN'] = (string) t('PHP built-in font: font_preview', [
+      $available_fonts['BUILTIN'] = (string) $this->t('PHP built-in font: font_preview', [
         'font_preview' => '<img' . new Attribute($attributes) . ' />',
       ]);
 

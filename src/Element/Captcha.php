@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Captcha extends FormElement implements ContainerFactoryPluginInterface {
 
   /**
+   * The config factory.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
@@ -130,10 +132,9 @@ class Captcha extends FormElement implements ContainerFactoryPluginInterface {
     // Additional one time CAPTCHA token: store in database and send with form.
     // $captcha_token = hash('sha256', mt_rand());
     // db_update('captcha_sessions')
-    //   ->fields(['token' => $captcha_token])
-    //   ->condition('csid', $captcha_sid)
-    //   ->execute();
-
+    // ->fields(['token' => $captcha_token])
+    // ->condition('csid', $captcha_sid)
+    // ->execute();
     $captcha_token = \Drupal::database()
       ->select('captcha_sessions', 'cs')
       ->fields('cs', ['token'])
