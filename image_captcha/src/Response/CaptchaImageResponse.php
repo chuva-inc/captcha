@@ -3,7 +3,7 @@
 namespace Drupal\image_captcha\Response;
 
 use Drupal\Core\Config\Config;
-use Drupal\Core\Logger\LoggerChannelInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @package Drupal\image_captcha\Response
  */
 class CaptchaImageResponse extends Response {
+
+  const LOG_LEVEL = 'ERROR';
 
   /**
    * Image Captcha config storage.
@@ -24,7 +26,7 @@ class CaptchaImageResponse extends Response {
   /**
    * Watchdog logger channel for captcha.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
@@ -38,7 +40,7 @@ class CaptchaImageResponse extends Response {
   /**
    * {@inheritdoc}
    */
-  public function __construct(Config $config, LoggerChannelInterface $logger, $callback = NULL, $status = 200, $headers = []) {
+  public function __construct(Config $config, LoggerInterface $logger, $callback = NULL, $status = 200, $headers = []) {
     parent::__construct(NULL, $status, $headers);
 
     $this->config = $config;
@@ -62,7 +64,7 @@ class CaptchaImageResponse extends Response {
       $this->image = @$this->generateImage($code);
 
       if (!$this->image) {
-        $this->logger->log(WATCHDOG_ERROR, 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', []);
+        $this->logger->log(self::LOG_LEVEL, 'Generation of image CAPTCHA failed. Check your image CAPTCHA configuration and especially the used font.', []);
       }
     }
 
