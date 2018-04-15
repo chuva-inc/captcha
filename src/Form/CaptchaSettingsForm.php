@@ -92,6 +92,13 @@ class CaptchaSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('default_challenge'),
     ];
 
+    // Option for enabling CAPTCHA for all forms.
+    $form['form_protection']['enabled_default'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Default challenge on non-listed forms.'),
+      '#description' => $this->t('Enable CAPTCHA for every form not listed in "CAPTCHA points"'),
+      '#default_value' => $config->get('enabled_default'),
+    ];
     // Field for the CAPTCHA administration mode.
     $form['form_protection']['administration_mode'] = [
       '#type' => 'checkbox',
@@ -213,6 +220,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $config->set('administration_mode', $form_state->getValue('administration_mode'));
     $config->set('allow_on_admin_pages', $form_state->getValue('allow_on_admin_pages'));
     $config->set('default_challenge', $form_state->getValue('default_challenge'));
+    $config->set('enabled_default', $form_state->getValue('enabled_default'));
 
     // CAPTCHA description stuff.
     $config->set('add_captcha_description', $form_state->getValue('add_captcha_description'));

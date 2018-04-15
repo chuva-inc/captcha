@@ -165,6 +165,15 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       ->getStorage('captcha_point')
       ->load($form_id);
 
+    if (!$captcha_point && $config->get('enabled_default')) {
+      // Create fake captcha point without saving.
+      $captcha_point = new CaptchaPoint([
+        'formId' => $form_id,
+        'captchaType' => $config->get('default_challenge'),
+      ], 'captcha_point');
+      $captcha_point->enable();
+    }
+
     if ($captcha_point && $captcha_point->status()) {
       // Build CAPTCHA form element.
       $captcha_element = [
