@@ -157,14 +157,15 @@ class Captcha extends FormElement implements ContainerFactoryPluginInterface {
     // - $element['#captcha_info'], for post processing functions that do not
     //   receive a $form_state argument (e.g. the pre_render callback).
     // Added a new access attribute,
-    // by default it will be true if access attribute not defined in a custom form.
+    // by default it will be true if access attribute
+    // not defined in a custom form.
     $form_state->set('captcha_info', [
       'this_form_id' => $this_form_id,
       'posted_form_id' => $posted_form_id,
       'captcha_sid' => $captcha_sid,
       'module' => $captcha_type_module,
       'captcha_type' => $captcha_type_challenge,
-      'access' => isset($element['#access']) ? $element['#access'] : CAPTCHA_FIELD_DEFAULT_ACCESS
+      'access' => isset($element['#access']) ? $element['#access'] : CAPTCHA_FIELD_DEFAULT_ACCESS,
     ]);
     $element['#captcha_info'] = [
       'form_id' => $this_form_id,

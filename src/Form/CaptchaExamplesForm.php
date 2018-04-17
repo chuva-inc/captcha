@@ -25,7 +25,7 @@ class CaptchaExamplesForm extends FormBase {
    * CaptchaExamplesForm constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *    Constructor.
+   *   Constructor.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler) {
     $this->moduleHandler = $moduleHandler;

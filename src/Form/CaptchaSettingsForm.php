@@ -244,7 +244,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
    *
    * @param array $form
    *   Form structured array.
-   * @param FormStateInterface $form_state
+   * @param Drupal\Core\Form\FormStateInterface $form_state
    *   Form state structured array.
    */
   public function clearCaptchaPlacementCacheSubmit(array $form, FormStateInterface $form_state) {

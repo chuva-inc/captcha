@@ -258,7 +258,7 @@ class CaptchaAdminTestCase extends CaptchaBaseWebTestCase {
    *   Form machine ID.
    *
    * @return \Drupal\captcha\Entity\CaptchaPoint
-   *    CaptchaPoint with mysql query result.
+   *   CaptchaPoint with mysql query result.
    */
   protected function getCaptchaPointSettingFromDatabase($form_id) {
     $ids = \Drupal::entityQuery('captcha_point')

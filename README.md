@@ -8,7 +8,7 @@ CAPTCHA module for Drupal
 (https://codeclimate.com/github/chuva-inc/captcha/badges/gpa.svg)]
 (https://codeclimate.com/github/chuva-inc/captcha)
 
-DESCRIPTION
+INTRODUCTION
 -----------
   captcha.module is the basic CAPTCHA module, offering general CAPTCHA
   administration and a simple maths challenge.
@@ -27,6 +27,10 @@ INSTALLATION:
 DEPENDENCIES
 ------------
   The basic CAPTCHA module has no dependencies, nothing special is required.
+
+REQUIREMENTS
+------------
+No special requirements.
 
 CONFLICTS/KNOWN ISSUES
 ----------------------

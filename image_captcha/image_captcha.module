@@ -56,7 +56,7 @@ function _image_captcha_get_enabled_fonts() {
  * @return array
  *   List($readable_fonts, $problem_fonts).
  */
-function _image_captcha_check_fonts($fonts) {
+function _image_captcha_check_fonts(array $fonts) {
   $readable_fonts = [];
   $problem_fonts = [];
 

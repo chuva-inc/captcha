@@ -23,7 +23,7 @@ class CaptchaCachedSettingsSubscriber implements EventSubscriberInterface {
    * CaptchaCachedSettingsSubscriber constructor.
    *
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $elementInfo
-   *    Constructor.
+   *   Constructor.
    */
   public function __construct(ElementInfoManagerInterface $elementInfo) {
     $this->elementInfo = $elementInfo;
