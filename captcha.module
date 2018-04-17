@@ -58,20 +58,20 @@ function captcha_help($route_name, RouteMatchInterface $route_match) {
       $output = '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('"CAPTCHA" is an acronym for "Completely Automated Public Turing test to tell Computers and Humans Apart". It is typically a challenge-response test to determine whether the user is human. The CAPTCHA module is a tool to fight automated submission by malicious users (spamming) of for example comments forms, user registration forms, guestbook forms, etc. You can extend the desired forms with an additional challenge, which should be easy for a human to solve correctly, but hard enough to keep automated scripts and spam bots out.') . '</p>';
       $output .= '<p>' . t('Note that the CAPTCHA module interacts with page caching (see <a href=":performancesettings">performance settings</a>). Because the challenge should be unique for each generated form, the caching of the page it appears on is prevented. Make sure that these forms do not appear on too many pages or you will lose much caching efficiency. For example, if you put a CAPTCHA on the user login block, which typically appears on each page for anonymous visitors, caching will practically be disabled. The comment submission forms are another example. In this case you should set the <em>Location of comment submission form</em> to <em>Display on separate page</em> in the comment settings of the relevant <a href=":contenttypes">content types</a> for better caching efficiency.', [
-          ':performancesettings' => Url::fromRoute('system.performance_settings')->toString(),
-          ':contenttypes' => Url::fromRoute('entity.node_type.collection')->toString(),
-        ]) . '</p>';
+        ':performancesettings' => Url::fromRoute('system.performance_settings')->toString(),
+        ':contenttypes' => Url::fromRoute('entity.node_type.collection')->toString(),
+      ]) . '</p>';
       $output .= '<p>' . t('CAPTCHA is a trademark of Carnegie Mellon University.') . '</p>';
       return ['#markup' => $output];
 
     case 'captcha_settings':
       $output = '<p>' . t('A CAPTCHA can be added to virtually each Drupal form. Some default forms are already provided in the form list, but arbitrary forms can be easily added and managed when the option <em>Add CAPTCHA administration links to forms</em> is enabled.') . '</p>';
       $output .= '<p>' . t('Users with the <em>Skip CAPTCHA</em> <a href=":perm">permission</a> won\'t be offered a challenge. Be sure to grant this permission to the trusted users (e.g. site administrators). If you want to test a protected form, be sure to do it as a user without the <em>Skip CAPTCHA</em> permission (e.g. as anonymous user).', [
-          ':perm' => Url::fromRoute('user.admin_permissions')->toString(),
-        ]) . '</p>';
+        ':perm' => Url::fromRoute('user.admin_permissions')->toString(),
+      ]) . '</p>';
       $output .= '<p><b>' . t('Note that the CAPTCHA module disables <a href=":performancesettings">page caching</a> of pages that include a CAPTCHA challenge.', [
-          ':performancesettings' => Url::fromRoute('system.performance_settings')->toString(),
-        ]) . '</b></p>';
+        ':performancesettings' => Url::fromRoute('system.performance_settings')->toString(),
+      ]) . '</b></p>';
       return ['#markup' => $output];
   }
 }
@@ -211,7 +211,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
   }
   elseif ($config->get('administration_mode') && $account->hasPermission('administer CAPTCHA settings')
     && (!\Drupal::service('router.admin_context')
-        ->isAdminRoute() || $config->get('allow_on_admin_pages'))
+      ->isAdminRoute() || $config->get('allow_on_admin_pages'))
   ) {
     // Add CAPTCHA administration tools.
     /* @var \Drupal\captcha\Entity\CaptchaPoint $captcha_point */
@@ -254,7 +254,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
           t('Place a CAPTCHA here for untrusted users.'),
           Url::fromRoute('captcha_point.add', [], [
             'query' => Drupal::destination()
-                ->getAsArray() + ['form_id' => $form_id],
+              ->getAsArray() + ['form_id' => $form_id],
           ])
         )->toString(),
       ];
@@ -352,7 +352,7 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *
  * @param array $element
  *   The CAPTCHA element.
- * @param FormStateInterface $form_state
+ * @param Drupal\Core\Form\FormStateInterface $form_state
  *   The form state structure to extract the info from.
  * @param string $this_form_id
  *   The form ID of the form we are currently processing
@@ -451,7 +451,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
 
   // Bypass captcha validation if access attribute value is false.
   if (empty($captcha_info['access'])) {
-    return false;
+    return FALSE;
   }
 
   // @todo: what is the result when there is no entry for
@@ -496,7 +496,7 @@ function captcha_validate($element, FormStateInterface &$form_state) {
       // Update wrong response counter.
       if (\Drupal::config('captcha.settings')->get('enable_stats', FALSE)) {
         Drupal::state()->set('captcha.wrong_response_counter', Drupal::state()
-            ->get('captcha.wrong_response_counter', 0) + 1);
+          ->get('captcha.wrong_response_counter', 0) + 1);
       }
 
       if (\Drupal::config('captcha.settings')
