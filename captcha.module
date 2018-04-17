@@ -18,6 +18,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Form\BaseFormIdInterface;
 
 /**
  * Constants for CAPTCHA persistence.
@@ -47,6 +48,7 @@ define('CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE', 1);
 
 // Default captcha field access.
 define('CAPTCHA_FIELD_DEFAULT_ACCESS', 1);
+
 /**
  * Implements hook_help().
  */
@@ -166,6 +168,19 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     $captcha_point = \Drupal::entityTypeManager()
       ->getStorage('captcha_point')
       ->load($form_id);
+
+    // If there is no CaptchaPoint for the form_id, try to use the base_form_id.
+    if (!$captcha_point || !$captcha_point->status()) {
+      $form_object = $form_state->getFormObject();
+      if ($form_object instanceof BaseFormIdInterface) {
+        $base_form_id = $form_object->getBaseFormId();
+        if (!empty($base_form_id) && $base_form_id != $form_id) {
+          $captcha_point = \Drupal::entityTypeManager()
+            ->getStorage('captcha_point')
+            ->load($base_form_id);
+        }
+      }
+    }
 
     if (!$captcha_point && $config->get('enabled_default')) {
       // Create fake captcha point without saving.

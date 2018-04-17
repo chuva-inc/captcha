@@ -64,6 +64,7 @@ class CaptchaPointForm extends EntityForm {
     $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Form ID'),
+      '#description' => $this->t('Also works with the base form ID.'),
       '#default_value' => $captcha_point->label(),
       '#required' => TRUE,
     ];
