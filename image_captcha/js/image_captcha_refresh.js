@@ -5,7 +5,7 @@
 
 (function ($) {
   'use strict';
-  
+
   /**
    * Attaches jQuery validate behavoir to forms.
    *
