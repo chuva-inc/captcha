@@ -45,7 +45,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
     // Try to log in, which should fail.
     $edit = [
-      'name' => $user->getUsername(),
+      'name' => $user->getDisplayName(),
       'pass' => $user->pass_raw,
       'captcha_response' => '?',
     ];

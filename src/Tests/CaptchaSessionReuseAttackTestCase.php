@@ -135,7 +135,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
     // Log in through form.
     $edit = [
-      'name' => $this->normalUser->getUsername(),
+      'name' => $this->normalUser->getDisplayName(),
       'pass' => $this->normalUser->pass_raw,
       'captcha_response' => $solution,
     ];
@@ -144,7 +144,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $this->assertCaptchaPresence(FALSE);
     // If a "log out" link appears on the page, it is almost certainly because
     // the login was successful.
-    $this->assertText($this->normalUser->getUsername());
+    $this->assertText($this->normalUser->getDisplayName());
 
     // Log out again.
     $this->drupalLogout();
