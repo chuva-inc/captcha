@@ -172,7 +172,7 @@ function _image_captcha_check_setup($check_fonts = TRUE) {
  *   The utf8 string which will be used to split in characters.
  *
  * @return array
- *   Array($width, $heigh).
+ *   [$width, $heigh].
  */
 function _image_captcha_image_size($code) {
   $config = \Drupal::config('image_captcha.settings');
