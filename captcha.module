@@ -411,7 +411,8 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
         // Invalidate CAPTCHA token to avoid reuse.
         \Drupal::database()->update('captcha_sessions')
           ->fields(['token' => NULL])
-          ->condition('csid', $posted_captcha_sid);
+          ->condition('csid', $posted_captcha_sid)
+          ->execute();
       }
     }
     else {
