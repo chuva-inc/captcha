@@ -404,7 +404,9 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
           ->fetchField();
 
         if ($expected_captcha_token !== $posted_captcha_token) {
-          drupal_set_message(t('CAPTCHA session reuse attack detected.'), 'error');
+          if (empty($input['captcha_cacheable'])) {
+            drupal_set_message(t('CAPTCHA session reuse attack detected.'), 'error');
+          }
           // Invalidate the CAPTCHA session.
           $posted_captcha_sid = NULL;
         }

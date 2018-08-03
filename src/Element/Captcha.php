@@ -228,6 +228,19 @@ class Captcha extends FormElement implements ContainerFactoryPluginInterface {
       // Store the solution in the #captcha_info array.
       $element['#captcha_info']['solution'] = $captcha['solution'];
 
+      // Store if this captcha type is cacheable:
+      // A cacheable captcha must not depend on the sid or solution, but be
+      // independent - like for example recaptcha.
+      $element['#captcha_info']['cacheable'] = !empty($captcha['cacheable']);
+
+      if (!empty($element['#captcha_info']['cacheable'])) {
+        // This is only used to avoid the re-use message.
+        $element['captcha_cacheable'] = [
+          '#type' => 'hidden',
+          '#value' => 1,
+        ];
+      }
+
       // Make sure we can use a top level form value
       // $form_state->getValue('captcha_response'),
       // even if the form has #tree=true.
