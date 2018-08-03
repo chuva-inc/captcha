@@ -310,10 +310,22 @@ function image_captcha_element_info_alter(array &$element) {
 function image_captcha_after_build_process($element) {
   $form_id = $element['#captcha_info']['form_id'];
   $captcha_point = captcha_get_form_id_setting($form_id);
-  if ($captcha_point && $captcha_point->captchaType &&
-    $captcha_point->captchaType == 'image_captcha/Image' &&
-    isset($element['captcha_widgets']['captcha_image'])
-  ) {
+
+  $is_image_captcha = false;
+  if(isset($captcha_point->captchaType) && $captcha_point->captchaType == 'image_captcha/Image'){
+	$is_image_captcha  = true;
+  }
+  else if(isset($captcha_point->captchaType) && $captcha_point->captchaType == 'default'){
+    $default_challenge = \Drupal::service('config.manager')
+      ->getConfigFactory()
+      ->get('captcha.settings')
+      ->get('default_challenge');
+    if ($default_challenge == 'image_captcha/Image') {
+      $is_image_captcha  = true;
+	}
+  }
+
+  if ($is_image_captcha && isset($element['captcha_widgets']['captcha_image'])) {
     $uri = Link::fromTextAndUrl(t('Get new captcha!'),
       new Url('image_captcha.refresh',
         ['form_id' => $form_id],
