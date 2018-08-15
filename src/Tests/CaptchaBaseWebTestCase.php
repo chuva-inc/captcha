@@ -36,11 +36,6 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
   const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE = 'The answer you entered for the CAPTCHA was not correct.';
 
   /**
-   * Session reuse attack error message.
-   */
-  const CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE = 'CAPTCHA session reuse attack detected.';
-
-  /**
    * Unknown CSID error message.
    */
   const CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE = 'CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists.';
@@ -136,11 +131,6 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     // There should be no error message about unknown CAPTCHA session ID.
     $this->assertNoText(self::CAPTCHA_UNKNOWN_CSID_ERROR_MESSAGE,
       'CAPTCHA response should be accepted (known CSID).',
-      'CAPTCHA'
-    );
-    // There should be no error message about CSID reuse attack.
-    $this->assertNoText(self::CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE,
-      'CAPTCHA response should be accepted (no CAPTCHA session reuse attack detection).',
       'CAPTCHA'
     );
     // There should be no error message about wrong response.

@@ -403,11 +403,22 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
           ->execute()
           ->fetchField();
 
-        if ($expected_captcha_token !== $posted_captcha_token) {
-          if (empty($input['captcha_cacheable'])) {
-            drupal_set_message(t('CAPTCHA session reuse attack detected.'), 'error');
+        // If we do have a CAPTCHA token mismatch then log it.
+        try {
+          if (($expected_captcha_token !== $posted_captcha_token) && empty($input['captcha_cacheable'])) {
+            throw new \UnexpectedValueException('CAPTCHA session reuse attack detected.');
           }
-          // Invalidate the CAPTCHA session.
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('captcha')->debug(
+            'CAPTCHA session reuse attack detected on @form_id <br/>Posted CAPTCHA token: @posted_captcha_token <br/>Expected captcha token: @expected_captcha_token',
+            [
+              '@form_id' => $this_form_id,
+              '@expected_captcha_token' => var_export($expected_captcha_token, TRUE),
+              '@posted_captcha_token' => var_export($posted_captcha_token, TRUE),
+            ]
+          );
+
           $posted_captcha_sid = NULL;
         }
         // Invalidate CAPTCHA token to avoid reuse.

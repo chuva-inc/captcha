@@ -13,10 +13,6 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
    * Assert that the CAPTCHA session ID reuse attack was detected.
    */
   protected function assertCaptchaSessionIdReuseAttackDetection() {
-    $this->assertText(self::CAPTCHA_SESSION_REUSE_ATTACK_ERROR_MESSAGE,
-      'CAPTCHA session ID reuse attack should be detected.',
-      'CAPTCHA'
-    );
     // There should be an error message about wrong response.
     $this->assertText(self::CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE,
       'CAPTCHA response should flagged as wrong.',
