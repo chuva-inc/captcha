@@ -421,13 +421,13 @@ function _captcha_get_posted_captcha_info(array $element, FormStateInterface $fo
 
           $posted_captcha_sid = NULL;
         }
-        // Invalidate CAPTCHA token to avoid reuse when the form is submitted.
-		if (!empty($form_state['submitted']) && !empty($posted_captcha_sid)) {
+        // Invalidate CAPTCHA token to avoid reuse.
+        if (!empty($posted_captcha_sid)) {
           \Drupal::database()->update('captcha_sessions')
             ->fields(['token' => NULL])
             ->condition('csid', $posted_captcha_sid)
             ->execute();
-		}
+        }
       }
     }
     else {
