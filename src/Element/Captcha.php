@@ -129,12 +129,7 @@ class Captcha extends FormElement implements ContainerFactoryPluginInterface {
       '#value' => $captcha_sid,
     ];
 
-    // Additional one time CAPTCHA token: store in database and send with form.
-    // $captcha_token = hash('sha256', mt_rand());
-    // db_update('captcha_sessions')
-    // ->fields(['token' => $captcha_token])
-    // ->condition('csid', $captcha_sid)
-    // ->execute();
+    // Store CAPTCHA token as hidden field.
     $captcha_token = \Drupal::database()
       ->select('captcha_sessions', 'cs')
       ->fields('cs', ['token'])
