@@ -19,7 +19,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    *
    * @var array
    */
-  public static $modules = ['block'];
+  public static $modules = ['block', 'captcha_long_form_id_test'];
 
   /**
    * Testing the protection of the user log in form.
@@ -269,6 +269,37 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
     // No error.
     $this->assertText(t('The changes have been saved.'));
+  }
+
+  /**
+   * Test that forms with IDs exceeding 64 characters can be assigned captchas.
+   */
+  public function testLongFormId() {
+    // We add the form manually so we can mimic the character
+    // truncation of the label field as formId.
+    $this->drupalLogin($this->adminUser);
+    $this->drupalGet(self::CAPTCHA_ADMIN_PATH);
+
+    $label = 'this_formid_is_intentionally_longer_than_64_characters_to_test_captcha';
+    // Truncated to 64 chars so it can be a machine name.
+    $formId = substr($label, 0, 64);
+
+    $form_values = [
+      'label' => $label,
+      'formId' => $formId,
+      'captchaType' => 'captcha/Math',
+    ];
+
+    // Create intentionally long id Captcha Point.
+    $this->drupalPostForm(self::CAPTCHA_ADMIN_PATH . '/captcha-points/add', $form_values, t('Save'));
+    $this->assertRaw(t('Captcha Point for %label form was created.', ['%label' => $formId]));
+
+    // We need to log out to test the captcha.
+    $this->drupalLogout();
+
+    // Navigate to the form with a >64 char id and confirm there is Captcha.
+    $this->drupalGet('captcha/test_form/long_id');
+    $this->assertCaptchaPresence(TRUE);
   }
 
 }

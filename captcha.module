@@ -164,14 +164,27 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
   // Visitor does not have permission to skip CAPTCHAs.
   module_load_include('inc', 'captcha');
   if (!$account->hasPermission('skip CAPTCHA')) {
+    $query = \Drupal::entityQuery('captcha_point');
+    $query->condition('label', $form_id);
+    $entity_ids = $query->execute();
 
-    /* @var CaptchaPoint $captcha_point */
-    $captcha_point = \Drupal::entityTypeManager()
-      ->getStorage('captcha_point')
-      ->load($form_id);
+    // If empty, see if it is a form provided by default config.
+    if (empty($entity_ids)) {
+      $query = \Drupal::entityQuery('captcha_point');
+      $query->condition('formId', $form_id);
+      $entity_ids = $query->execute();
+    }
+
+    if (!empty($entity_ids) && is_array($entity_ids)) {
+      $captcha_point_id = array_pop($entity_ids);
+      /* @var CaptchaPoint $captcha_point */
+      $captcha_point = \Drupal::entityTypeManager()
+        ->getStorage('captcha_point')
+        ->load($captcha_point_id);
+    }
 
     // If there is no CaptchaPoint for the form_id, try to use the base_form_id.
-    if (!$captcha_point || !$captcha_point->status()) {
+    if (empty($captcha_point) || !$captcha_point->status()) {
       $form_object = $form_state->getFormObject();
       if ($form_object instanceof BaseFormIdInterface) {
         $base_form_id = $form_object->getBaseFormId();
@@ -183,7 +196,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       }
     }
 
-    if (!$captcha_point && $config->get('enabled_default')) {
+    if (empty($captcha_point) && $config->get('enabled_default')) {
       // Create fake captcha point without saving.
       $captcha_point = new CaptchaPoint([
         'formId' => $form_id,
@@ -192,7 +205,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       $captcha_point->enable();
     }
 
-    if ($captcha_point && $captcha_point->status()) {
+    if (!empty($captcha_point) && $captcha_point->status()) {
       // Build CAPTCHA form element.
       $captcha_element = [
         '#type' => 'captcha',
