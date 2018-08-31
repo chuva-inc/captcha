@@ -285,7 +285,7 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     $form['caching']['captcha'] = [
       '#type' => 'item',
       '#title' => t('CAPTCHA'),
-      '#markup' => '<div class="messages messages--warning">' . t('The CAPTCHA module will disable the caching of pages that contain a CAPTCHA element.') . '</div>',
+      '#markup' => '<div class="messages messages--warning">' . t('Most CAPTCHA methods will disable the caching of pages that contain a CAPTCHA element. Check the different implementations to know more about how it affects caching.') . '</div>',
     ];
   }
 }
