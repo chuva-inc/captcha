@@ -98,7 +98,7 @@ class CaptchaSettingsForm extends ConfigFormBase {
     $form['form_protection']['enabled_default'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Default challenge on non-listed forms.'),
-      '#description' => $this->t('Enable CAPTCHA for every form not listed in "CAPTCHA points"'),
+      '#description' => $this->t('Enable CAPTCHA for every form not listed here'),
       '#default_value' => $config->get('enabled_default'),
     ];
     // Field for the CAPTCHA administration mode.
